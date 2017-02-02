@@ -49,7 +49,7 @@ require ROOT . '/vendor/autoload.php';
 require CORE_PATH . 'config/bootstrap.php';
 
 Configure::write('App', [
-    'namespace' => $pluginName . '\Test\App',
+    'namespace' => 'Qobo\\' . $pluginName . '\Test\App',
     'paths' => [
         'templates' => [
             APP . 'Template' . DS
@@ -106,7 +106,7 @@ Cake\Datasource\ConnectionManager::config('test', [
 ]);
 
 // Alias AppController to the test App
-class_alias($pluginName . '\Test\App\Controller\AppController', 'App\Controller\AppController');
+class_alias('Qobo\\' . $pluginName . '\Test\App\Controller\AppController', 'App\Controller\AppController');
 // If plugin has routes.php/bootstrap.php then load them, otherwise don't.
 $loadPluginRoutes = file_exists(dirname(__FILE__) . DS . 'config' . DS . 'routes.php');
 $loadPluginBootstrap = file_exists(dirname(__FILE__) . DS . 'config' . DS . 'bootstrap.php');
