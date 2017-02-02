@@ -1,5 +1,5 @@
 <?php
-namespace Utils\Test\Fixture;
+namespace Qobo\Utils\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 

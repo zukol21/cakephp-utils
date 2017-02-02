@@ -13,13 +13,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Utils\\": "src",
-            "Utils\\Test\\Fixture\\": "tests\\Fixture"
+            "Qobo\\Utils\\": "src",
+            "Qobo\\Utils\\Test\\Fixture\\": "tests\\Fixture"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Utils\\Test\\": "tests",
+            "Qobo\\Utils\\Test\\": "tests",
             "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
         }
     }
