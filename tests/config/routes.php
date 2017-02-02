@@ -1,5 +1,5 @@
 <?php
-namespace Utils\Test\App\Config;
+namespace Qobo\Utils\Test\App\Config;
 
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
