@@ -1,0 +1,26 @@
+{
+    "name": "qobo/cakephp-utils",
+    "description": "CakePHP utilities",
+    "type": "cakephp-plugin",
+    "license": "GPL-2.0",
+    "require": {
+        "php": ">=5.4.16",
+        "cakephp/cakephp": ">3.0.0 <4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*",
+        "cakephp/cakephp-codesniffer": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "Utils\\": "src",
+            "Utils\\Test\\Fixture\\": "tests\\Fixture"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Utils\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    }
+}
