@@ -13,7 +13,7 @@ $config = Configure::read('FileStorage');
 $config = $config ? $config : [];
 
 // load default plugin config
-Configure::load('Utils.file_storage');
+Configure::load('Qobo/Utils.file_storage');
 
 // overwrite default plugin config by app level config
 Configure::write('FileStorage', array_replace_recursive(
