@@ -2,7 +2,7 @@
 // Burzum File-Storage plugin configuration
 return [
     // default thumbnail setup for all $entity->model entities for file_storage
-    'ThumbnailVersions', [
+    'ThumbnailVersions' => [
         'huge' => [
             'thumbnail' => ['width' => 2000, 'height' => 2000]
         ],
@@ -19,7 +19,7 @@ return [
             'thumbnail' => ['width' => 50, 'height' => 50]
         ]
     ],
-    'FileStorage', [
+    'FileStorage' => [
         'imageProcessing' => true,
         'pathBuilderOptions' => ['pathPrefix' => '/uploads'],
         'association' => 'UploadDocuments',
