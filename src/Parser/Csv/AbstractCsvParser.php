@@ -1,8 +1,8 @@
 <?php
-namespace CsvMigrations\Parser\Csv;
+namespace Qobo\Utils\Parser\Csv;
 
-use CsvMigrations\Parser\AbstractParser;
 use League\Csv\Reader;
+use Qobo\Utils\Parser\AbstractParser;
 
 abstract class AbstractCsvParser extends AbstractParser
 {

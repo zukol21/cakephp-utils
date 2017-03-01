@@ -1,5 +1,5 @@
 <?php
-namespace CsvMigrations\Parser;
+namespace Qobo\Utils\Parser;
 
 interface ParserInterface
 {

@@ -1,5 +1,5 @@
 <?php
-namespace CsvMigrations\Parser\Csv;
+namespace Qobo\Utils\Parser\Csv;
 
 use League\Csv\Reader;
 

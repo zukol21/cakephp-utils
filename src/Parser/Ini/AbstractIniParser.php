@@ -1,7 +1,7 @@
 <?php
-namespace CsvMigrations\Parser\Ini;
+namespace Qobo\Utils\Parser\Ini;
 
-use CsvMigrations\Parser\AbstractParser;
+use Qobo\Utils\Parser\AbstractParser;
 
 abstract class AbstractIniParser extends AbstractParser
 {

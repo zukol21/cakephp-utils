@@ -1,5 +1,5 @@
 <?php
-namespace CsvMigrations\Parser\Ini;
+namespace Qobo\Utils\Parser\Ini;
 
 use Piwik\Ini\IniReader;
 
