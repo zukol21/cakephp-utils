@@ -1,9 +1,9 @@
 <?php
-namespace CsvMigrations\Test\TestCase\PathFinder;
+namespace Qobo\Utils\Test\TestCase\PathFinder;
 
 use Cake\Core\Configure;
-use CsvMigrations\PathFinder\ConfigPathFinder;
 use PHPUnit_Framework_TestCase;
+use Qobo\Utils\PathFinder\ConfigPathFinder;
 
 class ConfigPathFinderTest extends PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class ConfigPathFinderTest extends PHPUnit_Framework_TestCase
     public function testInterface()
     {
         $implementedInterfaces = array_keys(class_implements($this->pf));
-        $this->assertTrue(in_array('CsvMigrations\PathFinder\PathFinderInterface', $implementedInterfaces), "PathFinderInterface is not implemented");
+        $this->assertTrue(in_array('Qobo\Utils\PathFinder\PathFinderInterface', $implementedInterfaces), "PathFinderInterface is not implemented");
     }
 
     public function testFind()

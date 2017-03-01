@@ -1,5 +1,5 @@
 <?php
-namespace CsvMigrations\PathFinder;
+namespace Qobo\Utils\PathFinder;
 
 use Cake\Core\Configure;
 
