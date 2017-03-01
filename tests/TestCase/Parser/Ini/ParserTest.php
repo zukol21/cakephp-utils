@@ -1,8 +1,8 @@
 <?php
-namespace CsvMigrations\Test\TestCase\Parser\Ini;
+namespace Qobo\Utils\Test\TestCase\Parser\Ini;
 
-use CsvMigrations\Parser\Ini\Parser;
 use PHPUnit_Framework_TestCase;
+use Qobo\Utils\Parser\Ini\Parser;
 
 class ParserTest extends PHPUnit_Framework_TestCase
 {

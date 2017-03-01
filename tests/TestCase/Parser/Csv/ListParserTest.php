@@ -1,8 +1,8 @@
 <?php
-namespace CsvMigrations\Test\TestCase\Parser\Csv;
+namespace Qobo\Utils\Test\TestCase\Parser\Csv;
 
-use CsvMigrations\Parser\Csv\ListParser;
 use PHPUnit_Framework_TestCase;
+use Qobo\Utils\Parser\Csv\ListParser;
 
 class ListParserTest extends PHPUnit_Framework_TestCase
 {
