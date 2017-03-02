@@ -45,7 +45,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $result = $parser->getFieldsIniParams($file, 'cost');
 
         $this->assertTrue(is_array($result));
-        $this->assertTrue(in_array('default' , array_keys($result)));
+        $this->assertTrue(in_array('default', array_keys($result)));
     }
 
     /**
@@ -72,7 +72,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
     {
         $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
         $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file,'birthdate','default');
+        $result = $parser->getFieldsIniParams($file, 'birthdate', 'default');
         $this->assertEquals($result, null);
     }
 
@@ -80,28 +80,25 @@ class ParserTest extends PHPUnit_Framework_TestCase
     {
         $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields_from_outer_space.ini';
         $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file,'birthdate','default');
+        $result = $parser->getFieldsIniParams($file, 'birthdate', 'default');
         $this->assertEquals($result, null);
     }
-
 
     public function testGetFieldsIniArrayParams()
     {
         $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
         $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file,'cost',['default','foo','baz']);
-        $this->assertTrue( (['default','foo'] == array_keys($result)) );
+        $result = $parser->getFieldsIniParams($file, 'cost', ['default', 'foo', 'baz']);
+        $this->assertTrue((['default', 'foo'] == array_keys($result)));
     }
-
 
     public function testGetFieldsIniOneArrayElement()
     {
         $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
         $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file,'cost',['default']);
+        $result = $parser->getFieldsIniParams($file, 'cost', ['default']);
         $this->assertEquals($result, 'EUR');
     }
-
 
     public function testParseFromPathTestingArrays()
     {
