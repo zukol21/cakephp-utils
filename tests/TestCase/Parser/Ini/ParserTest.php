@@ -29,6 +29,77 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('name', $result['table']['display_field'], "Parser misinterpreted 'display_field' value");
     }
 
+    public function testGetFieldsIniParamsDefault()
+    {
+        $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $parser = new Parser();
+        $result = $parser->getFieldsIniParams($file, 'cost', 'default');
+
+        $this->assertEquals($result, 'EUR');
+    }
+
+    public function testGetFieldsIniParams()
+    {
+        $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $parser = new Parser();
+        $result = $parser->getFieldsIniParams($file, 'cost');
+
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(in_array('default', array_keys($result)));
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testGetFieldsIniParamsPathException()
+    {
+        $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $parser = new Parser();
+        $result = $parser->getFieldsIniParams(123, 'cost');
+    }
+
+    /**
+     * @expectedException RuntimeException
+     */
+    public function testGetFieldsIniParamsFieldException()
+    {
+        $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $parser = new Parser();
+        $result = $parser->getFieldsIniParams($file, null);
+    }
+
+    public function testGetFieldsIniParamsNonReturned()
+    {
+        $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $parser = new Parser();
+        $result = $parser->getFieldsIniParams($file, 'birthdate', 'default');
+        $this->assertEquals($result, null);
+    }
+
+    public function testGetFieldsIniParamsFileDoesntExist()
+    {
+        $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields_from_outer_space.ini';
+        $parser = new Parser();
+        $result = $parser->getFieldsIniParams($file, 'birthdate', 'default');
+        $this->assertEquals($result, null);
+    }
+
+    public function testGetFieldsIniArrayParams()
+    {
+        $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $parser = new Parser();
+        $result = $parser->getFieldsIniParams($file, 'cost', ['default', 'foo', 'baz']);
+        $this->assertTrue((['default', 'foo'] == array_keys($result)));
+    }
+
+    public function testGetFieldsIniOneArrayElement()
+    {
+        $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $parser = new Parser();
+        $result = $parser->getFieldsIniParams($file, 'cost', ['default']);
+        $this->assertEquals($result, 'EUR');
+    }
+
     public function testParseFromPathTestingArrays()
     {
         $file = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'array_in_config.ini';
