@@ -8,7 +8,7 @@
 CakePHP3.x Qobo Utils Plugin
 =======================
 
-Qobo Utils plugin is a swiss knife collection of tools used on daily basis in [Qobo Ltd.](www.qobo.biz).
+Qobo Utils plugin is a swiss knife collection of tools used on daily basis in [Qobo Ltd.](https://www.qobo.biz).
 
 Usage
 -----
