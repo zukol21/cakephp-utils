@@ -3,15 +3,15 @@ namespace Qobo\Utils\Test\TestCase\PathFinder;
 
 use Cake\Core\Configure;
 use PHPUnit_Framework_TestCase;
-use Qobo\Utils\PathFinder\FieldsIniPathFinder;
+use Qobo\Utils\PathFinder\FieldsPathFinder;
 
-class FieldsIniPathFinderTest extends PHPUnit_Framework_TestCase
+class FieldsPathFinderTest extends PHPUnit_Framework_TestCase
 {
     protected $pf;
 
     protected function setUp()
     {
-        $this->pf = new FieldsIniPathFinder();
+        $this->pf = new FieldsPathFinder();
         $dir = dirname(dirname(__DIR__)) . DS . 'data' . DS . 'Modules' . DS;
         Configure::write('CsvMigrations.modules.path', $dir);
     }
