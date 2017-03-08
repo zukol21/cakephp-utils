@@ -4,7 +4,7 @@ namespace Qobo\Utils\PathFinder;
 use Cake\Core\Configure;
 
 /**
- * FieldsIniPathFinder Class
+ * FieldsPathFinder Class
  *
  * This path finder is here to assist with finding
  * the paths to the module fields configuration files.
@@ -12,7 +12,7 @@ use Cake\Core\Configure;
  * default fields configuration file (fields.ini) is
  * returned.
  */
-class FieldsIniPathFinder extends ConfigPathFinder
+class FieldsPathFinder extends ConfigPathFinder
 {
     protected $fileName = 'fields.ini';
 }
