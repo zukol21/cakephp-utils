@@ -2,8 +2,8 @@
 namespace Qobo\Utils\ModuleConfig;
 
 use BadMethodCallException;
-use Qobo\Utils\Parser\ParserInterface;
-use Qobo\Utils\PathFinder\PathFinderInterface;
+use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
+use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
 use RuntimeException;
 
 /**
@@ -89,14 +89,14 @@ class ModuleConfig
     /**
      * Instance of the PathFinder
      *
-     * @var \Qobo\Utils\PathFinderInterface
+     * @var \Qobo\Utils\ModuleConfig\PathFinderInterface
      */
     protected $finder;
 
     /**
      * Instance of the Parser
      *
-     * @var \Qobo\Utils\Parser
+     * @var \Qobo\Utils\ModuleConfig\ParserInterface
      */
     protected $parser;
 
@@ -107,24 +107,24 @@ class ModuleConfig
      */
     protected $lookup = [
         self::CONFIG_TYPE_MIGRATION => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\PathFinder\\MigrationPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\Parser\\Csv\\MigrationParser',
+            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\MigrationPathFinder',
+            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\MigrationParser',
         ],
         self::CONFIG_TYPE_MODULE => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\PathFinder\\ConfigPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\Parser\\Ini\\Parser',
+            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ConfigPathFinder',
+            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\Parser',
         ],
         self::CONFIG_TYPE_LIST => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\PathFinder\\ListPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\Parser\\Csv\\ListParser',
+            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ListPathFinder',
+            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\ListParser',
         ],
         self::CONFIG_TYPE_FIELDS => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\PathFinder\\FieldsPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\Parser\\Ini\\Parser',
+            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\FieldsPathFinder',
+            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\Parser',
         ],
         self::CONFIG_TYPE_VIEW => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\PathFinder\\ViewPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\Parser\\Csv\\ViewParser',
+            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ViewPathFinder',
+            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\ViewParser',
         ],
     ];
 
@@ -190,7 +190,7 @@ class ModuleConfig
     /**
      * Set path finder instance
      *
-     * @param \Qobo\Utils\PathFinderInterface $finder Finder instance
+     * @param \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface $finder Finder instance
      * @return void
      */
     public function setFinder(PathFinderInterface $finder)
@@ -204,7 +204,7 @@ class ModuleConfig
      * If the specific instance wasn't set, the automagic kicks in to
      * figure out which class is the most appropriate.
      *
-     * @return \Qobo\Utils\PathFinderInterface
+     * @return \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
      */
     public function getFinder()
     {
@@ -220,7 +220,7 @@ class ModuleConfig
     /**
      * Set parser instance
      *
-     * @param \Qobo\Utils\ParserInterface $parser Parser instance
+     * @param \Qobo\Utils\ModuleConfig\Parser\ParserInterface $parser Parser instance
      * @return void
      */
     public function setParser(ParserInterface $parser)
@@ -234,7 +234,7 @@ class ModuleConfig
      * If the specific instance wasn't set, the automagic kicks in to
      * figure out which class is the most appropriate.
      *
-     * @return \Qobo\Utils\ParserInterface
+     * @return \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
     public function getParser()
     {
