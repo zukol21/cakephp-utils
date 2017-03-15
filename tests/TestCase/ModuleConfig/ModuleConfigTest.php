@@ -2,10 +2,10 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig;
 
 use Cake\Core\Configure;
+use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
 use Qobo\Utils\Parser\Ini\Parser;
 use Qobo\Utils\PathFinder\ConfigPathFinder;
-use PHPUnit_Framework_TestCase;
 
 class ModuleConfigTest extends PHPUnit_Framework_TestCase
 {
@@ -54,7 +54,6 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
         $mc = new ModuleConfig('unsupportedType', 'Foo');
         $mc->getParser();
     }
-
 
     public function testFind()
     {

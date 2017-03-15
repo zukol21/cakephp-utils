@@ -2,8 +2,8 @@
 namespace Qobo\Utils\ModuleConfig;
 
 use BadMethodCallException;
-use Qobo\Utils\PathFinder\PathFinderInterface;
 use Qobo\Utils\Parser\ParserInterface;
+use Qobo\Utils\PathFinder\PathFinderInterface;
 use RuntimeException;
 
 /**
@@ -138,9 +138,9 @@ class ModuleConfig
      */
     public function __construct($configType, $module, $configFile = '', array $options = [])
     {
-        $this->configType = (string) $configType;
-        $this->module = (string) $module;
-        $this->configFile = (string) $configFile;
+        $this->configType = (string)$configType;
+        $this->module = (string)$module;
+        $this->configFile = (string)$configFile;
         $this->options = $options;
     }
 
@@ -191,6 +191,7 @@ class ModuleConfig
      * Set path finder instance
      *
      * @param \Qobo\Utils\PathFinderInterface $finder Finder instance
+     * @return void
      */
     public function setFinder(PathFinderInterface $finder)
     {
@@ -212,6 +213,7 @@ class ModuleConfig
         }
 
         $this->setFinder($this->getInstanceByType(self::CLASS_TYPE_FINDER));
+
         return $this->finder;
     }
 
@@ -219,6 +221,7 @@ class ModuleConfig
      * Set parser instance
      *
      * @param \Qobo\Utils\ParserInterface $parser Parser instance
+     * @return void
      */
     public function setParser(ParserInterface $parser)
     {
@@ -240,6 +243,7 @@ class ModuleConfig
         }
 
         $this->setParser($this->getInstanceByType(self::CLASS_TYPE_PARSER));
+
         return $this->parser;
     }
 
