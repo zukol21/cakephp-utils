@@ -8,12 +8,13 @@ use Qobo\Utils\ModuleConfig\PathFinder\ListPathFinder;
 class ListPathFinderTest extends PHPUnit_Framework_TestCase
 {
     protected $pf;
+    protected $dataDir;
 
     protected function setUp()
     {
         $this->pf = new ListPathFinder();
-        $dir = dirname(dirname(__DIR__)) . DS . 'data' . DS . 'CsvMigrations' . DS . 'lists' . DS;
-        Configure::write('CsvMigrations.lists.path', $dir);
+        $this->dataDir = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS;
+        Configure::write('CsvMigrations.modules.path', $this->dataDir);
     }
 
     public function testInterface()

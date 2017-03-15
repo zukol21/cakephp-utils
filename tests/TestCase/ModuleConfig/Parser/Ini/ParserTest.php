@@ -1,25 +1,34 @@
 <?php
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\Ini;
 
+use Cake\Core\Configure;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\Parser\Ini\Parser;
 
 class ParserTest extends PHPUnit_Framework_TestCase
 {
+    protected $parser;
+    protected $dataDir;
+
+    protected function setUp()
+    {
+        $this->parser = new Parser();
+        $this->dataDir = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS;
+        Configure::write('CsvMigrations.modules.path', $this->dataDir);
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
     public function testParseFromPathException()
     {
-        $parser = new Parser();
-        $result = $parser->parseFromPath('some-non-existing-file');
+        $result = $this->parser->parseFromPath('some-non-existing-file');
     }
 
     public function testParseFromPath()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'config.ini';
-        $parser = new Parser();
-        $result = $parser->parseFromPath($file);
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'config.ini';
+        $result = $this->parser->parseFromPath($file);
 
         $this->assertTrue(is_array($result), "Parser returned a non-array");
         $this->assertFalse(empty($result), "Parser returned empty result");
@@ -31,18 +40,16 @@ class ParserTest extends PHPUnit_Framework_TestCase
 
     public function testGetFieldsIniParamsDefault()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
-        $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file, 'cost', 'default');
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $result = $this->parser->getFieldsIniParams($file, 'cost', 'default');
 
-        $this->assertEquals($result, 'EUR');
+        $this->assertEquals('EUR', $result);
     }
 
     public function testGetFieldsIniParams()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
-        $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file, 'cost');
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $result = $this->parser->getFieldsIniParams($file, 'cost');
 
         $this->assertTrue(is_array($result));
         $this->assertTrue(in_array('default', array_keys($result)));
@@ -53,9 +60,8 @@ class ParserTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFieldsIniParamsPathException()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
-        $parser = new Parser();
-        $result = $parser->getFieldsIniParams(123, 'cost');
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $result = $this->parser->getFieldsIniParams(123, 'cost');
     }
 
     /**
@@ -63,48 +69,42 @@ class ParserTest extends PHPUnit_Framework_TestCase
      */
     public function testGetFieldsIniParamsFieldException()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
-        $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file, null);
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $result = $this->parser->getFieldsIniParams($file, null);
     }
 
     public function testGetFieldsIniParamsNonReturned()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
-        $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file, 'birthdate', 'default');
-        $this->assertEquals($result, null);
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $result = $this->parser->getFieldsIniParams($file, 'birthdate', 'default');
+        $this->assertEquals(null, $result);
     }
 
     public function testGetFieldsIniParamsFileDoesntExist()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields_from_outer_space.ini';
-        $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file, 'birthdate', 'default');
-        $this->assertEquals($result, null);
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields_from_outer_space.ini';
+        $result = $this->parser->getFieldsIniParams($file, 'birthdate', 'default');
+        $this->assertEquals(null, $result);
     }
 
     public function testGetFieldsIniArrayParams()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
-        $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file, 'cost', ['default', 'foo', 'baz']);
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $result = $this->parser->getFieldsIniParams($file, 'cost', ['default', 'foo', 'baz']);
         $this->assertTrue((['default', 'foo'] == array_keys($result)));
     }
 
     public function testGetFieldsIniOneArrayElement()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'fields.ini';
-        $parser = new Parser();
-        $result = $parser->getFieldsIniParams($file, 'cost', ['default']);
-        $this->assertEquals($result, 'EUR');
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
+        $result = $this->parser->getFieldsIniParams($file, 'cost', ['default']);
+        $this->assertEquals('EUR', $result);
     }
 
     public function testParseFromPathTestingArrays()
     {
-        $file = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS . 'Foo' . DS . 'config' . DS . 'array_in_config.ini';
-        $parser = new Parser();
-        $result = $parser->parseFromPath($file);
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'array_in_config.ini';
+        $result = $this->parser->parseFromPath($file);
 
         $this->assertTrue(is_array($result), 'Return data from parser isn\'t array type');
         $this->assertArrayHasKey('associations', $result, "No associations found in the table config");

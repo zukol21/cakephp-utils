@@ -10,11 +10,12 @@ use Qobo\Utils\ModuleConfig\PathFinder\ConfigPathFinder;
 class ModuleConfigTest extends PHPUnit_Framework_TestCase
 {
     protected $pf;
+    protected $dataDir;
 
     protected function setUp()
     {
-        $dir = dirname(dirname(__DIR__)) . DS . 'data' . DS . 'Modules' . DS;
-        Configure::write('CsvMigrations.modules.path', $dir);
+        $this->dataDir = dirname(dirname(__DIR__)) . DS . 'data' . DS . 'Modules' . DS;
+        Configure::write('CsvMigrations.modules.path', $this->dataDir);
     }
 
     public function testSetFinder()

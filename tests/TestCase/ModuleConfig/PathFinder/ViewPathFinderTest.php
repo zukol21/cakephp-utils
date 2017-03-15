@@ -8,12 +8,13 @@ use Qobo\Utils\ModuleConfig\PathFinder\ViewPathFinder;
 class ViewPathFinderTest extends PHPUnit_Framework_TestCase
 {
     protected $pf;
+    protected $dataDir;
 
     protected function setUp()
     {
         $this->pf = new ViewPathFinder();
-        $dir = dirname(dirname(__DIR__)) . DS . 'data' . DS . 'CsvMigrations' . DS . 'views' . DS;
-        Configure::write('CsvMigrations.views.path', $dir);
+        $this->dataDir = dirname(dirname(dirname(__DIR__))) . DS . 'data' . DS . 'Modules' . DS;
+        Configure::write('CsvMigrations.modules.path', $this->dataDir);
     }
 
     public function testInterface()
