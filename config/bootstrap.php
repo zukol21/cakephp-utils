@@ -31,3 +31,32 @@ StorageManager::config('Local', [
 ]);
 
 EventManager::instance()->on(new BaseListener(Configure::read('FileStorage')));
+
+/**
+ * Convert size to bytes.
+ *
+ * Convert sizes from php settings like post_max_size
+ * for example 8M to integer number of bytes.
+ *
+ * If number is integer return as is.
+ *
+ * @param string|int $size Size to convert
+ * @return int
+ */
+function sizeToBytes($size)
+{
+    if (is_int($size)) {
+        return $size;
+    }
+
+    $result = (string)$size;
+    if (preg_match('/(\d+)K/i', $result, $matches)) {
+        $result = $matches[1] * 1024;
+    } elseif (preg_match('/(\d+)M/i', $result, $matches)) {
+        $result = $matches[1] * 1024 * 1024;
+    } elseif (preg_match('/(\d+)G/i', $result, $matches)) {
+        $result = $matches[1] * 1024 * 1024 * 1024;
+    }
+
+    return (int)$result;
+}
