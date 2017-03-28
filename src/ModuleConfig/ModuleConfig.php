@@ -16,6 +16,7 @@ use RuntimeException;
  * * migration.csv
  * * config.ini
  * * fields.ini
+ * * reports.ini
  * * lists CSV files
  * * views CSV files
  *
@@ -37,6 +38,11 @@ class ModuleConfig
      * Type for fields configuration (fields.ini)
      */
     const CONFIG_TYPE_FIELDS = 'fields';
+
+    /**
+     * Type for reports configuration (reports.ini)
+     */
+    const CONFIG_TYPE_REPORTS = 'reports';
 
     /**
      * Type for list configuration (list.csv)
@@ -120,6 +126,10 @@ class ModuleConfig
         ],
         self::CONFIG_TYPE_FIELDS => [
             self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\FieldsPathFinder',
+            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\Parser',
+        ],
+        self::CONFIG_TYPE_REPORTS => [
+            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ReportsPathFinder',
             self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\Parser',
         ],
         self::CONFIG_TYPE_VIEW => [
