@@ -31,27 +31,19 @@ class MigrationParser extends Parser
     protected $wrapField = 'name';
 
     /**
-     * Wrap parsed fields into associative array
+     * Parse from path
      *
-     * Generic CSV parser returns an index array of fields.
-     * For migrations however it useful to have an associative
-     * array, where the key is the name (or other identifier of
-     * the field) and the value is the array of the field
-     * details.
+     * Parses a given file according to the specified options
      *
-     * @throws \InvalidArgumentException If $wrapField is not in the structure
-     * @param string $path      Path to file
-     * @param array  $options   Parsing options
-     * @param string $wrapField Field to use as the key
+     * @param string $path    Path to file
+     * @param array  $options Parsing options
      * @return array
      */
-    public function wrapFromPath($path, array $options = [], $wrapField = null)
+    public function parseFromPath($path, array $options = [])
     {
-        $result = [];
-
-        // Overwrite default wrap field
-        if (!empty($wrapField)) {
-            $this->wrapField = $wrapField;
+        $fields = parent::parseFromPath($path, $options);
+        if (empty($fields)) {
+            return $fields;
         }
 
         // Overwrite defaults
@@ -59,12 +51,9 @@ class MigrationParser extends Parser
             $this->options = $options;
         }
 
-        // Make sure that wrap field is in the list of structure fields
-        if (!in_array($this->wrapField, $this->options['structure'])) {
-            throw new \InvalidArgumentException("Wrap field [" . $this->wrapField . "] is not in the structure");
-        }
-
-        $fields = $this->parseFromPath($path, $options, $this->wrapField);
+        // Convert indexed array to associative one,
+        // using wrapField as a key for the record.
+        $result = [];
         foreach ($fields as $field) {
             $result[$field[$this->wrapField]] = $field;
         }
