@@ -1,0 +1,70 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Module configuration",
+    "description": "Module configuration options",
+    "type": "object",
+    "properties": {
+        "table": {
+            "title": "Module configuration parameters",
+            "description": "Basic module configuration parameters and flags",
+            "type": "object",
+            "properties": {
+                "display_field": {
+                    "title": "Display field",
+                    "description": "Module display field to use in links to records of this module.",
+                    "type": "string"
+                },
+                "alias": {
+                    "title": "Module alias",
+                    "description": "A different user-friendly name for the current module.",
+                    "type": "string"
+                },
+                "searchable": {
+                    "title": "Searchable",
+                    "description": "Whether or not the module is searchable.",
+                    "type": "boolean"
+                },
+                "typeahead_fields": {
+                    "title": "Type-ahead fields",
+                    "description": "Comma-separated list of fields to use for searching in type-ahead lookups",
+                    "type": "string"
+                },
+                "lookup_fields": {
+                    "title": "Lookup fields",
+                    "description": "Comma-separated list of fields to use in the URL for locating module record",
+                    "type": "string"
+                }
+            }
+        },
+        "parent": {
+            "title": "Module parent configuration",
+            "description": "Definition of a module's parent",
+            "type": "object",
+            "properties": {
+                "module": {
+                    "title": "Module name",
+                    "description": "Name fo the parent module",
+                    "type": "string"
+                },
+                "redirect": {
+                    "title": "Redirect behavior configuration",
+                    "description": "Definition of where to redirect upon creation/modification/deletion of module records",
+                    "type": "string",
+                    "enum": ["self", "parent", "referer"]
+                }
+            }
+        },
+        "associations": {
+            "title": "Module associations configuration",
+            "description": "Defines some association behaviors",
+            "type": "object",
+            "properties": {
+                "hide_associations": {
+                    "title": "List of hidden associations",
+                    "description": "Defines a list of associations that should be displayed",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
