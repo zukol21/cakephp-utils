@@ -22,6 +22,7 @@ class Parser extends AbstractCsvParser
      *
      * Parses a given file according to the specified options
      *
+     * @throws InvalidArgumentException when file is not readable or not valid
      * @param string $path    Path to file
      * @param array  $options Parsing options
      * @return array
