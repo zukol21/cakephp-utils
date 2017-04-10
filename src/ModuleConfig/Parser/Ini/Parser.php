@@ -13,7 +13,7 @@ use Piwik\Ini\IniReader;
 class Parser extends AbstractIniParser
 {
     /**
-     * Parse from path
+     * Parse
      *
      * Parses a given file according to the specified options
      *
@@ -21,7 +21,7 @@ class Parser extends AbstractIniParser
      * @param array  $options Parsing options
      * @return array
      */
-    public function parseFromPath($path, array $options = [])
+    public function parse($path, array $options = [])
     {
         $result = [];
 

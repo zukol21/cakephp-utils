@@ -22,13 +22,13 @@ class ParserTest extends PHPUnit_Framework_TestCase
      */
     public function testParseFromPathException()
     {
-        $result = $this->parser->parseFromPath('some-non-existing-file');
+        $result = $this->parser->parse('some-non-existing-file');
     }
 
     public function testParseFromPath()
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
-        $result = $this->parser->parseFromPath($file);
+        $result = $this->parser->parse($file);
 
         $this->assertTrue(is_array($result), "Parser returned a non-array");
         $this->assertFalse(empty($result), "Parser returned empty result");

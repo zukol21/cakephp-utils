@@ -31,7 +31,7 @@ class MigrationParser extends Parser
     protected $wrapField = 'name';
 
     /**
-     * Parse from path
+     * Parse
      *
      * Parses a given file according to the specified options
      *
@@ -39,9 +39,9 @@ class MigrationParser extends Parser
      * @param array  $options Parsing options
      * @return array
      */
-    public function parseFromPath($path, array $options = [])
+    public function parse($path, array $options = [])
     {
-        $fields = parent::parseFromPath($path, $options);
+        $fields = parent::parse($path, $options);
         if (empty($fields)) {
             return $fields;
         }

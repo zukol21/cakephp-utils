@@ -4,7 +4,7 @@ namespace Qobo\Utils\ModuleConfig\Parser;
 interface ParserInterface
 {
     /**
-     * Parse from path
+     * Parse
      *
      * Parses a given file according to the specified options
      *
@@ -12,5 +12,5 @@ interface ParserInterface
      * @param array  $options Options for parsing
      * @return array
      */
-    public function parseFromPath($path, array $options = []);
+    public function parse($path, array $options = []);
 }

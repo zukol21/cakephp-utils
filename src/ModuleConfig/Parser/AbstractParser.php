@@ -9,7 +9,7 @@ abstract class AbstractParser implements ParserInterface
     protected $options = [];
 
     /**
-     * Parse from path
+     * Parse
      *
      * Parses a given file according to the specified options
      *
@@ -17,7 +17,7 @@ abstract class AbstractParser implements ParserInterface
      * @param array  $options Options for parsing
      * @return array
      */
-    abstract public function parseFromPath($path, array $options = []);
+    abstract public function parse($path, array $options = []);
 
     /**
      * Validate path

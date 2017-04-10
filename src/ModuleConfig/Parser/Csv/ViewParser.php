@@ -23,7 +23,7 @@ use League\Csv\Reader;
 class ViewParser extends AbstractCsvParser
 {
     /**
-     * Parse from path
+     * Parse
      *
      * Parses a given file and return a list of all
      * records.
@@ -32,7 +32,7 @@ class ViewParser extends AbstractCsvParser
      * @param array  $options Parsing options
      * @return array
      */
-    public function parseFromPath($path, array $options = [])
+    public function parse($path, array $options = [])
     {
         $result = [];
 

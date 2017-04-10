@@ -18,7 +18,7 @@ use League\Csv\Reader;
 class Parser extends AbstractCsvParser
 {
     /**
-     * Parse from path
+     * Parse
      *
      * Parses a given file according to the specified options
      *
@@ -26,7 +26,7 @@ class Parser extends AbstractCsvParser
      * @param array  $options Parsing options
      * @return array
      */
-    public function parseFromPath($path, array $options = [])
+    public function parse($path, array $options = [])
     {
         $result = [];
 

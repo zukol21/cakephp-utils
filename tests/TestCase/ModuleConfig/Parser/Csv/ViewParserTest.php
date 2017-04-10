@@ -20,7 +20,7 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
     public function testParseFromPath()
     {
         $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'view.csv';
-        $result = $this->parser->parseFromPath($file);
+        $result = $this->parser->parse($file);
 
         $this->assertTrue(is_array($result), "Parser returned a non-array");
         $this->assertFalse(empty($result), "Parser returned empty result");
