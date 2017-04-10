@@ -4,7 +4,7 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig;
 use Cake\Core\Configure;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
-use Qobo\Utils\ModuleConfig\Parser\Ini\Parser;
+use Qobo\Utils\ModuleConfig\Parser\Ini\ConfigParser;
 use Qobo\Utils\ModuleConfig\PathFinder\ConfigPathFinder;
 
 class ModuleConfigTest extends PHPUnit_Framework_TestCase
@@ -39,7 +39,7 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
 
     public function testSetParser()
     {
-        $expected = new Parser();
+        $expected = new ConfigParser();
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
         $mc->setParser($expected);
         $result = $mc->getParser();
