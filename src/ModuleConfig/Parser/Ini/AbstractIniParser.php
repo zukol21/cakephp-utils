@@ -104,7 +104,6 @@ abstract class AbstractIniParser extends AbstractParser
 
         if (is_string($this->schema)) {
             $deref = new Dereferencer();
-            #$schema = $deref->dereference('file:///home/leonid/Work/cakephp-utils/src/ModuleConfig/Parser/Schema/config.json');
             $this->schema = $deref->dereference($this->schema);
 
             return $this->schema;
