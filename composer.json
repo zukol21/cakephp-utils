@@ -10,6 +10,7 @@
         "burzum/cakephp-file-storage": "^1.2",
         "muffin/trash": "^1.1",
         "league/csv": "^8.1",
+        "league/json-guard": "^0.5",
         "piwik/ini": "^1.0",
         "fzaninotto/faker": "^1.0"
     },
