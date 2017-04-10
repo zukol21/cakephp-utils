@@ -17,7 +17,7 @@ class MigrationParserTest extends PHPUnit_Framework_TestCase
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
     }
 
-    public function testParseFromPath()
+    public function testParse()
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
         $result = $this->parser->parse($file);

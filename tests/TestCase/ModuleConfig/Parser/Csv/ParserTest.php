@@ -20,12 +20,12 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testParseFromPathException()
+    public function testParseException()
     {
         $result = $this->parser->parse('some-non-existing-file');
     }
 
-    public function testParseFromPath()
+    public function testParse()
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
         $result = $this->parser->parse($file);

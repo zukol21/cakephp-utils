@@ -20,12 +20,12 @@ class ParserTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testParseFromPathException()
+    public function testParseException()
     {
         $result = $this->parser->parse('some-non-existing-file');
     }
 
-    public function testParseFromPath()
+    public function testParse()
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'config.ini';
         $result = $this->parser->parse($file);
@@ -38,7 +38,7 @@ class ParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('name', $result['table']['display_field'], "Parser misinterpreted 'display_field' value");
     }
 
-    public function testParseFromPathTestingArrays()
+    public function testParseTestingArrays()
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'array_in_config.ini';
         $result = $this->parser->parse($file);
