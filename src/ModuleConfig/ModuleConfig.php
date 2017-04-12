@@ -278,12 +278,12 @@ class ModuleConfig
     }
 
     /**
-     * Validate module configuration file
+     * Get parser errors
      *
-     * @return mixed Whatever Parser returned
+     * @return array List of parser errors
      */
-    public function validate()
+    public function getParserErrors()
     {
-        throw new BadMethodCallException("This method is not implemented yet, and is just a placeholder");
+        return $this->getParser()->getErrors();
     }
 }
