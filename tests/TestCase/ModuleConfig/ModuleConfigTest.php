@@ -4,7 +4,7 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig;
 use Cake\Core\Configure;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
-use Qobo\Utils\ModuleConfig\Parser\Ini\Parser;
+use Qobo\Utils\ModuleConfig\Parser\Ini\ConfigParser;
 use Qobo\Utils\ModuleConfig\PathFinder\ConfigPathFinder;
 
 class ModuleConfigTest extends PHPUnit_Framework_TestCase
@@ -39,7 +39,7 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
 
     public function testSetParser()
     {
-        $expected = new Parser();
+        $expected = new ConfigParser();
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
         $mc->setParser($expected);
         $result = $mc->getParser();
@@ -85,12 +85,18 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(empty($result), "Result is empty");
     }
 
-    /**
-     * @expectedException BadMethodCallException
-     */
-    public function testValidate()
+    public function testGetParserErrors()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
-        $result = $mc->validate();
+
+        // Before parsing
+        $result = $mc->getParserErrors();
+        $this->assertTrue(is_array($result), "Parser errors is not an array before parsing");
+        $this->assertTrue(empty($result), "Parser errors is not empty before parsing");
+        // Parsing
+        $mc->parse();
+        // After parsing
+        $result = $mc->getParserErrors();
+        $this->assertTrue(is_array($result), "Parser errors is not an array after parsing");
     }
 }

@@ -17,10 +17,10 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
     }
 
-    public function testParseFromPath()
+    public function testParse()
     {
         $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'view.csv';
-        $result = $this->parser->parseFromPath($file);
+        $result = $this->parser->parse($file);
 
         $this->assertTrue(is_array($result), "Parser returned a non-array");
         $this->assertFalse(empty($result), "Parser returned empty result");
