@@ -1,0 +1,16 @@
+{
+    "main": {
+        "enable": true,
+        "items": [
+            {
+                "label": "Foo",
+                "url": "/foo/",
+                "icon": "user",
+                "order": 10
+            }
+        ]
+    },
+    "admin": {
+        "enable": false
+    }
+}
