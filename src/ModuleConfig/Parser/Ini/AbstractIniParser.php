@@ -44,6 +44,10 @@ abstract class AbstractIniParser extends AbstractParser
             $this->validatePath($path);
             // Read and parse path
             $result = $this->getData($path);
+            // No need to validate empty data
+            if (empty($result)) {
+                return $result;
+            }
             // Validate result
             $data = json_decode(json_encode($result));
             $schema = $this->getSchema();
@@ -82,7 +86,9 @@ abstract class AbstractIniParser extends AbstractParser
     {
         $validator = new Validator($data, $schema);
         if ($validator->fails()) {
-            $this->errors = array_merge($this->errors, $validator->errors());
+            foreach ($validator->errors() as $error) {
+                $this->errors[] = $error->getMessage();
+            }
             throw new InvalidArgumentException("Validation failed");
         }
     }
