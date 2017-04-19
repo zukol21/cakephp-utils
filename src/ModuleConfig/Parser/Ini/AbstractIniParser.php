@@ -89,7 +89,6 @@ abstract class AbstractIniParser extends AbstractParser
             foreach ($validator->errors() as $error) {
                 $this->errors[] = $error->getMessage();
             }
-            $this->errors = array_merge($this->errors, $validator->errors());
             throw new InvalidArgumentException("Validation failed");
         }
     }
