@@ -270,11 +270,12 @@ class ModuleConfig
     /**
      * Find module configuration file
      *
+     * @param bool $validate Whether or not validate result
      * @return mixed Whatever the PathFinder returned
      */
-    public function find()
+    public function find($validate = true)
     {
-        return $this->getFinder()->find($this->module, $this->configFile);
+        return $this->getFinder()->find($this->module, $this->configFile, $validate);
     }
 
     /**
