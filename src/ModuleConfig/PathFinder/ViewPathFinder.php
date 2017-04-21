@@ -27,9 +27,10 @@ class ViewPathFinder extends BasePathFinder
      *
      * @param string $module Module to look for files in
      * @param string $path     Path to look for
+     * @param bool   $validate Validate existence of the result
      * @return null|string|array Null for not found, string for single path, array for multiple paths
      */
-    public function find($module, $path = null)
+    public function find($module, $path = null, $validate = true)
     {
         if (empty($path)) {
             throw new \InvalidArgumentException("Path is not specified");
@@ -43,6 +44,6 @@ class ViewPathFinder extends BasePathFinder
             $path .= $this->extension;
         }
 
-        return parent::find($module, $path);
+        return parent::find($module, $path, $validate);
     }
 }

@@ -31,9 +31,10 @@ class ListPathFinder extends BasePathFinder
      *
      * @param string $module Module to look for files in
      * @param string $path   Path to look for
+     * @param bool   $validate Validate existence of the result
      * @return null|string|array Null for not found, string for single path, array for multiple paths
      */
-    public function find($module, $path = null)
+    public function find($module, $path = null, $validate = true)
     {
         if (empty($module)) {
             $module = self::DEFAULT_MODULE;
@@ -53,7 +54,7 @@ class ListPathFinder extends BasePathFinder
 
         $result = null;
         try {
-            $result = parent::find($module, $path);
+            $result = parent::find($module, $path, $validate);
         } catch (\Exception $e) {
             if ($module == self::DEFAULT_MODULE) {
                 throw $e;
@@ -61,7 +62,7 @@ class ListPathFinder extends BasePathFinder
         }
 
         if (($result === null) && ($module <> self::DEFAULT_MODULE)) {
-            $result = parent::find(self::DEFAULT_MODULE, $path);
+            $result = parent::find(self::DEFAULT_MODULE, $path, $validate);
         }
 
         return $result;

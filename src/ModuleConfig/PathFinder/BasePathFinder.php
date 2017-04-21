@@ -15,9 +15,10 @@ abstract class BasePathFinder implements PathFinderInterface
      * @throws \InvalidArgumentException when module or path is not specified
      * @param string $module Module to look for files in
      * @param string $path     Path to look for
+     * @param bool   $validate Validate existence of the result
      * @return null|string|array Null for not found, string for single path, array for multiple paths
      */
-    public function find($module, $path = null)
+    public function find($module, $path = null, $validate = true)
     {
         if (empty($module)) {
             throw new \InvalidArgumentException("Module is not specified");
@@ -45,7 +46,9 @@ abstract class BasePathFinder implements PathFinderInterface
 
         $result .= $path;
 
-        $this->validatePath($result);
+        if ($validate) {
+            $this->validatePath($result);
+        }
 
         return $result;
     }
