@@ -2,6 +2,7 @@
 namespace Qobo\Utils\ModuleConfig\PathFinder;
 
 use Cake\Core\Configure;
+use Qobo\Utils\Utility;
 
 abstract class BasePathFinder implements PathFinderInterface
 {
@@ -34,10 +35,10 @@ abstract class BasePathFinder implements PathFinderInterface
             throw new \InvalidArgumentException("Path is not a string");
         }
 
-        if (empty($this->pathConfigKey)) {
-            throw new \InvalidArgumentException("pathConfigKey is empty");
+        $result = '';
+        if (!empty($this->pathConfigKey)) {
+            $result = Configure::readOrFail($this->pathConfigKey);
         }
-        $result = Configure::readOrFail($this->pathConfigKey);
         $result .= $module . DIRECTORY_SEPARATOR;
 
         if (!empty($this->prefix)) {
@@ -47,28 +48,9 @@ abstract class BasePathFinder implements PathFinderInterface
         $result .= $path;
 
         if ($validate) {
-            $this->validatePath($result);
+            Utility::validatePath($result);
         }
 
         return $result;
-    }
-
-    /**
-     * Check validity of the given path
-     *
-     * If the path is not valid, throw an exception.
-     *
-     * @throws \InvalidArgumentException when path is invalid
-     * @param string $path Path to validate
-     * @return void
-     */
-    public function validatePath($path)
-    {
-        if (!file_exists($path)) {
-            throw new \InvalidArgumentException("Path does not exist [$path]");
-        }
-        if (!is_readable($path)) {
-            throw new \InvalidArgumentException("Path is not readable [$path]");
-        }
     }
 }
