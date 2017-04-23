@@ -24,5 +24,7 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_array($result), "Parser returned a non-array");
         $this->assertFalse(empty($result), "Parser returned empty result");
+
+        print_r($result);
     }
 }

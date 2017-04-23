@@ -29,4 +29,13 @@ class MenusParserTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(empty($result['main']['enable']), "Parser missed 'enable' key");
         $this->assertEquals(true, $result['main']['enable'], "Parser misinterpreted 'enable' value");
     }
+
+    public function testParseMissing()
+    {
+        $file = $this->dataDir . 'MissingModule' . DS . 'config' . DS . 'menus.json';
+        $result = $this->parser->parse($file);
+
+        $this->assertTrue(is_array($result), "Parser returned a non-array");
+        $this->assertTrue(empty($result), "Parser returned non-empty result");
+    }
 }

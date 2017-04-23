@@ -24,5 +24,8 @@ class ListParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_array($result), "Parser returned a non-array");
         $this->assertFalse(empty($result), "Parser returned empty result");
+        $this->assertEquals(2, count($result), "Parser returned incorrect count of list values");
+        $this->assertTrue(array_key_exists('value', $result[0]), "Parser missed 'value' key in first element of gender list");
+        $this->assertEquals($result[0]['value'], 'm', "Parser missed 'm' as 'value' key in first element of gender list");
     }
 }
