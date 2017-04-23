@@ -38,6 +38,7 @@ abstract class AbstractParser implements ParserInterface
     /**
      * Read and parse a given path
      *
+     * @param string $path Path to file
      * @return array
      */
     abstract protected function getDataFromPath($path);

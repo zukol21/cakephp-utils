@@ -43,6 +43,5 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($result[0]), "Parser returned incorrect number of items in first element");
         $this->assertEquals('status', $result[0][0], "Parser missed first field in first element");
         $this->assertEquals('type', $result[1][0], "Parser missed first field in second element");
-
     }
 }

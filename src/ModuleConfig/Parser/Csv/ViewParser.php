@@ -36,6 +36,7 @@ class ViewParser extends AbstractCsvParser
     /**
      * Read and parse a given path
      *
+     * @param string $path Path to file
      * @return array
      */
     protected function getDataFromPath($path)
