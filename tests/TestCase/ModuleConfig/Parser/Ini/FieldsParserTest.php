@@ -17,37 +17,6 @@ class FieldsParserTest extends PHPUnit_Framework_TestCase
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testParseExceptionNonExisting()
-    {
-        $result = $this->parser->parse('some-non-existing-file');
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testParseExceptionEmptyPath()
-    {
-        $result = $this->parser->parse('');
-    }
-
-    public function testGetErrors()
-    {
-        $caughtException = false;
-        try {
-            $result = $this->parser->parse('');
-        } catch (\Exception $e) {
-            $caughtException = true;
-            $errors = $this->parser->getErrors();
-            $this->assertTrue(is_array($errors), "Errors are not an array");
-            $this->assertFalse(empty($errors), "Errors are empty");
-            $this->assertEquals($e->getMessage(), $errors[0], "Error message is different from exception message");
-        }
-        $this->assertTrue($caughtException, "Exception was not caught");
-    }
-
     public function testParse()
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
