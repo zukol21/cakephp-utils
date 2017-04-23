@@ -1,0 +1,6 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "View configuration",
+    "description": "View configuration",
+    "type": "array"
+}
