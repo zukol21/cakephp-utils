@@ -23,34 +23,13 @@ use League\Csv\Reader;
 class ViewParser extends AbstractCsvParser
 {
     /**
-     * Parse
+     * JSON schema
      *
-     * Parses a given file and return a list of all
-     * records.
+     * This can either be a string, pointing to the file
+     * or an StdClass with an instance of an already parsed
+     * schema
      *
-     * @param string $path    Path to file
-     * @param array  $options Parsing options
-     * @return array
+     * @var string|StdClass $schema JSON schema
      */
-    public function parse($path, array $options = [])
-    {
-        $result = [];
-
-        $this->validatePath($path);
-
-        // Overwrite defaults
-        if (!empty($options)) {
-            $this->options = $options;
-        }
-
-        // If no structure specified (default or param), then use headers
-        if (empty($this->options['structure'])) {
-            $this->options['structure'] = $this->getHeadersFromPath($path);
-        }
-
-        $reader = Reader::createFromPath($path, $this->open_mode);
-        $result = $reader->setOffset(1)->fetchAll();
-
-        return $result;
-    }
+    protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'view.json';
 }

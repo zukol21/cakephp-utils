@@ -20,4 +20,14 @@ class ConfigParser extends AbstractIniParser
      * @var string|StdClass $schema JSON schema
      */
     protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'config.json';
+
+    /**
+     * @var array $defaults Default configuration
+     */
+    protected $defaults = [
+        'table' => [
+            'icon' => 'cube',
+            'searchable' => true,
+        ],
+    ];
 }
