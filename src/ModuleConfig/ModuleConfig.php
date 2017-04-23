@@ -285,7 +285,7 @@ class ModuleConfig
      */
     public function parse()
     {
-        return $this->getParser()->parse($this->find(), $this->options);
+        return $this->getParser()->parse($this->find($this->module, $this->configFile, false), $this->options);
     }
 
     /**
