@@ -32,4 +32,22 @@ class ViewParser extends AbstractCsvParser
      * @var string|StdClass $schema JSON schema
      */
     protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'view.json';
+
+    /**
+     * Read and parse a given path
+     *
+     * @return array
+     */
+    protected function getDataFromPath($path)
+    {
+        $result = [];
+
+        $reader = Reader::createFromPath($path, $this->open_mode);
+        $rows = $reader->setOffset(1)->fetchAll();
+        foreach ($rows as $row) {
+            $result[] = $row;
+        }
+
+        return $result;
+    }
 }

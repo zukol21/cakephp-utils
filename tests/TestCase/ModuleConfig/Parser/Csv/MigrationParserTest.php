@@ -35,6 +35,15 @@ class MigrationParserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('unique', $result['id']), "Parser missed 'unique' key in 'id' field");
     }
 
+    public function testParseNonExisting()
+    {
+        $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'missing_migration.csv';
+        $result = $this->parser->parse($file);
+
+        $this->assertTrue(is_array($result), "Parser returned a non-array");
+        $this->assertTrue(empty($result), "Parser returned empty result");
+    }
+
     public function testWrapFromPath()
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
