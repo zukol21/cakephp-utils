@@ -86,4 +86,22 @@ class ListPathFinderTest extends PHPUnit_Framework_TestCase
     {
         $path = $this->pf->find('Foo', ['foo' => 'bar']);
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testFindExceptionPathNotExist()
+    {
+        $path = $this->pf->find('Common', 'no_such_list');
+    }
+
+    public function testFindCommonFallback()
+    {
+        $path = $this->pf->find('Foo', 'genders');
+        $this->assertFalse(empty($path), "Path is empty [$path]");
+        $this->assertTrue(is_string($path), "Path is not a string [$path]");
+        $this->assertTrue(file_exists($path), "Path does not exist [$path]");
+        $this->assertTrue(is_readable($path), "Path is not readable [$path]");
+        $this->assertTrue(is_file($path), "Path is not a file [$path]");
+    }
 }
