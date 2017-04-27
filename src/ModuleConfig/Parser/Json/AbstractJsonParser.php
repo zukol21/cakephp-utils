@@ -9,11 +9,11 @@ abstract class AbstractJsonParser extends AbstractParser
      * Read and parse a given path
      *
      * @param string $path Path to read and parse
-     * @return array
+     * @return object
      */
     protected function getDataFromPath($path)
     {
-        $result = json_decode(file_get_contents($path), true);
+        $result = (object)json_decode(file_get_contents($path));
 
         return $result;
     }

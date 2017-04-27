@@ -39,7 +39,7 @@ abstract class AbstractCsvParser extends AbstractParser
      * Read and parse a given path
      *
      * @param string $path Path to file
-     * @return array
+     * @return object
      */
     protected function getDataFromPath($path)
     {
@@ -55,6 +55,7 @@ abstract class AbstractCsvParser extends AbstractParser
         foreach ($rows as $row) {
             $result[] = $row;
         }
+        $result = (object)json_decode(json_encode($result));
 
         return $result;
     }

@@ -42,19 +42,18 @@ class MigrationParser extends AbstractCsvParser
     protected $wrapField = 'name';
 
     /**
-     * Parse
+     * Read and parse a given path
      *
-     * Parses a given file according to the specified options
-     *
-     * @param string $path    Path to file
-     * @param array  $options Parsing options
-     * @return array
+     * @param string $path Path to file
+     * @return object
      */
-    public function parse($path, array $options = [])
+    protected function getDataFromPath($path)
     {
-        $fields = parent::parse($path, $options);
+        $result = parent::getDataFromPath($path);
+
+        $fields = json_decode(json_encode($result), true);
         if (empty($fields)) {
-            return $fields;
+            return $result;
         }
 
         // Convert indexed array to associative one,
@@ -63,6 +62,7 @@ class MigrationParser extends AbstractCsvParser
         foreach ($fields as $field) {
             $result[$field[$this->wrapField]] = $field;
         }
+        $result = (object)json_decode(json_encode($result));
 
         return $result;
     }

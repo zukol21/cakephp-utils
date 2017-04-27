@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use League\JsonGuard\Dereferencer;
 use League\JsonGuard\Validator;
 use Qobo\Utils\Utility;
+use StdClass;
 
 abstract class AbstractParser implements ParserInterface
 {
@@ -26,12 +27,17 @@ abstract class AbstractParser implements ParserInterface
     protected $errors = [];
 
     /**
+     * @var array $errors List of warnings from last parsing
+     */
+    protected $warnings = [];
+
+    /**
      * @var array $options Parsing options
      */
     protected $options = [];
 
     /**
-     * @var array $defaults Default configuration
+     * @var object|array $defaults Default configuration
      */
     protected $defaults = [];
 
@@ -39,7 +45,7 @@ abstract class AbstractParser implements ParserInterface
      * Read and parse a given path
      *
      * @param string $path Path to file
-     * @return array
+     * @return object
      */
     abstract protected function getDataFromPath($path);
 
@@ -48,16 +54,15 @@ abstract class AbstractParser implements ParserInterface
      *
      * Parses a given file according to the specified options
      *
-     * @throws InvalidArgumentException when file is not readable or not valid
      * @param string $path    Path to file
      * @param array  $options Options for parsing
-     * @return array
+     * @return object
      */
     public function parse($path, array $options = [])
     {
         $result = [];
 
-        // Overwrite defaults
+        // Overwrite default options
         if (!empty($options)) {
             $this->options = $options;
         }
@@ -67,30 +72,63 @@ abstract class AbstractParser implements ParserInterface
         try {
             Utility::validatePath($path);
         } catch (Exception $e) {
-            $result = $this->defaults;
+            $result = $this->getDefaults();
             $configFileExists = false;
+            $this->warnings[] = "Path does not exist, relying on defaults: $path";
         }
 
         try {
             // Read and parse path
             if ($configFileExists) {
                 $result = $this->getDataFromPath($path);
-                $result = array_replace_recursive($this->defaults, $result);
+
+                // Temporarily convert to arrays, so that we can recursive merge
+                $defaults = (array)json_decode(json_encode($this->getDefaults()), true);
+                $result = (array)json_decode(json_encode($result), true);
+
+                // Merge defaults and result
+                $result = array_replace_recursive($defaults, $result);
+
+                // Restore the world order of objects
+                $result = (object)json_decode(json_encode($result));
             }
-            // No need to validate empty data
-            if (empty($result)) {
+
+            // No need to validate empty data (empty() does not work on objects)
+            if (empty((array)$result)) {
+                $this->warnings[] = "Skipping validation for empty result";
                 return $result;
             }
-            // Validate result
-            $data = json_decode(json_encode($result));
+
             $schema = $this->getSchema();
-            $this->validateData($data, $schema);
+            // No need to validate with empty schema (empty() does not work on objects)
+            if (empty((array)$schema)) {
+                $this->warnings[] = "Skipping validation for empty schema";
+                return $result;
+            }
+
+            // Validate result
+            $this->validateData($result, $schema);
         } catch (Exception $e) {
-            $this->errors[] = $e->getMessage();
-            throw new InvalidArgumentException($e->getMessage());
+            $this->fail($e->getMessage());
         }
 
         return $result;
+    }
+
+    /**
+     * Fail execution with a given error
+     *
+     * * Adds error to the list of errors
+     * * Throws an exception with the error message
+     *
+     * @throws \InvalidArgumentException
+     * @param string $message Error message
+     * @return void
+     */
+    protected function fail($message)
+    {
+        $this->errors[] = $message;
+        throw new InvalidArgumentException($message);
     }
 
     /**
@@ -104,9 +142,18 @@ abstract class AbstractParser implements ParserInterface
     }
 
     /**
+     * Get parser warnings
+     *
+     * @return array List of warnings from last parsing
+     */
+    public function getWarnings()
+    {
+        return $this->warnings;
+    }
+
+    /**
      * Validate given data against schema
      *
-     * @throws InvalidArgumentException when validation fails, and sets $errors
      * @param object $data Data to validate
      * @param object $schema Schema to validate against
      * @return void
@@ -118,19 +165,20 @@ abstract class AbstractParser implements ParserInterface
             foreach ($validator->errors() as $error) {
                 $this->errors[] = $error->getMessage();
             }
-            throw new InvalidArgumentException("Validation failed");
+            $this->fail("Validation failed");
         }
     }
 
     /**
      * Get schema
      *
-     * @return object
+     * @return object|null
      */
     protected function getSchema()
     {
+        $result = null;
         if (empty($this->schema)) {
-            throw new InvalidArgumentException("Schema not specified");
+            return $result;
         }
 
         if (is_object($this->schema)) {
@@ -144,6 +192,26 @@ abstract class AbstractParser implements ParserInterface
             return $this->schema;
         }
 
-        throw new InvalidArgumentException("Schema is not a string or stdClass: " . print_r($this->schema, true));
+        $this->fail("Schema is not a string or object: " . gettype($this->schema));
+    }
+
+    /**
+     * Get default values
+     *
+     * @return object
+     */
+    protected function getDefaults()
+    {
+        if (empty($this->defaults)) {
+            return new StdClass();
+        }
+
+        if (is_array($this->defaults)) {
+            // Convert $this->defaults to object.
+            // Unlike casting with (object), this handles recursive arrays
+            return (object)json_decode(json_encode($this->defaults));
+        }
+
+        return $this->defaults;
     }
 }
