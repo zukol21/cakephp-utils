@@ -2,6 +2,7 @@
 namespace Qobo\Utils\ModuleConfig;
 
 use BadMethodCallException;
+use Exception;
 use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
 use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
 use RuntimeException;
@@ -113,6 +114,16 @@ class ModuleConfig
     protected $parser;
 
     /**
+     * @var array $errors List of errors
+     */
+    protected $errors = [];
+
+    /**
+     * @var array $warnings List of warnings
+     */
+    protected $warnings = [];
+
+    /**
      * Class lookup map
      *
      * @var array
@@ -170,7 +181,6 @@ class ModuleConfig
      * This is a factory method, which finds the appropriate class
      * name for a given configuration type.
      *
-     * @throws \RuntimeException When the class is not defined.
      * @param string $classType Type of class to find
      * @return string
      */
@@ -179,7 +189,7 @@ class ModuleConfig
         $result = null;
 
         if (empty($this->lookup[$this->configType][$classType])) {
-            throw new RuntimeException("No [$classType] found for configurationi type [" . $this->configType . "]");
+            $this->fail("Module Config : No [$classType] found for configurationi type [" . $this->configType . "]");
         }
         $result = $this->lookup[$this->configType][$classType];
 
@@ -192,7 +202,6 @@ class ModuleConfig
      * This is a factory method, which finds the appropriate class
      * for a given configuration type and returns an instance of it.
      *
-     * @throws \RuntimeException When the defined class does not exist.
      * @param string $classType Type of class to find
      * @return object
      */
@@ -201,7 +210,7 @@ class ModuleConfig
         $className = $this->getClassByType($classType);
 
         if (!class_exists($className)) {
-            throw new RuntimeException("Class [$className] does not exist");
+            $this->fail("Module Config : Class [$className] does not exist");
         }
 
         return new $className;
@@ -275,17 +284,78 @@ class ModuleConfig
      */
     public function find($validate = true)
     {
-        return $this->getFinder()->find($this->module, $this->configFile, $validate);
+        $finder = null;
+        $exception = null;
+        try {
+            $finder = $this->getFinder();
+            $result = $finder->find($this->module, $this->configFile, $validate);
+        } catch (Exception $e) {
+            $exception = $e;
+            $error = "Finder : " . $e->getMessage();
+            $this->errors[] = $error;
+        }
+
+        // Get finder errors and warnings, if any
+        if (is_object($finder)) {
+            $this->errors = array_merge($this->errors, $finder->getErrors());
+            $this->warnings = array_merge($this->warnings, $finder->getWarnings());
+        }
+
+        // Re-throw finder exception
+        if ($exception) {
+            throw $exception;
+        }
+
+        return $result;
     }
 
     /**
      * Parse module configuration file
      *
-     * @return mixed Whatever Parser returned
+     * @return object Whatever Parser returned
      */
     public function parse()
     {
-        return $this->getParser()->parse($this->find($this->module, $this->configFile, false), $this->options);
+        $parser = null;
+        $exception = null;
+        try {
+            $path = $this->find($this->module, $this->configFile, false);
+            $parser = $this->getParser();
+            $result = $parser->parse($path, $this->options);
+        } catch (Exception $e) {
+            $exception = $e;
+            $error = "Parser : " . $e->getMessage();
+            $this->errors[] = $error;
+        }
+
+        // Get parser errors and warnings, if any
+        if (is_object($parser)) {
+            $this->errors = array_merge($this->errors, $parser->getErrors());
+            $this->warnings = array_merge($this->warnings, $parser->getWarnings());
+        }
+
+        // Re-throw parser exception
+        if ($exception) {
+            throw $exception;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Fail execution with a given error
+     *
+     * * Adds error to the list of errors
+     * * Throws an exception with the error message
+     *
+     * @throws \RuntimeException
+     * @param string $message Error message
+     * @return void
+     */
+    protected function fail($message)
+    {
+        $this->errors[] = $message;
+        throw new RuntimeException($message);
     }
 
     /**
@@ -293,8 +363,18 @@ class ModuleConfig
      *
      * @return array List of parser errors
      */
-    public function getParserErrors()
+    public function getErrors()
     {
-        return $this->getParser()->getErrors();
+        return $this->errors;
+    }
+
+    /**
+     * Get parser warnings
+     *
+     * @return array List of parser warnings
+     */
+    public function getWarnings()
+    {
+        return $this->warnings;
     }
 }
