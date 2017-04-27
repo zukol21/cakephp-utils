@@ -1,6 +1,8 @@
 <?php
 namespace Qobo\Utils\ModuleConfig\Parser\Ini;
 
+use StdClass;
+
 /**
  * Config INI Parser
  *
