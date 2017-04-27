@@ -59,7 +59,7 @@ class ListParserTest extends PHPUnit_Framework_TestCase
 
         $badValue = false;
         foreach ($errors as $error) {
-            if (preg_match('/bad_value/', $error)) {
+            if (preg_match('/any of the provided schemas/', $error)) {
                 $badValue = true;
                 break;
             }

@@ -3,36 +3,46 @@
     "definitions": {
         "listItem": {
             "title": "List item",
-            "description": "A single list item",
+            "description": "A single list item definition",
             "type": "object",
             "properties": {
                 "value": {
                     "title": "Value",
                     "description": "Value to be stored in the database",
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
                 },
                 "label": {
                     "title": "Label",
                     "description": "User-friendly label",
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 1
                 },
                 "inactive": {
                     "title": "Inactive",
                     "description": "Whether or not the item is active",
-                    "type": "string",
-                    "enum": ["", "0", "1"]
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": ["", "0", "1"]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
                 }
             },
             "additionalProperties": false,
             "required": ["value", "label", "inactive"]
         }
     },
-    "title": "List configuration",
-    "description": "List items configuration",
+    "title": "CSV List Configuration",
+    "description": "List items configuration for a single CSV list",
     "type": "object",
     "properties": {
         "title": "List items",
-        "description": "List items list",
+        "description": "A list of items for a given list",
         "items": {
             "type": "array",
             "items": {
