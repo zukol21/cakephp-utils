@@ -37,11 +37,6 @@ abstract class AbstractParser implements ParserInterface
     protected $options = [];
 
     /**
-     * @var object|array $defaults Default configuration
-     */
-    protected $defaults = [];
-
-    /**
      * Read and parse a given path
      *
      * @param string $path Path to file
@@ -60,7 +55,7 @@ abstract class AbstractParser implements ParserInterface
      */
     public function parse($path, array $options = [])
     {
-        $result = [];
+        $result = new StdClass();
 
         // Overwrite default options
         if (!empty($options)) {
@@ -72,7 +67,8 @@ abstract class AbstractParser implements ParserInterface
         try {
             Utility::validatePath($path);
         } catch (Exception $e) {
-            $result = $this->getDefaults();
+            // Merge empty data with defaults
+            $result = $this->mergeWithDefaults($result);
             $configFileExists = false;
             $this->warnings[] = "Path does not exist, relying on defaults: $path";
         }
@@ -81,16 +77,7 @@ abstract class AbstractParser implements ParserInterface
             // Read and parse path
             if ($configFileExists) {
                 $result = $this->getDataFromPath($path);
-
-                // Temporarily convert to arrays, so that we can recursive merge
-                $defaults = (array)json_decode(json_encode($this->getDefaults()), true);
-                $result = (array)json_decode(json_encode($result), true);
-
-                // Merge defaults and result
-                $result = array_replace_recursive($defaults, $result);
-
-                // Restore the world order of objects
-                $result = (object)json_decode(json_encode($result));
+                $result = $this->mergeWithDefaults($result);
             }
 
             // No need to validate empty data (empty() does not work on objects)
@@ -111,7 +98,7 @@ abstract class AbstractParser implements ParserInterface
             // Validate result
             $this->validateData($result, $schema);
         } catch (Exception $e) {
-            $this->fail($e->getMessage());
+            $this->fail("$path : " . $e->getMessage());
         }
 
         return $result;
@@ -198,22 +185,13 @@ abstract class AbstractParser implements ParserInterface
     }
 
     /**
-     * Get default values
+     * Merge with default values
      *
+     * @param object $data Data to merge with defaults
      * @return object
      */
-    protected function getDefaults()
+    protected function mergeWithDefaults($data)
     {
-        if (empty($this->defaults)) {
-            return new StdClass();
-        }
-
-        if (is_array($this->defaults)) {
-            // Convert $this->defaults to object.
-            // Unlike casting with (object), this handles recursive arrays
-            return (object)json_decode(json_encode($this->defaults));
-        }
-
-        return $this->defaults;
+        return $data;
     }
 }
