@@ -82,21 +82,37 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
         $result = $mc->parse();
-        $this->assertFalse(empty($result), "Result is empty");
+        $this->assertTrue(is_object($result), "Result is not an object");
+        $this->assertFalse(empty(json_decode(json_encode($result), true)), "Result is empty");
     }
 
-    public function testGetParserErrors()
+    public function testGetErrors()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
 
         // Before parsing
-        $result = $mc->getParserErrors();
-        $this->assertTrue(is_array($result), "Parser errors is not an array before parsing");
-        $this->assertTrue(empty($result), "Parser errors is not empty before parsing");
+        $result = $mc->getErrors();
+        $this->assertTrue(is_array($result), "Errors is not an array before parsing");
+        $this->assertTrue(empty($result), "Errors is not empty before parsing");
         // Parsing
         $mc->parse();
         // After parsing
-        $result = $mc->getParserErrors();
-        $this->assertTrue(is_array($result), "Parser errors is not an array after parsing");
+        $result = $mc->getErrors();
+        $this->assertTrue(is_array($result), "Errors is not an array after parsing");
+    }
+
+    public function testGetWarnings()
+    {
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
+
+        // Before parsing
+        $result = $mc->getWarnings();
+        $this->assertTrue(is_array($result), "Warnings is not an array before parsing");
+        $this->assertTrue(empty($result), "Warnings is not empty before parsing");
+        // Parsing
+        $mc->parse();
+        // After parsing
+        $result = $mc->getErrors();
+        $this->assertTrue(is_array($result), "Warnings is not an array after parsing");
     }
 }
