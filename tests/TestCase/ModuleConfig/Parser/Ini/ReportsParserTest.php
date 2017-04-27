@@ -22,9 +22,12 @@ class ReportsParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'reports.ini';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
-        $this->assertFalse(empty($result), "Parser returned empty result");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
 
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
+        $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertFalse(empty($result['by_campaign_name']), "Parser missed 'by_campaign_name' section");
         $this->assertFalse(empty($result['by_campaign_name']['widget_type']), "Parser missed 'widget_type' key");
         $this->assertEquals('report', $result['by_campaign_name']['widget_type'], "Parser misinterpreted 'widget_type' value");

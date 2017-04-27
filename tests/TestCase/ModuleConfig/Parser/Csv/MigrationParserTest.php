@@ -22,9 +22,12 @@ class MigrationParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
-        $this->assertFalse(empty($result), "Parser returned empty result");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
 
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
+        $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertTrue(array_key_exists('id', $result), "Parser missed 'id' field");
         $this->assertTrue(array_key_exists('name', $result['id']), "Parser missed 'name' key in 'id' field");
         $this->assertEquals('id', $result['id']['name'], "Parser missed 'name' value in 'id' field");
@@ -40,7 +43,10 @@ class MigrationParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'missing_migration.csv';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
         $this->assertTrue(empty($result), "Parser returned empty result");
     }
 
@@ -49,7 +55,10 @@ class MigrationParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
         $this->assertFalse(empty($result), "Parser returned empty result");
     }
 }

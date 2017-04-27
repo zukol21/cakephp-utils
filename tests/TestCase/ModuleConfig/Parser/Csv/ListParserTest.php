@@ -22,7 +22,10 @@ class ListParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Common' . DS . 'lists' . DS . 'genders.csv';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
         $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertEquals(2, count($result), "Parser returned incorrect count of list values");
         $this->assertTrue(array_key_exists('value', $result[0]), "Parser missed 'value' key in first element of gender list");

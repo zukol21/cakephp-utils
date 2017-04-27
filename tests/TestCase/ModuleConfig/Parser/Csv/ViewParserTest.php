@@ -23,7 +23,11 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'view.csv';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
         $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertTrue(is_array($result[0]), "Parser returned a non-array first element");
         $this->assertFalse(empty($result[0]), "Parser returned a non-array first element");
@@ -36,7 +40,11 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'index.csv';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
         $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertTrue(is_array($result[0]), "Parser returned a non-array first element");
         $this->assertFalse(empty($result[0]), "Parser returned a non-array first element");

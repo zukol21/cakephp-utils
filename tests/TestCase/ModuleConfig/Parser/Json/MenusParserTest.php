@@ -22,12 +22,7 @@ class MenusParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'menus.json';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
-        $this->assertFalse(empty($result), "Parser returned empty result");
-
-        $this->assertFalse(empty($result['main']), "Parser missed 'main' section");
-        $this->assertFalse(empty($result['main']['enable']), "Parser missed 'enable' key");
-        $this->assertEquals(true, $result['main']['enable'], "Parser misinterpreted 'enable' value");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
     }
 
     public function testParseMissing()
@@ -35,7 +30,6 @@ class MenusParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'MissingModule' . DS . 'config' . DS . 'menus.json';
         $result = $this->parser->parse($file);
 
-        $this->assertTrue(is_array($result), "Parser returned a non-array");
-        $this->assertTrue(empty($result), "Parser returned non-empty result");
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
     }
 }
