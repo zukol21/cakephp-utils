@@ -1,5 +1,17 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "fieldName": {
+            "title": "Module field name",
+            "description": "A single module field name",
+            "type": "string"
+        },
+        "moduleName": {
+            "title": "Module name",
+            "description": "A single module name",
+            "type": "string"
+        }
+    },
     "title": "Module configuration",
     "description": "Module configuration options",
     "type": "object",
@@ -12,7 +24,7 @@
                 "display_field": {
                     "title": "Display field",
                     "description": "Module display field to use in links to records of this module.",
-                    "type": "string"
+                    "$ref": "#/definitions/fieldName"
                 },
                 "alias": {
                     "title": "Module alias",
@@ -44,7 +56,7 @@
                 "module": {
                     "title": "Module name",
                     "description": "Name fo the parent module",
-                    "type": "string"
+                    "$ref": "#/definitions/moduleName"
                 },
                 "redirect": {
                     "title": "Redirect behavior configuration",
