@@ -14,5 +14,8 @@ use Cake\Core\Configure;
  */
 class ReportsPathFinder extends ConfigPathFinder
 {
+    /**
+     * @var string $fileName File name
+     */
     protected $fileName = 'reports.ini';
 }

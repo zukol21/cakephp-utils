@@ -14,7 +14,14 @@ use Cake\Core\Configure;
  */
 class ViewPathFinder extends BasePathFinder
 {
+    /**
+     * @var string $prefix Path prefix
+     */
     protected $prefix = 'views';
+
+    /**
+     * @var string $extension Default file extension
+     */
     protected $extension = '.csv';
 
     /**
@@ -33,10 +40,11 @@ class ViewPathFinder extends BasePathFinder
     public function find($module, $path = null, $validate = true)
     {
         if (empty($path)) {
-            throw new \InvalidArgumentException("Path is not specified");
+            $this->fail("Path is not specified");
         }
+
         if (!is_string($path)) {
-            throw new \InvalidArgumentException("Path is not a string");
+            $this->fail("Path is not a string");
         }
 
         $extension = pathinfo($path, PATHINFO_EXTENSION);

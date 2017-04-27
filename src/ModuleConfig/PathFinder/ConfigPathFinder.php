@@ -16,6 +16,13 @@ use Cake\Core\Configure;
  */
 class ConfigPathFinder extends BasePathFinder
 {
+    /**
+     * @var string $prefix Path prefix
+     */
     protected $prefix = 'config';
+
+    /**
+     * @var string $fileName File name
+     */
     protected $fileName = 'config.ini';
 }

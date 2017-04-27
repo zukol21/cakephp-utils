@@ -2,18 +2,42 @@
 namespace Qobo\Utils\ModuleConfig\PathFinder;
 
 use Cake\Core\Configure;
+use InvalidArgumentException;
 use Qobo\Utils\Utility;
 
 abstract class BasePathFinder implements PathFinderInterface
 {
+    /**
+     * CakePHP configuration key with base path
+     *
+     * @var string $pathConfigKey
+     */
     protected $pathConfigKey = 'CsvMigrations.modules.path';
+
+    /**
+     * @var string $prefix Path prefix
+     */
     protected $prefix;
+
+    /**
+     * @var string $fileName File name
+     */
     protected $fileName;
+
+    /**
+     * @var array $errors List of errors from last find
+     */
+    protected $errors = [];
+
+    /**
+     * @var array $errors List of warnings from last find
+     */
+    protected $warnings = [];
+
 
     /**
      * Find path
      *
-     * @throws \InvalidArgumentException when module or path is not specified
      * @param string $module Module to look for files in
      * @param string $path     Path to look for
      * @param bool   $validate Validate existence of the result
@@ -22,17 +46,19 @@ abstract class BasePathFinder implements PathFinderInterface
     public function find($module, $path = null, $validate = true)
     {
         if (empty($module)) {
-            throw new \InvalidArgumentException("Module is not specified");
+            $this->fail("Module is not specified");
         }
+
         if (!is_string($module)) {
-            throw new \InvalidArgumentException("Module name is not a string");
+            $this->fail("Module name is not a string");
         }
 
         if (empty($path)) {
             $path = $this->fileName;
         }
+
         if (!is_string($path)) {
-            throw new \InvalidArgumentException("Path is not a string");
+            $this->fail("Path is not a string");
         }
 
         $result = '';
@@ -52,5 +78,41 @@ abstract class BasePathFinder implements PathFinderInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Fail execution with a given error
+     *
+     * * Adds error to the list of errors
+     * * Throws an exception with the error message
+     *
+     * @throws \InvalidArgumentException
+     * @param string $message Error message
+     * @return void
+     */
+    protected function fail($message)
+    {
+        $this->errors[] = $message;
+        throw new InvalidArgumentException($message);
+    }
+
+    /**
+     * Get finder errors
+     *
+     * @return array List of errors from last find
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
+
+    /**
+     * Get finder warnings
+     *
+     * @return array List of warnings from last find
+     */
+    public function getWarnings()
+    {
+        return $this->warnings;
     }
 }

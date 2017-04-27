@@ -16,6 +16,13 @@ use Cake\Core\Configure;
  */
 class MigrationPathFinder extends BasePathFinder
 {
+    /**
+     * @var string $prefix Path prefix
+     */
     protected $prefix = 'db';
+
+    /**
+     * @var string $fileName File name
+     */
     protected $fileName = 'migration.csv';
 }
