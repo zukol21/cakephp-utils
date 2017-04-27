@@ -34,7 +34,6 @@ abstract class BasePathFinder implements PathFinderInterface
      */
     protected $warnings = [];
 
-
     /**
      * Find path
      *
