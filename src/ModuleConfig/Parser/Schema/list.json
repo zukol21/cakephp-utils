@@ -1,6 +1,39 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "listItem": {
+            "title": "List item",
+            "description": "A single list item",
+            "type": "object",
+            "properties": {
+                "value": {
+                    "title": "Value",
+                    "description": "Value to be stored in the database",
+                    "type": "string"
+                },
+                "label": {
+                    "title": "Label",
+                    "description": "User-friendly label",
+                    "type": "string"
+                },
+                "inactive": {
+                    "title": "Inactive",
+                    "description": "Whether or not the item is active",
+                    "type": "string",
+                    "enum": ["", "0", "1"]
+                }
+            },
+            "required": ["value", "label", "inactive"]
+        }
+    },
     "title": "List configuration",
     "description": "List items configuration",
-    "type": "array"
+    "type": "object",
+    "properties": {
+        "allOf": {
+            "$ref": "#/definitions/listItem"
+        }
+    },
+    "minItems": 1,
+    "uniqueItems": true
 }
