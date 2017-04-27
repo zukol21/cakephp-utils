@@ -5,6 +5,7 @@ use Exception;
 use League\Csv\Reader;
 use Qobo\Utils\ModuleConfig\Parser\AbstractParser;
 use Qobo\Utils\Utility;
+use StdClass;
 
 abstract class AbstractCsvParser extends AbstractParser
 {
@@ -43,7 +44,8 @@ abstract class AbstractCsvParser extends AbstractParser
      */
     protected function getDataFromPath($path)
     {
-        $result = [];
+        $result = new StdClass();
+        $result->items = [];
 
         // If no structure specified (default or param), then use headers
         if (empty($this->options['structure'])) {
@@ -53,9 +55,8 @@ abstract class AbstractCsvParser extends AbstractParser
         $reader = Reader::createFromPath($path, $this->open_mode);
         $rows = $reader->setOffset(1)->fetchAssoc($this->options['structure']);
         foreach ($rows as $row) {
-            $result[] = $row;
+            $result->items[] = (object)json_decode(json_encode($row), true);
         }
-        $result = (object)json_decode(json_encode($result));
 
         return $result;
     }

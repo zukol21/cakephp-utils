@@ -1,6 +1,8 @@
 <?php
 namespace Qobo\Utils\ModuleConfig\Parser\Csv;
 
+use StdClass;
+
 /**
  * List CSV Parser
  *

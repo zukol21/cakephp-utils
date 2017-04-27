@@ -51,18 +51,19 @@ class MigrationParser extends AbstractCsvParser
     {
         $result = parent::getDataFromPath($path);
 
-        $fields = json_decode(json_encode($result), true);
-        if (empty($fields)) {
+        if (empty($result->items)) {
+            unset($result->items);
+
             return $result;
         }
 
         // Convert indexed array to associative one,
         // using wrapField as a key for the record.
-        $result = [];
+        $fields = $result->items;
+        unset($result->items);
         foreach ($fields as $field) {
-            $result[$field[$this->wrapField]] = $field;
+            $result->{$field->{$this->wrapField}} = $field;
         }
-        $result = (object)json_decode(json_encode($result));
 
         return $result;
     }

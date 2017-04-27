@@ -23,6 +23,7 @@
                     "enum": ["", "0", "1"]
                 }
             },
+            "additionalProperties": false,
             "required": ["value", "label", "inactive"]
         }
     },
@@ -30,10 +31,19 @@
     "description": "List items configuration",
     "type": "object",
     "properties": {
-        "allOf": {
-            "$ref": "#/definitions/listItem"
+        "title": "List items",
+        "description": "List items list",
+        "items": {
+            "type": "array",
+            "items": {
+                "allOf": [
+                    { "$ref": "#/definitions/listItem" }
+                ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
         }
     },
-    "minItems": 1,
-    "uniqueItems": true
+    "additionalProperties": false,
+    "required": ["items"]
 }
