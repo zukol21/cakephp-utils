@@ -1,6 +1,19 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "definitions": {
+        "booleanString": {
+            "title": "Boolean string",
+            "description": "Shortcut for defining boolean strings that can be empty or null",
+            "anyOf": [
+                {
+                    "type": "string",
+                    "enum": ["", "0", "1"]
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
         "migrationField": {
             "title": "Migration field",
             "description": "Representation of a single field from migrations.csv",
@@ -22,39 +35,21 @@
                     "title": "Required flag",
                     "description": "Defines whether or not the field is required",
                     "anyOf": [
-                        {
-                            "type": "string",
-                            "enum": ["", "0", "1"]
-                        },
-                        {
-                            "type": "null"
-                        }
+                        { "$ref": "#/definitions/booleanString" }
                     ]
                 },
                 "non-searchable": {
                     "title": "Searchable flag",
                     "description": "Defines whether or not the field is searchable",
                     "anyOf": [
-                        {
-                            "type": "string",
-                            "enum": ["", "0", "1"]
-                        },
-                        {
-                            "type": "null"
-                        }
+                        { "$ref": "#/definitions/booleanString" }
                     ]
                 },
                 "unique": {
                     "title": "Unique flag",
                     "description": "Defines whether or not the field is contains unique value",
                     "anyOf": [
-                        {
-                            "type": "string",
-                            "enum": ["", "0", "1"]
-                        },
-                        {
-                            "type": "null"
-                        }
+                        { "$ref": "#/definitions/booleanString" }
                     ]
                 }
             },
