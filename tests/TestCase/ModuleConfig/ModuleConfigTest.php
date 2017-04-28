@@ -2,6 +2,7 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig;
 
 use Cake\Core\Configure;
+use Exception;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
 use Qobo\Utils\ModuleConfig\Parser\Ini\ConfigParser;
@@ -90,7 +91,12 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
     public function testParse()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
-        $result = $mc->parse();
+        $result = null;
+        try {
+            $result = $mc->parse();
+        } catch (Exception $e) {
+            print_r($mc->getErrors());
+        }
         $this->assertTrue(is_object($result), "Result is not an object");
         $this->assertFalse(empty(json_decode(json_encode($result), true)), "Result is empty");
     }
@@ -114,7 +120,12 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($result), "Errors is not an array before parsing");
         $this->assertTrue(empty($result), "Errors is not empty before parsing");
         // Parsing
-        $mc->parse();
+        $result = null;
+        try {
+            $result = $mc->parse();
+        } catch (Exception $e) {
+            print_r($mc->getErrors());
+        }
         // After parsing
         $result = $mc->getErrors();
         $this->assertTrue(is_array($result), "Errors is not an array after parsing");
@@ -129,7 +140,12 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($result), "Warnings is not an array before parsing");
         $this->assertTrue(empty($result), "Warnings is not empty before parsing");
         // Parsing
-        $mc->parse();
+        $result = null;
+        try {
+            $result = $mc->parse();
+        } catch (Exception $e) {
+            print_r($mc->getErrors());
+        }
         // After parsing
         $result = $mc->getErrors();
         $this->assertTrue(is_array($result), "Warnings is not an array after parsing");
