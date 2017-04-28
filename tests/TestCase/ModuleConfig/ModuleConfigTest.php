@@ -78,6 +78,15 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testFindNotFoundException()
+    {
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', 'this_file_is_not.there');
+        $path = $mc->find();
+    }
+
     public function testParse()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
@@ -85,6 +94,17 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($result), "Result is not an object");
         $this->assertFalse(empty(json_decode(json_encode($result), true)), "Result is empty");
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testParseInvlidException()
+    {
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_LIST, 'Foo', 'invalid_list.csv');
+        $path = $mc->find();
+        $parser = $mc->parse();
+    }
+
 
     public function testGetErrors()
     {
