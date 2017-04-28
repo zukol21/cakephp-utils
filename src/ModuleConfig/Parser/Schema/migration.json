@@ -1,6 +1,74 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "migrationField": {
+            "title": "Migration field",
+            "description": "Representation of a single field from migrations.csv",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "Field name",
+                    "description": "Database field name",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "type": {
+                    "title": "Field type",
+                    "description": "Database field type (think: field handlers)",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "required": {
+                    "title": "Required flag",
+                    "description": "Defines whether or not the field is required",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": ["", "0", "1"]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "non-searchable": {
+                    "title": "Searchable flag",
+                    "description": "Defines whether or not the field is searchable",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": ["", "0", "1"]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                },
+                "unique": {
+                    "title": "Unique flag",
+                    "description": "Defines whether or not the field is contains unique value",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": ["", "0", "1"]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["name", "type", "required", "non-searchable", "unique"]
+        }
+    },
     "title": "CSV migration",
     "description": "CSV migration configuration",
-    "type": "object"
+    "type": "object",
+    "properties": {},
+    "additionalProperties": {
+        "allOf": [
+            { "$ref": "#/definitions/migrationField" }
+        ]
+    }
 }
