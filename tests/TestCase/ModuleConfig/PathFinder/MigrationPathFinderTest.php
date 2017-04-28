@@ -35,7 +35,7 @@ class MigrationPathFinderTest extends PHPUnit_Framework_TestCase
 
     public function testFindOther()
     {
-        $path = $this->pf->find('Foo', 'other_migration.csv');
+        $path = $this->pf->find('Foo', 'empty_migration.csv');
         $this->assertFalse(empty($path), "Path is empty");
         $this->assertTrue(is_string($path), "Path is not a string");
         $this->assertTrue(file_exists($path), "Path does not exist");

@@ -34,6 +34,22 @@ class ConfigParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('name', $result['table']['display_field'], "Parser misinterpreted 'display_field' value");
     }
 
+    public function testParseWithDefaults()
+    {
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'config_no_table.ini';
+        $result = $this->parser->parse($file);
+
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
+        $this->assertFalse(empty($result), "Parser returned empty result");
+
+        $this->assertFalse(empty($result['table']), "Parser missed 'table' section");
+        $this->assertFalse(empty($result['table']['icon']), "Parser missed 'icon' default key");
+    }
+
     public function testParseTestingArrays()
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'array_in_config.ini';

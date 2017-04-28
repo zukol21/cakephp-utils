@@ -50,6 +50,19 @@ class MigrationParserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(empty($result), "Parser returned empty result");
     }
 
+    public function testParseEmpty()
+    {
+        $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'empty_migration.csv';
+        $result = $this->parser->parse($file);
+
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
+        $this->assertTrue(empty($result), "Parser returned non-empty result");
+    }
+
     public function testWrapFromPath()
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
