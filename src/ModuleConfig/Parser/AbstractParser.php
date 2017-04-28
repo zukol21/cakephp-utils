@@ -82,7 +82,7 @@ abstract class AbstractParser implements ParserInterface
 
             // No need to validate empty data (empty() does not work on objects)
             if (empty((array)$result)) {
-                $this->warnings[] = "Skipping validation for empty result";
+                $this->warnings[] = "Skipping validation of empty result";
 
                 return $result;
             }
@@ -90,7 +90,7 @@ abstract class AbstractParser implements ParserInterface
             $schema = $this->getSchema();
             // No need to validate with empty schema (empty() does not work on objects)
             if (empty((array)$schema)) {
-                $this->warnings[] = "Skipping validation for empty schema";
+                $this->warnings[] = "Skipping validation with empty schema";
 
                 return $result;
             }
