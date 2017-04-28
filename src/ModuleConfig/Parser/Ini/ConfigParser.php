@@ -43,6 +43,10 @@ class ConfigParser extends AbstractIniParser
             $data->table->searchable = true;
         }
 
+        if (!property_exists($data->table, 'display_field')) {
+            $this->warnings = array_merge($this->warnings, ["'display_field' is not set in 'table' section"]);
+        }
+
         return $data;
     }
 }
