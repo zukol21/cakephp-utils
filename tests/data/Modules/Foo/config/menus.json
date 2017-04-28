@@ -1,16 +1,46 @@
 {
-    "main": {
-        "enable": true,
-        "items": [
-            {
-                "label": "Foo",
-                "url": "/foo/",
-                "icon": "user",
-                "order": 10
-            }
-        ]
-    },
-    "admin": {
-        "enable": false
-    }
+    "main_menu": [
+        {
+            "label": "Activities",
+            "url": "#",
+            "icon": "user",
+            "order": 10,
+            "children": [
+                {
+                    "label": "FooCall",
+                    "url": "#",
+                    "icon": "phone",
+                    "order": 20
+                },
+                 {
+                    "label": "FooMeeting",
+                    "url": "#",
+                    "icon": "calendar",
+                    "order": 30
+                }
+           ]
+        },
+        {
+            "label": "Notes",
+            "url": "#",
+            "icon": "user",
+            "order": 10,
+            "children": [
+                {
+                    "label": "FooNote",
+                    "url": "#",
+                    "icon": "note",
+                    "order": 20
+                }
+           ]
+        }
+    ],
+    "admin_menu": [
+        {
+            "label": "Tests",
+            "url": "#",
+            "icon": "alert",
+            "order": 10
+        }
+    ]
 }

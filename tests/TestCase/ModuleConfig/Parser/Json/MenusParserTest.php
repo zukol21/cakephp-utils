@@ -23,6 +23,8 @@ class MenusParserTest extends PHPUnit_Framework_TestCase
         $result = $this->parser->parse($file);
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
+        $this->assertTrue(property_exists($result, 'main_menu'), "Parser missed 'main_menu' item");
+        $this->assertTrue(is_array($result->main_menu), "Parser returned non-array for main menu items");
     }
 
     public function testParseMissing()
