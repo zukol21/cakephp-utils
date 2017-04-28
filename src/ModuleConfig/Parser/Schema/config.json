@@ -59,6 +59,17 @@
                 ]
             }
         },
+        "panels": {
+            "title": "Dynamic panels configuration",
+            "description": "Configure views dynamic panels (panel name, panel expression)",
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {
+                "allOf": [
+                    { "type": "string" }
+                ]
+            }
+        },
         "manyToMany": {
             "title": "Module many-to-many relationships",
             "description": "Configuration of many-to-many relationships",
@@ -169,6 +180,19 @@
                     "type": "string"
                 }
             }
+        },
+        "associationLabels": {
+            "title": "Association labels",
+            "description": "Defines custom labels for association tabs",
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {
+                "allOf": [
+                    { "type": ["string"] }
+                ]
+            }
         }
-    }
+    },
+    "additionalProperties": false,
+    "required": ["table"]
 }
