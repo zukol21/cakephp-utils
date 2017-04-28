@@ -4,9 +4,28 @@ namespace Qobo\Utils;
 use Cake\Core\App;
 use Cake\Core\Plugin;
 use DirectoryIterator;
+use Exception;
+use InvalidArgumentException;
 
 class Utility
 {
+    /**
+     * Check validity of the given path
+     *
+     * @throws \InvalidArgumentException when path does not exist or is not readable
+     * @param string $path Path to validate
+     * @return void
+     */
+    public static function validatePath($path)
+    {
+        if (!file_exists($path)) {
+            throw new InvalidArgumentException("Path does not exist [$path]");
+        }
+        if (!is_readable($path)) {
+            throw new InvalidArgumentException("Path is not readable [$path]");
+        }
+    }
+
     /**
      * Method that returns all controller names.
      *
@@ -43,21 +62,24 @@ class Utility
     public static function getDirControllers($path, $plugin = null, $fqcn = true)
     {
         $result = [];
-        if (!file_exists($path)) {
+
+        try {
+            static::validatePath($path);
+            $dir = new DirectoryIterator($path);
+        } catch (Exception $e) {
             return $result;
         }
 
-        $dir = new DirectoryIterator($path);
         foreach ($dir as $fileinfo) {
+            // skip directories
+            if (!$fileinfo->isFile()) {
+                continue;
+            }
+
             $className = $fileinfo->getBasename('.php');
 
             // skip AppController
             if ('AppController' === $className) {
-                continue;
-            }
-
-            // skip directories
-            if (!$fileinfo->isFile()) {
                 continue;
             }
 
@@ -69,11 +91,9 @@ class Utility
                 $className = App::className($className, 'Controller');
             }
 
-            if (!$className) {
-                continue;
+            if ($className) {
+                $result[] = $className;
             }
-
-            $result[] = $className;
         }
 
         return $result;

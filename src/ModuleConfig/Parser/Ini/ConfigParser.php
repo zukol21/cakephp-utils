@@ -1,6 +1,8 @@
 <?php
 namespace Qobo\Utils\ModuleConfig\Parser\Ini;
 
+use StdClass;
+
 /**
  * Config INI Parser
  *
@@ -20,4 +22,31 @@ class ConfigParser extends AbstractIniParser
      * @var string|StdClass $schema JSON schema
      */
     protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'config.json';
+
+    /**
+     * Merge with default values
+     *
+     * @param object $data Data to merge with defaults
+     * @return object
+     */
+    protected function mergeWithDefaults($data = null)
+    {
+        if (!property_exists($data, 'table')) {
+            $data->table = new StdClass();
+        }
+
+        if (!property_exists($data->table, 'icon') || empty($data->table->icon)) {
+            $data->table->icon = 'cube';
+        }
+
+        if (!property_exists($data->table, 'searchable')) {
+            $data->table->searchable = true;
+        }
+
+        if (!property_exists($data->table, 'display_field')) {
+            $this->warnings = array_merge($this->warnings, ["'display_field' is not set in 'table' section"]);
+        }
+
+        return $data;
+    }
 }

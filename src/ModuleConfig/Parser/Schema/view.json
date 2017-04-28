@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "viewRow": {
+            "title": "View row",
+            "description": "A single row of a view (either add/edit/view or index)",
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true,
+            "minItems": 1,
+            "maxItems": 4
+        }
+    },
+    "title": "View configuration",
+    "description": "View configuration",
+    "type": "object",
+    "properties": {
+        "items": {
+            "title": "View row items",
+            "description": "All rows for a given view",
+            "type": "array",
+            "items": {
+                "allOf": [
+                    { "$ref": "#/definitions/viewRow" }
+                ]
+            }
+        }
+    }
+}

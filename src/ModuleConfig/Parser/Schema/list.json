@@ -1,0 +1,59 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "listItem": {
+            "title": "List item",
+            "description": "A single list item definition",
+            "type": "object",
+            "properties": {
+                "value": {
+                    "title": "Value",
+                    "description": "Value to be stored in the database",
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 255
+                },
+                "label": {
+                    "title": "Label",
+                    "description": "User-friendly label",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "inactive": {
+                    "title": "Inactive",
+                    "description": "Whether or not the item is active",
+                    "anyOf": [
+                        {
+                            "type": "string",
+                            "enum": ["", "0", "1"]
+                        },
+                        {
+                            "type": "null"
+                        }
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["value", "label", "inactive"]
+        }
+    },
+    "title": "CSV List Configuration",
+    "description": "List items configuration for a single CSV list",
+    "type": "object",
+    "properties": {
+        "title": "List items",
+        "description": "A list of items for a given list",
+        "items": {
+            "type": "array",
+            "items": {
+                "allOf": [
+                    { "$ref": "#/definitions/listItem" }
+                ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        }
+    },
+    "additionalProperties": false,
+    "required": ["items"]
+}

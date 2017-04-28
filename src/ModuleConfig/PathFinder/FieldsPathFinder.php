@@ -14,5 +14,8 @@ use Cake\Core\Configure;
  */
 class FieldsPathFinder extends ConfigPathFinder
 {
+    /**
+     * @var string $fileName File name
+     */
     protected $fileName = 'fields.ini';
 }

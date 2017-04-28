@@ -2,6 +2,7 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig;
 
 use Cake\Core\Configure;
+use Exception;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
 use Qobo\Utils\ModuleConfig\Parser\Ini\ConfigParser;
@@ -78,25 +79,75 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testFindNotFoundException()
+    {
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', 'this_file_is_not.there');
+        $path = $mc->find();
+    }
+
     public function testParse()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
-        $result = $mc->parse();
-        $this->assertFalse(empty($result), "Result is empty");
+        $result = null;
+        try {
+            $result = $mc->parse();
+        } catch (Exception $e) {
+            print_r($mc->getErrors());
+        }
+        $this->assertTrue(is_object($result), "Result is not an object");
+        $this->assertFalse(empty(json_decode(json_encode($result), true)), "Result is empty");
     }
 
-    public function testGetParserErrors()
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testParseInvlidException()
+    {
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_LIST, 'Foo', 'invalid_list.csv');
+        $path = $mc->find();
+        $parser = $mc->parse();
+    }
+
+    public function testGetErrors()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
 
         // Before parsing
-        $result = $mc->getParserErrors();
-        $this->assertTrue(is_array($result), "Parser errors is not an array before parsing");
-        $this->assertTrue(empty($result), "Parser errors is not empty before parsing");
+        $result = $mc->getErrors();
+        $this->assertTrue(is_array($result), "Errors is not an array before parsing");
+        $this->assertTrue(empty($result), "Errors is not empty before parsing");
         // Parsing
-        $mc->parse();
+        $result = null;
+        try {
+            $result = $mc->parse();
+        } catch (Exception $e) {
+            print_r($mc->getErrors());
+        }
         // After parsing
-        $result = $mc->getParserErrors();
-        $this->assertTrue(is_array($result), "Parser errors is not an array after parsing");
+        $result = $mc->getErrors();
+        $this->assertTrue(is_array($result), "Errors is not an array after parsing");
+    }
+
+    public function testGetWarnings()
+    {
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
+
+        // Before parsing
+        $result = $mc->getWarnings();
+        $this->assertTrue(is_array($result), "Warnings is not an array before parsing");
+        $this->assertTrue(empty($result), "Warnings is not empty before parsing");
+        // Parsing
+        $result = null;
+        try {
+            $result = $mc->parse();
+        } catch (Exception $e) {
+            print_r($mc->getErrors());
+        }
+        // After parsing
+        $result = $mc->getErrors();
+        $this->assertTrue(is_array($result), "Warnings is not an array after parsing");
     }
 }

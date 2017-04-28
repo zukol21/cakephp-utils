@@ -1,5 +1,17 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "fieldName": {
+            "title": "Module field name",
+            "description": "A single module field name",
+            "type": "string"
+        },
+        "moduleName": {
+            "title": "Module name",
+            "description": "A single module name",
+            "type": "string"
+        }
+    },
     "title": "Module configuration",
     "description": "Module configuration options",
     "type": "object",
@@ -12,7 +24,7 @@
                 "display_field": {
                     "title": "Display field",
                     "description": "Module display field to use in links to records of this module.",
-                    "type": "string"
+                    "$ref": "#/definitions/fieldName"
                 },
                 "alias": {
                     "title": "Module alias",
@@ -36,6 +48,103 @@
                 }
             }
         },
+        "virtualFields": {
+            "title": "Module virtual fields configuration",
+            "description": "List of virtual fields and their mapping to real fields for SQL queries",
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {
+                "allOf": [
+                    { "$ref": "#/definitions/fieldName" }
+                ]
+            }
+        },
+        "panels": {
+            "title": "Dynamic panels configuration",
+            "description": "Configure views dynamic panels (panel name, panel expression)",
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {
+                "allOf": [
+                    { "type": "string" }
+                ]
+            }
+        },
+        "manyToMany": {
+            "title": "Module many-to-many relationships",
+            "description": "Configuration of many-to-many relationships",
+            "type": "object",
+            "properties": {
+                "module": {
+                    "title": "List of many-to-many modules",
+                    "description": "List of all modules with which current module has many-to-many relationships",
+                    "allOf": [
+                        { "$ref": "#/definitions/moduleName" }
+                    ]
+                }
+            },
+            "required": ["module"]
+        },
+        "notifications": {
+            "title": "Notifications",
+            "description": "Enable or disable email notifications for calendar events",
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "title": "Enable or disable email notifications for calendar events",
+                    "description": "If enabled, users will receive email notifications with vCal attachments",
+                    "anyOf": [
+                        { "type": "string", "enum": ["", "true", "false"] },
+                        { "type": "boolean" },
+                        { "type": "null" }
+                    ]
+                },
+                "ignore_fields": {
+                    "title": "Ignore notifications on modified fields",
+                    "description": "Do not send notifications when only these fields are modified",
+                    "allOf": [
+                        { "$ref": "#/definitions/fieldName" }
+                    ]
+                }
+            },
+            "required": ["enable"]
+        },
+        "conversion": {
+            "title": "Module conversion configuration",
+            "description": "Configure the conversion process",
+            "type": "object",
+            "properties": {
+                "modules": {
+                    "title": "List of destination modules",
+                    "description": "Describes the list of modules to which current module records will convert",
+                    "allOf": [
+                        { "$ref": "#/definitions/moduleName" }
+                    ]
+                },
+                "field": {
+                    "title": "Field to update after conversion",
+                    "description": "Once the conversion is done, which field of the current module to update",
+                    "allOf": [
+                        { "$ref": "#/definitions/fieldName" }
+                    ]
+                },
+                "value": {
+                    "title": "Value to update with after conversion",
+                    "description": "Defines the value to use for updating the field after conversion",
+                    "allOf": [
+                        { "type": ["string", "number", "boolean", "null"] }
+                    ]
+                },
+                "inherit": {
+                    "title": "Inherit related records",
+                    "description": "Records from which many-to-many modules should be linked to resulting records after conversion",
+                    "allOf": [
+                        { "$ref": "#/definitions/moduleName" }
+                    ]
+                }
+            },
+            "required": ["modules"]
+        },
         "parent": {
             "title": "Module parent configuration",
             "description": "Definition of a module's parent",
@@ -44,7 +153,12 @@
                 "module": {
                     "title": "Module name",
                     "description": "Name fo the parent module",
-                    "type": "string"
+                    "$ref": "#/definitions/moduleName"
+                },
+                "relation": {
+                    "title": "Relation field",
+                    "description": "Field to use for parent relation, if there are mutliple relations with module which is parent",
+                    "$ref": "#/definitions/fieldName"
                 },
                 "redirect": {
                     "title": "Redirect behavior configuration",
@@ -52,7 +166,8 @@
                     "type": "string",
                     "enum": ["self", "parent", "referer"]
                 }
-            }
+            },
+            "required": ["module"]
         },
         "associations": {
             "title": "Module associations configuration",
@@ -65,6 +180,19 @@
                     "type": "string"
                 }
             }
+        },
+        "associationLabels": {
+            "title": "Association labels",
+            "description": "Defines custom labels for association tabs",
+            "type": "object",
+            "properties": {},
+            "additionalProperties": {
+                "allOf": [
+                    { "type": ["string"] }
+                ]
+            }
         }
-    }
+    },
+    "additionalProperties": false,
+    "required": ["table"]
 }

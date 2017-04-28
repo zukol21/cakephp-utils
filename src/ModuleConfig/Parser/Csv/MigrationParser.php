@@ -9,8 +9,19 @@ namespace Qobo\Utils\ModuleConfig\Parser\Csv;
  *
  * @author Leonid Mamchenkov <l.mamchenkov@qobo.biz>
  */
-class MigrationParser extends Parser
+class MigrationParser extends AbstractCsvParser
 {
+    /**
+     * JSON schema
+     *
+     * This can either be a string, pointing to the file
+     * or an StdClass with an instance of an already parsed
+     * schema
+     *
+     * @var string|StdClass $schema JSON schema
+     */
+    protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'migration.json';
+
     /**
      * Parsing options
      */
@@ -31,31 +42,27 @@ class MigrationParser extends Parser
     protected $wrapField = 'name';
 
     /**
-     * Parse
+     * Read and parse a given path
      *
-     * Parses a given file according to the specified options
-     *
-     * @param string $path    Path to file
-     * @param array  $options Parsing options
-     * @return array
+     * @param string $path Path to file
+     * @return object
      */
-    public function parse($path, array $options = [])
+    protected function getDataFromPath($path)
     {
-        $fields = parent::parse($path, $options);
-        if (empty($fields)) {
-            return $fields;
-        }
+        $result = parent::getDataFromPath($path);
 
-        // Overwrite defaults
-        if (!empty($options)) {
-            $this->options = $options;
+        if (empty($result->items)) {
+            unset($result->items);
+
+            return $result;
         }
 
         // Convert indexed array to associative one,
         // using wrapField as a key for the record.
-        $result = [];
+        $fields = $result->items;
+        unset($result->items);
         foreach ($fields as $field) {
-            $result[$field[$this->wrapField]] = $field;
+            $result->{$field->{$this->wrapField}} = $field;
         }
 
         return $result;

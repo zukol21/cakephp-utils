@@ -1,0 +1,69 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "definitions": {
+        "booleanString": {
+            "title": "Boolean string",
+            "description": "Shortcut for defining boolean strings that can be empty or null",
+            "anyOf": [
+                {
+                    "type": "string",
+                    "enum": ["", "0", "1"]
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "migrationField": {
+            "title": "Migration field",
+            "description": "Representation of a single field from migrations.csv",
+            "type": "object",
+            "properties": {
+                "name": {
+                    "title": "Field name",
+                    "description": "Database field name",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "type": {
+                    "title": "Field type",
+                    "description": "Database field type (think: field handlers)",
+                    "type": "string",
+                    "minLength": 1
+                },
+                "required": {
+                    "title": "Required flag",
+                    "description": "Defines whether or not the field is required",
+                    "anyOf": [
+                        { "$ref": "#/definitions/booleanString" }
+                    ]
+                },
+                "non-searchable": {
+                    "title": "Searchable flag",
+                    "description": "Defines whether or not the field is searchable",
+                    "anyOf": [
+                        { "$ref": "#/definitions/booleanString" }
+                    ]
+                },
+                "unique": {
+                    "title": "Unique flag",
+                    "description": "Defines whether or not the field is contains unique value",
+                    "anyOf": [
+                        { "$ref": "#/definitions/booleanString" }
+                    ]
+                }
+            },
+            "additionalProperties": false,
+            "required": ["name", "type", "required", "non-searchable", "unique"]
+        }
+    },
+    "title": "CSV migration",
+    "description": "CSV migration configuration",
+    "type": "object",
+    "properties": {},
+    "additionalProperties": {
+        "allOf": [
+            { "$ref": "#/definitions/migrationField" }
+        ]
+    }
+}
