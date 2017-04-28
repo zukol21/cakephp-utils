@@ -291,14 +291,13 @@ class ModuleConfig
             $result = $finder->find($this->module, $this->configFile, $validate);
         } catch (Exception $e) {
             $exception = $e;
-            $error = "Finder : " . $e->getMessage();
-            $this->errors[] = $error;
+            $this->errors = array_merge($this->errors, $this->prefixMessages($e->getMessage(), __FUNCTION__));
         }
 
         // Get finder errors and warnings, if any
         if (is_object($finder)) {
-            $this->errors = array_merge($this->errors, $finder->getErrors());
-            $this->warnings = array_merge($this->warnings, $finder->getWarnings());
+            $this->errors = array_merge($this->errors, $this->prefixMessages($finder->getErrors(), __FUNCTION__));
+            $this->warnings = array_merge($this->warnings, $this->prefixMessages($finder->getWarnings(), __FUNCTION__));
         }
 
         // Re-throw finder exception
@@ -324,14 +323,13 @@ class ModuleConfig
             $result = $parser->parse($path, $this->options);
         } catch (Exception $e) {
             $exception = $e;
-            $error = "Parser : " . $e->getMessage();
-            $this->errors[] = $error;
+            $this->errors = array_merge($this->errors, $this->prefixMessages($e->getMessage(), __FUNCTION__));
         }
 
         // Get parser errors and warnings, if any
         if (is_object($parser)) {
-            $this->errors = array_merge($this->errors, $parser->getErrors());
-            $this->warnings = array_merge($this->warnings, $parser->getWarnings());
+            $this->errors = array_merge($this->errors, $this->prefixMessages($parser->getErrors(), __FUNCTION__));
+            $this->warnings = array_merge($this->warnings, $this->prefixMessages($parser->getWarnings(), __FUNCTION__));
         }
 
         // Re-throw parser exception
@@ -340,6 +338,30 @@ class ModuleConfig
         }
 
         return $result;
+    }
+
+    /**
+     * Prefix messages
+     *
+     * Prefix all given messages with a string
+     *
+     * @param string|array $messages One or more messages to prefix
+     * @param string $caller Caller that generated a message
+     * @return array List of prefixed messages
+     */
+    protected function prefixMessages($messages, $caller = 'ModuleConfig')
+    {
+        // Convert single messages to array
+        if (is_string($messages)) {
+            $messages = [$messages];
+        }
+
+        // Prefix all messages
+        $messages = array_map(function ($item) use ($caller) {
+            return sprintf("[%s][%s] %s : %s", $this->module, $this->configType, $caller, $item);
+        }, $messages);
+
+        return $messages;
     }
 
     /**

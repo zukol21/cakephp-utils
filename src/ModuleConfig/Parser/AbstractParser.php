@@ -98,7 +98,7 @@ abstract class AbstractParser implements ParserInterface
             // Validate result
             $this->validateData($result, $schema);
         } catch (Exception $e) {
-            $this->fail("$path : " . $e->getMessage());
+            $this->fail("[" . basename($path) . "] : " . $e->getMessage());
         }
 
         return $result;
@@ -154,7 +154,7 @@ abstract class AbstractParser implements ParserInterface
             foreach ($validator->errors() as $error) {
                 $this->errors[] = $error->getMessage();
             }
-            $this->fail("Validation failed");
+            throw new InvalidArgumentException("Validation failed");
         }
     }
 
