@@ -2,6 +2,7 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\Ini;
 
 use Cake\Core\Configure;
+use Exception;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\Parser\Ini\ReportsParser;
 
@@ -20,7 +21,12 @@ class ReportsParserTest extends PHPUnit_Framework_TestCase
     public function testParse()
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'reports.ini';
-        $result = $this->parser->parse($file);
+        $result = null;
+        try {
+            $result = $this->parser->parse($file);
+        } catch (Exception $e) {
+            print_r($this->parser->getErrors());
+        }
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
