@@ -2,6 +2,7 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\Csv;
 
 use Cake\Core\Configure;
+use Exception;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\Parser\Csv\ViewParser;
 
@@ -21,14 +22,20 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
     {
         // add, edit, view
         $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'view.csv';
-        $result = $this->parser->parse($file);
+        $result = null;
+        try {
+            $result = $this->parser->parse($file);
+        } catch (Exception $e) {
+            print_r($this->parser->getErrors());
+        }
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
+        $this->assertFalse(empty($result->items), "Parser returned empty items");
+        $this->assertTrue(is_array($result->items), "Parser returned non-array items");
 
         // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = $result->items;
 
-        $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertTrue(is_array($result[0]), "Parser returned a non-array first element");
         $this->assertFalse(empty($result[0]), "Parser returned a non-array first element");
         $this->assertEquals(3, count($result[0]), "Parser returned incorrect number of items in first element");
@@ -38,14 +45,23 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
 
         // index
         $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'index.csv';
-        $result = $this->parser->parse($file);
+        $result = null;
+        try {
+            $result = $this->parser->parse($file);
+        } catch (Exception $e) {
+            print_r($this->parser->getErrors());
+        }
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
+        $this->assertFalse(empty($result->items), "Parser returned empty items");
+        $this->assertTrue(is_array($result->items), "Parser returned non-array items");
+
+        // Convert object to array recursively
+        $result = $result->items;
 
         // Convert object to array recursively
         $result = json_decode(json_encode($result), true);
 
-        $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertTrue(is_array($result[0]), "Parser returned a non-array first element");
         $this->assertFalse(empty($result[0]), "Parser returned a non-array first element");
         $this->assertEquals(1, count($result[0]), "Parser returned incorrect number of items in first element");

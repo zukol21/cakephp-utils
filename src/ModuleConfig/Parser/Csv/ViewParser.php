@@ -2,6 +2,7 @@
 namespace Qobo\Utils\ModuleConfig\Parser\Csv;
 
 use League\Csv\Reader;
+use StdClass;
 
 /**
  * View CSV Parser
@@ -41,14 +42,14 @@ class ViewParser extends AbstractCsvParser
      */
     protected function getDataFromPath($path)
     {
-        $result = [];
+        $result = new StdClass();
+        $result->items = [];
 
         $reader = Reader::createFromPath($path, $this->open_mode);
         $rows = $reader->setOffset(1)->fetchAll();
         foreach ($rows as $row) {
-            $result[] = $row;
+            $result->items[] = json_decode(json_encode($row), true);
         }
-        $result = (object)json_decode(json_encode($result));
 
         return $result;
     }
