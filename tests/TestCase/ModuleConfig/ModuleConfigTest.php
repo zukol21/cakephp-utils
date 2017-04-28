@@ -105,7 +105,6 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
         $parser = $mc->parse();
     }
 
-
     public function testGetErrors()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
