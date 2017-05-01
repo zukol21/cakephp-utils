@@ -2,6 +2,7 @@
 namespace Qobo\Utils\ModuleConfig\Parser\Csv;
 
 use League\Csv\Reader;
+use Qobo\Utils\Utility;
 use StdClass;
 
 /**
@@ -37,6 +38,7 @@ class ViewParser extends AbstractCsvParser
     /**
      * Read and parse a given path
      *
+     * @throws \InvalidArgumentException when cannot read or decode path
      * @param string $path Path to file
      * @return object
      */
@@ -45,11 +47,29 @@ class ViewParser extends AbstractCsvParser
         $result = new StdClass();
         $result->items = [];
 
+        try {
+            Utility::validatePath($path);
+        } catch (Exception $e) {
+            // View files are not required
+            $this->warnings[] = "Path does not exist: $path";
+            $result = $this->mergeWithDefaults($result);
+            return $result;
+        }
+
         $reader = Reader::createFromPath($path, $this->open_mode);
         $rows = $reader->setOffset(1)->fetchAll();
         foreach ($rows as $row) {
-            $result->items[] = json_decode(json_encode($row), true);
+            $row = json_encode($row);
+            if ($row === false) {
+                throw new InvalidArgumentException("Failed to encode row from path: $path");
+            }
+            $row = json_decode($row, true);
+            if ($row === null) {
+                throw new InvalidArgumentException("Failed to decode row from path: $path");
+            }
+            $result->items[] = $row;
         }
+        $result = $this->mergeWithDefaults($result);
 
         return $result;
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Qobo\Utils\ModuleConfig\Parser\Csv;
 
+use Qobo\Utils\Utility;
 use StdClass;
 
 /**
@@ -35,4 +36,17 @@ class ListParser extends AbstractCsvParser
             'inactive',
         ],
     ];
+
+    /**
+     * Read and parse a given path
+     *
+     * @param string $path Path to file
+     * @return object
+     */
+    protected function getDataFromPath($path)
+    {
+        // List files are required
+        Utility::validatePath($path);
+        return parent::getDataFromPath($path);
+    }
 }
