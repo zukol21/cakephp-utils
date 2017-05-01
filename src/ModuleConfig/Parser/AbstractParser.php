@@ -62,23 +62,8 @@ abstract class AbstractParser implements ParserInterface
             $this->options = $options;
         }
 
-        // If config file does not exist, use defaults
-        $configFileExists = true;
         try {
-            Utility::validatePath($path);
-        } catch (Exception $e) {
-            // Merge empty data with defaults
-            $result = $this->mergeWithDefaults($result);
-            $configFileExists = false;
-            $this->warnings[] = "Path does not exist, relying on defaults: $path";
-        }
-
-        try {
-            // Read and parse path
-            if ($configFileExists) {
-                $result = $this->getDataFromPath($path);
-                $result = $this->mergeWithDefaults($result);
-            }
+            $result = $this->getDataFromPath($path);
 
             // No need to validate empty data (empty() does not work on objects)
             if (empty((array)$result)) {

@@ -64,4 +64,32 @@ class ConfigParserTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('association_labels', $result['associations'], "No associations found in the table config");
         $this->assertTrue(is_array($result['associations']['association_labels']), "Associations label is not an array");
     }
+
+    public function testParseMissing()
+    {
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'this_file_does_not_exist.ini';
+        $result = $this->parser->parse($file);
+
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+
+        // Make sure warnings are not empty
+        $warnings = $this->parser->getWarnings();
+        $this->assertTrue(is_array($warnings), "Warnings is not an array");
+        $this->assertFalse(empty($warnings), "Warnings are empty");
+
+        // Convert object to array recursively
+        $result = json_decode(json_encode($result), true);
+
+        $this->assertFalse(empty($result['table']), "Parser missed 'table' section");
+        $this->assertFalse(empty($result['table']['icon']), "Parser missed 'icon' default key");
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testParseBad()
+    {
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'config_bad.ini';
+        $result = $this->parser->parse($file);
+    }
 }

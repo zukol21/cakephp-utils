@@ -318,7 +318,7 @@ class ModuleConfig
         $parser = null;
         $exception = null;
         try {
-            $path = $this->find($this->module, $this->configFile, false);
+            $path = $this->find(false);
             $parser = $this->getParser();
             $result = $parser->parse($path, $this->options);
         } catch (Exception $e) {

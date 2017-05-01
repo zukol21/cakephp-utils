@@ -104,10 +104,9 @@ class ModuleConfigTest extends PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testParseInvlidException()
+    public function testParseInvalidException()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_LIST, 'Foo', 'invalid_list.csv');
-        $path = $mc->find();
         $parser = $mc->parse();
     }
 

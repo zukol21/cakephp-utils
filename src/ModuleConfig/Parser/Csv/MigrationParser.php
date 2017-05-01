@@ -23,18 +23,14 @@ class MigrationParser extends AbstractCsvParser
     protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'migration.json';
 
     /**
-     * Parsing options
+     * CSV file structure
+     *
+     * This is an optional list of column names, which will
+     * be used as keys for the key-value parsing.
+     *
+     * @var array $structure List of column names
      */
-    protected $options = [
-        // Structure of the migration.csv file
-        'structure' => [
-            'name',
-            'type',
-            'required',
-            'non-searchable',
-            'unique',
-        ],
-    ];
+    protected $structure = ['name', 'type', 'required', 'non-searchable', 'unique'];
 
     /**
      * Field to use for wrapping into associative array

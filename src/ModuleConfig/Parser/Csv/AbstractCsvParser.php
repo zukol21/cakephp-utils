@@ -2,6 +2,7 @@
 namespace Qobo\Utils\ModuleConfig\Parser\Csv;
 
 use Exception;
+use InvalidArgumentException;
 use League\Csv\Reader;
 use Qobo\Utils\ModuleConfig\Parser\AbstractParser;
 use Qobo\Utils\Utility;
@@ -15,30 +16,19 @@ abstract class AbstractCsvParser extends AbstractParser
     protected $open_mode = 'r';
 
     /**
-     * Get headers from path
+     * CSV file structure
      *
-     * @param string $path Path to file
-     * @return array
+     * This is an optional list of column names, which will
+     * be used as keys for the key-value parsing.
+     *
+     * @var array $structure List of column names
      */
-    public function getHeadersFromPath($path)
-    {
-        $result = [];
-
-        try {
-            Utility::validatePath($path);
-        } catch (Exception $e) {
-            return $result;
-        }
-
-        $reader = Reader::createFromPath($path, $this->open_mode);
-        $result = $reader->fetchOne();
-
-        return $result;
-    }
+    protected $structure = [];
 
     /**
      * Read and parse a given path
      *
+     * @throws \InvalidArgumentException when cannot read or decode path
      * @param string $path Path to file
      * @return object
      */
@@ -47,16 +37,35 @@ abstract class AbstractCsvParser extends AbstractParser
         $result = new StdClass();
         $result->items = [];
 
-        // If no structure specified (default or param), then use headers
-        if (empty($this->options['structure'])) {
-            $this->options['structure'] = $this->getHeadersFromPath($path);
+        try {
+            Utility::validatePath($path);
+        } catch (Exception $e) {
+            // If path is required, child class should check for it.
+            $this->warnings[] = "Path does not exist: $path";
+            $result = $this->mergeWithDefaults($result);
+
+            return $result;
+        }
+
+        // Fail with empty structure
+        if (empty($this->structure)) {
+            throw new InvalidArgumentException("No structure defined fro reading path: $path");
         }
 
         $reader = Reader::createFromPath($path, $this->open_mode);
-        $rows = $reader->setOffset(1)->fetchAssoc($this->options['structure']);
+        $rows = $reader->setOffset(1)->fetchAssoc($this->structure);
         foreach ($rows as $row) {
-            $result->items[] = (object)json_decode(json_encode($row), true);
+            $row = json_encode($row);
+            if ($row === false) {
+                throw new InvalidArgumentException("Failed to encode row from path: $path");
+            }
+            $row = json_decode($row, true);
+            if ($row === null) {
+                throw new InvalidArgumentException("Failed to decode row from path: $path");
+            }
+            $result->items[] = (object)$row;
         }
+        $result = $this->mergeWithDefaults($result);
 
         return $result;
     }

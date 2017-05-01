@@ -68,4 +68,21 @@ class ViewParserTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('status', $result[0][0], "Parser missed first field in first element");
         $this->assertEquals('type', $result[1][0], "Parser missed first field in second element");
     }
+
+    public function testParseMissing()
+    {
+        $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'this_file_does_not_exist.csv';
+        $result = $this->parser->parse($file);
+
+        $this->assertTrue(is_object($result), "Parser returned a non-object");
+
+        // Make sure warnings are not empty
+        $warnings = $this->parser->getWarnings();
+        $this->assertTrue(is_array($warnings), "Warnings is not an array");
+        $this->assertFalse(empty($warnings), "Warnings are empty");
+
+        $this->assertTrue(property_exists($result, 'items'), "Parser missed items property");
+        $this->assertTrue(is_array($result->items), "Parser returned non-array items");
+        $this->assertTrue(empty($result->items), "Parser returned non-empty items");
+    }
 }
