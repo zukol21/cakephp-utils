@@ -26,16 +26,14 @@ class ListParser extends AbstractCsvParser
     protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'list.json';
 
     /**
-     * Parsing options
+     * CSV file structure
+     *
+     * This is an optional list of column names, which will
+     * be used as keys for the key-value parsing.
+     *
+     * @var array $structure List of column names
      */
-    protected $options = [
-        // Structure of the some_list.csv file
-        'structure' => [
-            'value',
-            'label',
-            'inactive',
-        ],
-    ];
+    protected $structure = ['value', 'label', 'inactive'];
 
     /**
      * Read and parse a given path

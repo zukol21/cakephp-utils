@@ -16,26 +16,14 @@ abstract class AbstractCsvParser extends AbstractParser
     protected $open_mode = 'r';
 
     /**
-     * Get headers from path
+     * CSV file structure
      *
-     * @param string $path Path to file
-     * @return array
+     * This is an optional list of column names, which will
+     * be used as keys for the key-value parsing.
+     *
+     * @var array $structure List of column names
      */
-    public function getHeadersFromPath($path)
-    {
-        $result = [];
-
-        try {
-            Utility::validatePath($path);
-        } catch (Exception $e) {
-            return $result;
-        }
-
-        $reader = Reader::createFromPath($path, $this->open_mode);
-        $result = $reader->fetchOne();
-
-        return $result;
-    }
+    protected $structure = [];
 
     /**
      * Read and parse a given path
@@ -59,18 +47,13 @@ abstract class AbstractCsvParser extends AbstractParser
             return $result;
         }
 
-        // If no structure specified (default or param), then use headers
-        if (empty($this->options['structure'])) {
-            $this->options['structure'] = $this->getHeadersFromPath($path);
-        }
-
         // Fail with empty structure
-        if (empty($this->options['structure'])) {
-            throw new InvalidArgumentException("Failed to read structure from path: $path");
+        if (empty($this->structure)) {
+            throw new InvalidArgumentException("No structure defined fro reading path: $path");
         }
 
         $reader = Reader::createFromPath($path, $this->open_mode);
-        $rows = $reader->setOffset(1)->fetchAssoc($this->options['structure']);
+        $rows = $reader->setOffset(1)->fetchAssoc($this->structure);
         foreach ($rows as $row) {
             $row = json_encode($row);
             if ($row === false) {

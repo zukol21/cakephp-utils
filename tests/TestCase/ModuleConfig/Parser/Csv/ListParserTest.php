@@ -46,7 +46,7 @@ class ListParserTest extends PHPUnit_Framework_TestCase
         $file = $this->dataDir . 'Common' . DS . 'lists' . DS . 'invalid_list.csv';
         $exception = null;
         try {
-            $result = $this->parser->parse($file, [ 'structure' => ['value', 'label', 'inactive', 'foobar'] ]);
+            $result = $this->parser->parse($file);
         } catch (Exception $e) {
             $exception = $e;
         }
@@ -65,14 +65,5 @@ class ListParserTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertTrue($badValue, "Parser errors do not complain about 'bad_value'");
-
-        $foobarProperty = false;
-        foreach ($errors as $error) {
-            if (preg_match('/foobar/', $error)) {
-                $foobarProperty = true;
-                break;
-            }
-        }
-        $this->assertTrue($foobarProperty, "Parser errors do not complain about 'foobar' property");
     }
 }
