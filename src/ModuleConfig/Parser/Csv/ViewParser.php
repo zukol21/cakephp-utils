@@ -53,6 +53,7 @@ class ViewParser extends AbstractCsvParser
             // View files are not required
             $this->warnings[] = "Path does not exist: $path";
             $result = $this->mergeWithDefaults($result);
+
             return $result;
         }
 

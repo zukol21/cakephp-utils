@@ -27,6 +27,7 @@ abstract class AbstractIniParser extends AbstractParser
             // If path is required, child class should check for it.
             $this->warnings[] = "Path does not exist: $path";
             $result = $this->mergeWithDefaults($result);
+
             return $result;
         }
 

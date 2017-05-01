@@ -47,6 +47,7 @@ class ListParser extends AbstractCsvParser
     {
         // List files are required
         Utility::validatePath($path);
+
         return parent::getDataFromPath($path);
     }
 }
