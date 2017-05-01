@@ -27,8 +27,16 @@ class UtilityTest extends PHPUnit_Framework_TestCase
         $result = Utility::getDirControllers($testApp);
         $this->assertTrue(is_array($result), "Result is not an array (plugin=false,fqcn=true)");
         $this->assertFalse(empty($result), "Result is not empty (plugin=false,fqcn=true)");
-        $this->assertTrue(in_array('Qobo\Utils\Test\App\Controller\UsersController', $result), "Test app UsersController is not in the list (plugin=false,fqcn=true)");
-        $this->assertFalse(in_array('Qobo\Utils\Test\App\Controller\AppController', $result), "Test app AppController is in the list (plugin=false,fqcn=true)");
+        // Make sure non-fqcn controllers are not in the list
+        $this->assertFalse(in_array('UsersController', $result), "Non-fqcn UsersController is in the list (plugin=false,fqcn=true)");
+        // Convert fqcn to non-fqcn
+        foreach ($result as $key => $item) {
+            $parts = explode('\\', $item);
+            $result[$key] = array_pop($parts);
+        };
+        // Make sure fqcn controllers are in the list
+        $this->assertTrue(in_array('UsersController', $result), "Test app UsersController is not in the list (plugin=false,fqcn=true)");
+        $this->assertFalse(in_array('AppController', $result), "Test app AppController is in the list (plugin=false,fqcn=true)");
 
         // plugin=false, fqcn=false
         $result = Utility::getDirControllers($testApp, null, false);
