@@ -34,4 +34,13 @@ class MenusParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testParseEmpty()
+    {
+        $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'empty.json';
+        $result = $this->parser->parse($file);
+    }
 }
