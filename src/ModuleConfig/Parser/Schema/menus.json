@@ -22,6 +22,11 @@
                     "description": "Icon image reference",
                     "type": "string"
                 },
+                "desc": {
+                    "title": "Menu item description",
+                    "description": "Human-friendly description",
+                    "type": "string"
+                },
                 "order": {
                     "title": "Menu item order",
                     "description": "Used to determine the position of the item in the menu",
