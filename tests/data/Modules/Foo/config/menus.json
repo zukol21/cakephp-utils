@@ -38,6 +38,7 @@
     "admin_menu": [
         {
             "label": "Tests",
+            "desc": "Lorem ipsum",
             "url": "#",
             "icon": "alert",
             "order": 10
