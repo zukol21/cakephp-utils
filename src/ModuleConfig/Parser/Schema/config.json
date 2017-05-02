@@ -75,7 +75,7 @@
             "description": "Configuration of many-to-many relationships",
             "type": "object",
             "properties": {
-                "module": {
+                "modules": {
                     "title": "List of many-to-many modules",
                     "description": "List of all modules with which current module has many-to-many relationships",
                     "allOf": [
@@ -83,7 +83,7 @@
                     ]
                 }
             },
-            "required": ["module"]
+            "required": ["modules"]
         },
         "notifications": {
             "title": "Notifications",
