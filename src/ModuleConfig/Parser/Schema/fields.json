@@ -22,6 +22,21 @@
                     "description": "Non-default rendering of the field value",
                     "type": "string",
                     "enum": ["plain"]
+                },
+                "translatable": {
+                    "title": "Translatable button",
+                    "description": "Allow Render translatable button",
+                    "type": "boolean"
+                },
+                "auto-increment": {
+                    "title": "Auto-increment flag",
+                    "description": "Auto-increment flag",
+                    "type": "boolean"
+                },
+                "min": {
+                    "title": "Minimal value",
+                    "description": "Define a minimal value for field",
+                    "type": "integer"
                 }
             },
             "additionalProperties": false
