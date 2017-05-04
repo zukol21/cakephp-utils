@@ -22,6 +22,11 @@
                     "description": "Non-default rendering of the field value",
                     "type": "string",
                     "enum": ["plain"]
+                },
+                "translatable": {
+                    "title": "Translatable button",
+                    "description": "Allow Render translatable button",
+                    "type": "boolean"
                 }
             },
             "additionalProperties": false
