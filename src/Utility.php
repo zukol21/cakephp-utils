@@ -3,6 +3,8 @@ namespace Qobo\Utils;
 
 use Cake\Core\App;
 use Cake\Core\Plugin;
+use Cake\Datasource\ConnectionManager;
+use Cake\Utility\Inflector;
 use DirectoryIterator;
 use Exception;
 use InvalidArgumentException;
@@ -94,6 +96,77 @@ class Utility
             if ($className) {
                 $result[] = $className;
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get All Models
+     *
+     * Fetch the list of database models escaping phinxlog
+     *
+     * @param string $connectionManager to know which schema to fetch
+     * @param bool $excludePhinxlog flag to exclude phinxlog tables.
+     *
+     * @return array $result containing the list of models from database
+     */
+    public static function getModels($connectionManager = 'default', $excludePhinxlog = true)
+    {
+        $result = [];
+        $tables = ConnectionManager::get($connectionManager)->schemaCollection()->listTables();
+
+        if (empty($tables)) {
+            return $result;
+        }
+
+        foreach ($tables as $table) {
+            if ($excludePhinxlog) {
+                if (preg_match('/phinxlog/', $table)) {
+                    continue;
+                }
+            }
+
+            $result[$table] = Inflector::humanize($table);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get Model Columns
+     *
+     * @param string $model name of the table
+     * @param string $connectionManager of the datasource
+     *
+     * @return array $result containing key/value pairs of model columns.
+     */
+    public static function getModelColumns($model = null, $connectionManager = 'default')
+    {
+        $result = $columns = [];
+
+        if (empty($model)) {
+            return $result;
+        }
+
+        // making sure that model is in table naming conventions.
+        $model = Inflector::tableize($model);
+
+        try {
+            $columns = ConnectionManager::get($connectionManager)
+                        ->schemaCollection()
+                        ->describe($model)
+                        ->columns();
+        } catch (\Exception $e) {
+            //exception caught & silenced.
+        }
+
+        if (empty($columns)) {
+            return $result;
+        }
+
+        foreach ($columns as $column) {
+            $result[$column] = $column;
         }
 
         return $result;
