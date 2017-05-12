@@ -52,4 +52,17 @@ class UtilityTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('Blah.UsersController', $result), "Test app UsersController is not in the list (plugin=Blah,fqcn=false)");
         $this->assertFalse(in_array('Blah.AppController', $result), "Test app AppController is in the list (plugin=Blah,fqcn=false)");
     }
+
+    public function testGetModels()
+    {
+        $result = Utility::getModels('test');
+        $this->assertTrue(is_array($result));
+    }
+
+    public function testGetModelColumns()
+    {
+        $result = Utility::getModelColumns('Users', 'test');
+
+        $this->assertTrue(is_array($result));
+    }
 }
