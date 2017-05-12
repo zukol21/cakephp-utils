@@ -23,6 +23,7 @@ return [
         'imageProcessing' => true,
         'pathBuilderOptions' => ['pathPrefix' => '/uploads'],
         'association' => 'UploadDocuments',
+        'defaultImageSize' => 'huge',
         'imageSizes' => [
             'file_storage' => [
                 'huge' => [
