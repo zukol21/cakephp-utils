@@ -20,8 +20,27 @@
                 "renderAs": {
                     "title": "Render value",
                     "description": "Non-default rendering of the field value",
-                    "type": "string",
-                    "enum": ["plain"]
+                    "type": "string"
+                },
+                "format": {
+                    "title": "Date/time format",
+                    "description": "Date time format for time stamp fields",
+                    "type": "string"
+                },
+                "precision": {
+                    "title": "Numeric precision",
+                    "description": "How many digits to render after the floating point",
+                    "type": "integer"
+                },
+                "linkTo": {
+                    "title": "Link value to URL",
+                    "description": "URL to use for linking rendered values (use %s as placeholder)",
+                    "type": "string"
+                },
+                "linkTarget": {
+                    "title": "Link target for value URL",
+                    "description": "Target for link value URL (_blank, _self, _parent, _top, framename)",
+                    "type": "string"
                 },
                 "translatable": {
                     "title": "Translatable button",
