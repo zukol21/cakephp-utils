@@ -23,7 +23,7 @@
                     "title": "Widget type",
                     "description": "Type of widget used to render report",
                     "type": "string",
-                    "enum": ["report"]
+                    "enum": ["report", "table"]
                 },
                 "name": {
                     "title": "Report name",
