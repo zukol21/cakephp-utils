@@ -171,4 +171,35 @@ class Utility
 
         return $result;
     }
+
+    /**
+     * Get a list of directories from a given path (non-recursive)
+     *
+     * @param string $path Path to look in
+     * @return array List of directory names
+     */
+    public static function findDirs($path)
+    {
+        $result = [];
+
+        try {
+            self::validatePath($path);
+            $path = new DirectoryIterator($path);
+        } catch (Exception $e) {
+            return $result;
+        }
+
+        foreach ($path as $dir) {
+            if ($dir->isDot()) {
+                continue;
+            }
+            if (!$dir->isDir()) {
+                continue;
+            }
+            $result[] = $dir->getFilename();
+        }
+        asort($result);
+
+        return $result;
+    }
 }
