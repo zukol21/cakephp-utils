@@ -88,6 +88,5 @@ class UtilityTest extends PHPUnit_Framework_TestCase
         $result = Utility::findDirs($path);
         $this->assertTrue(is_array($result));
         $this->assertTrue(empty($result));
-
     }
 }
