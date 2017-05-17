@@ -65,4 +65,29 @@ class UtilityTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue(is_array($result));
     }
+
+    public function testFindDirs()
+    {
+        // Proper path
+        $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Modules';
+        $result = Utility::findDirs($path);
+        $this->assertTrue(is_array($result));
+        $this->assertFalse(empty($result));
+        $this->assertTrue(in_array('Common', $result), "Failed to find Common directory");
+        $this->assertTrue(in_array('Foo', $result), "Failed to find Foo directory");
+        $this->assertFalse(in_array('.', $result), "Failed to remove dot directory");
+
+        // Path with no directories
+        $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Modules' . DIRECTORY_SEPARATOR . 'Foo' . DIRECTORY_SEPARATOR . 'db';
+        $result = Utility::findDirs($path);
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+
+        // Invalid path
+        $path = 'this_path_does_not_exist';
+        $result = Utility::findDirs($path);
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+
+    }
 }
