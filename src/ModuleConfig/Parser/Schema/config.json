@@ -38,13 +38,34 @@
                 },
                 "typeahead_fields": {
                     "title": "Type-ahead fields",
-                    "description": "Comma-separated list of fields to use for searching in type-ahead lookups",
-                    "type": "string"
+                    "description": "Array or comma-separated string with list of fields to use for searching in type-ahead lookups",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/fieldName" }
+                                ]
+                            }
+                        }
+                    ]
                 },
                 "lookup_fields": {
                     "title": "Lookup fields",
-                    "description": "Comma-separated list of fields to use in the URL for locating module record",
-                    "type": "string"
+                    "description": "Array or comma-separated string with list of fields to use in the URL for locating module record",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/fieldName" }
+                                ]
+                            }
+                        }
+                    ]
+
                 }
             }
         },

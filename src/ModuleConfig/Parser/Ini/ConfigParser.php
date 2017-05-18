@@ -31,18 +31,40 @@ class ConfigParser extends AbstractIniParser
      */
     protected function mergeWithDefaults($data = null)
     {
+        // [table] section
         if (!property_exists($data, 'table')) {
             $data->table = new StdClass();
         }
 
+        // [table]icon
         if (!property_exists($data->table, 'icon') || empty($data->table->icon)) {
             $data->table->icon = 'cube';
         }
 
+        // [table]searchable
         if (!property_exists($data->table, 'searchable')) {
             $data->table->searchable = true;
         }
 
+        // [table]lookup_fields
+        if (!property_exists($data->table, 'lookup_fields')) {
+            $data->table->lookup_fields = [];
+        }
+
+        if (is_string($data->table->lookup_fields)) {
+            $data->table->lookup_fields = explode(',', $data->table->lookup_fields);
+        }
+
+        // [table]typeahead_fields
+        if (!property_exists($data->table, 'typeahead_fields')) {
+            $data->table->typeahead_fields = [];
+        }
+
+        if (is_string($data->table->typeahead_fields)) {
+            $data->table->typeahead_fields = explode(',', $data->table->typeahead_fields);
+        }
+
+        // [table]display_field
         if (!property_exists($data->table, 'display_field')) {
             $this->warnings = array_merge($this->warnings, ["'display_field' is not set in 'table' section"]);
         }
