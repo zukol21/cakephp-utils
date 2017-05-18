@@ -38,7 +38,6 @@ class ConfigParserTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(empty($result['table']['lookup_fields']), "Parser missed 'lookup_fields' value of [table] section");
         $this->assertTrue(is_array($result['table']['typeahead_fields']), "Parser missed 'typeahead_fields' key of [table] section");
         $this->assertFalse(empty($result['table']['typeahead_fields']), "Parser missed 'typeahead_fields' value of [table] section");
-
     }
 
     public function testParseWithDefaults()
