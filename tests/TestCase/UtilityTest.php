@@ -90,4 +90,24 @@ class UtilityTest extends TestCase
         $this->assertTrue(is_array($result));
         $this->assertTrue(empty($result));
     }
+
+    /**
+     * @dataProvider getIconProvider
+     */
+    public function testGetIcons($configFile, $isArray, $isEmpty)
+    {
+        $result = Utility::getIcons($configFile);
+
+        $this->assertEquals(is_array($result), $isArray);
+        $this->assertEquals(empty($result), $isEmpty);
+    }
+
+    public function getIconProvider()
+    {
+        return [
+            ['Icons', true, false],
+            ['FooBar', true, true],
+            ['', true, false],
+        ];
+    }
 }

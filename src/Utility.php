@@ -207,9 +207,11 @@ class Utility
     /**
      * Get Fontawesome icons based on config/icons.php
      *
+     * @param string $configFile from Cake\Core\Configure
+     *
      * @return array $result with list of icons.
      */
-    public static function getIcons()
+    public static function getIcons($configFile = null)
     {
         $result = [];
 
@@ -219,7 +221,11 @@ class Utility
             'default'
         ];
 
-        $config = Configure::read('Icons');
+        if (empty($configFile)) {
+            $configFile = 'Icons';
+        }
+
+        $config = Configure::read($configFile);
 
         if (empty($config)) {
             return $result;
