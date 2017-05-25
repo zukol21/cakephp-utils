@@ -205,6 +205,34 @@ class Utility
     }
 
     /**
+     * Get colors for Select2 dropdown
+     *
+     * @param array $config containing colors array
+     * @param bool $pretty to append color identifiers to values.
+     *
+     * @return array $result containing colors list.
+     */
+    public static function getColors($config = [], $pretty = true)
+    {
+        $result = [];
+
+        if (empty($config)) {
+            Configure::load('Qobo/Utils.colors');
+            $config = Configure::read('Colors');
+        }
+
+        if (!$pretty) {
+            return $config;
+        }
+
+        foreach ($config as $k => $v) {
+            $result[$k] = '<div><div style="width:20px;height:20px;margin:0;border:1px solid #eee;float:left;background:' . $v . ';"></div>&nbsp;&nbsp;' . $v . '</div><div style="clear:all"></div>';
+        }
+
+        return $result;
+    }
+
+    /**
      * Get Fontawesome icons based on config/icons.php
      *
      * @param array $config from Cake\Core\Configure containing icon resource
