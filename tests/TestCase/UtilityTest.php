@@ -1,11 +1,12 @@
 <?php
 namespace Qobo\Utils\Test\TestCase;
 
+use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\Utility;
 
-class UtilityTest extends PHPUnit_Framework_TestCase
+class UtilityTest extends TestCase
 {
     /**
      * @expectedException InvalidArgumentException
@@ -88,5 +89,25 @@ class UtilityTest extends PHPUnit_Framework_TestCase
         $result = Utility::findDirs($path);
         $this->assertTrue(is_array($result));
         $this->assertTrue(empty($result));
+    }
+
+    /**
+     * @dataProvider getIconProvider
+     */
+    public function testGetIcons($configFile, $isArray, $isEmpty)
+    {
+        $result = Utility::getIcons($configFile);
+
+        $this->assertEquals(is_array($result), $isArray);
+        $this->assertEquals(empty($result), $isEmpty);
+    }
+
+    public function getIconProvider()
+    {
+        return [
+            ['Icons', true, false],
+            ['FooBar', true, true],
+            ['', true, false],
+        ];
     }
 }

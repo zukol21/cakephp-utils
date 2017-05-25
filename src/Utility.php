@@ -2,6 +2,7 @@
 namespace Qobo\Utils;
 
 use Cake\Core\App;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
@@ -199,6 +200,55 @@ class Utility
             $result[] = $dir->getFilename();
         }
         asort($result);
+
+        return $result;
+    }
+
+    /**
+     * Get Fontawesome icons based on config/icons.php
+     *
+     * @param string $configFile from Cake\Core\Configure
+     *
+     * @return array $result with list of icons.
+     */
+    public static function getIcons($configFile = null)
+    {
+        $result = [];
+
+        $_requiredIconParams = [
+            'url',
+            'pattern',
+            'default'
+        ];
+
+        if (empty($configFile)) {
+            $configFile = 'Icons';
+        }
+
+        $config = Configure::read($configFile);
+
+        if (empty($config)) {
+            return $result;
+        }
+
+        $diff = array_diff($_requiredIconParams, array_keys($config));
+        if (!empty($diff)) {
+            return $result;
+        }
+
+        $data = file_get_contents($config['url']);
+        preg_match_all($config['pattern'], $data, $matches);
+
+        if (empty($matches[1])) {
+            return $result;
+        }
+
+        $result = array_unique($matches[1]);
+
+        if (!empty($config['ignored'])) {
+            $result = array_diff($result, $config['ignored']);
+        }
+        sort($result);
 
         return $result;
     }
