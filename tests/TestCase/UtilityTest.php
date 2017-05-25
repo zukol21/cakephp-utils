@@ -109,4 +109,17 @@ class UtilityTest extends TestCase
             ['Icons', true, false],
         ];
     }
+
+    public function testGetColors()
+    {
+        $config = \Cake\Core\Configure::read('Colors');
+        $result = Utility::getColors($config);
+
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
+
+        $result = Utility::getColors($config, false);
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
+    }
 }

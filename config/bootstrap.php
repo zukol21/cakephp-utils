@@ -15,6 +15,7 @@ $config = $config ? $config : [];
 // load default plugin config
 Configure::load('Qobo/Utils.file_storage');
 Configure::load('Qobo/Utils.icons');
+Configure::load('Qobo/Utils.colors');
 
 // overwrite default plugin config by app level config
 Configure::write('FileStorage', array_replace_recursive(
