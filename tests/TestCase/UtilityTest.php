@@ -96,7 +96,8 @@ class UtilityTest extends TestCase
      */
     public function testGetIcons($configFile, $isArray, $isEmpty)
     {
-        $result = Utility::getIcons($configFile);
+        $config = \Cake\Core\Configure::read($configFile);
+        $result = Utility::getIcons($config);
 
         $this->assertEquals(is_array($result), $isArray);
         $this->assertEquals(empty($result), $isEmpty);
@@ -106,8 +107,6 @@ class UtilityTest extends TestCase
     {
         return [
             ['Icons', true, false],
-            ['FooBar', true, true],
-            ['', true, false],
         ];
     }
 }

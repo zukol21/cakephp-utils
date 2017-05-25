@@ -207,11 +207,11 @@ class Utility
     /**
      * Get Fontawesome icons based on config/icons.php
      *
-     * @param string $configFile from Cake\Core\Configure
+     * @param array $config from Cake\Core\Configure containing icon resource
      *
      * @return array $result with list of icons.
      */
-    public static function getIcons($configFile = null)
+    public static function getIcons($config = [])
     {
         $result = [];
 
@@ -221,11 +221,11 @@ class Utility
             'default'
         ];
 
-        if (empty($configFile)) {
-            $configFile = 'Icons';
+        // passing default icons if no external config present.
+        if (empty($config)) {
+            Configure::load('Qobo/Utils.icons');
+            $config = Configure::read('Icons');
         }
-
-        $config = Configure::read($configFile);
 
         if (empty($config)) {
             return $result;
