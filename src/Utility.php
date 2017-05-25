@@ -226,7 +226,7 @@ class Utility
         }
 
         foreach ($config as $k => $v) {
-            $result[$k] = '<div><div style="width:20px;height:20px;margin:0;border:1px solid #eee;float:left;background:' . $v . ';"></div>&nbsp;&nbsp;' . $v . '</div><div style="clear:all"></div>';
+            $result[$k] = '<div><div style="width:20px;height:20px;margin:0;border:1px solid #eee;float:left;background:' . $k . ';"></div>&nbsp;&nbsp;' . $v . '</div><div style="clear:all"></div>';
         }
 
         return $result;
