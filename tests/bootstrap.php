@@ -105,6 +105,10 @@ Cake\Datasource\ConnectionManager::config('test', [
     'timezone' => 'UTC'
 ]);
 
+// loading test icons.php from test/config/icons.php
+Cake\Core\Configure::load('icons', 'default');
+Cake\Core\Configure::load('colors', 'default');
+
 // Alias AppController to the test App
 class_alias('Qobo\\' . $pluginName . '\Test\App\Controller\AppController', 'App\Controller\AppController');
 // If plugin has routes.php/bootstrap.php then load them, otherwise don't.
