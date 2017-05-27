@@ -75,8 +75,16 @@
             "type": "object",
             "properties": {},
             "additionalProperties": {
-                "allOf": [
-                    { "$ref": "#/definitions/fieldName" }
+                "anyOf": [
+                    { "type": "string" },
+                    {
+                        "type": "array",
+                        "items": {
+                            "allOf": [
+                                { "$ref": "#/definitions/fieldName" }
+                            ]
+                        }
+                    }
                 ]
             }
         },

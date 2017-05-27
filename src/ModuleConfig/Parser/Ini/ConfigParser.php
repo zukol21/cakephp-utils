@@ -69,6 +69,17 @@ class ConfigParser extends AbstractIniParser
             $this->warnings = array_merge($this->warnings, ["'display_field' is not set in 'table' section"]);
         }
 
+        // [virtualFields] section
+        if (!property_exists($data, 'virtualFields')) {
+            $data->virtualFields = new StdClass();
+        }
+        $virtualFields = json_decode(json_encode($data->virtualFields), true);
+        foreach ($virtualFields as $virtualField => $realFields) {
+            if (is_string($realFields)) {
+                $data->virtualFields->$virtualField = explode(',', $realFields);
+            }
+        }
+
         return $data;
     }
 }
