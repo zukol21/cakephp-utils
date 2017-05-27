@@ -205,8 +205,18 @@
             "properties": {
                 "hide_associations": {
                     "title": "List of hidden associations",
-                    "description": "Defines a list of associations that should be displayed",
-                    "type": "string"
+                    "description": "Array or comma-separated string with list of associations that should not be displayed",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "type": "string" }
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         },

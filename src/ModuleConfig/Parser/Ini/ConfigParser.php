@@ -80,6 +80,20 @@ class ConfigParser extends AbstractIniParser
             }
         }
 
+        // [associations] section
+        if (!property_exists($data, 'associations')) {
+            $data->associations = new StdClass();
+        }
+
+        // [associations]hide_associations
+        if (!property_exists($data->associations, 'hide_associations')) {
+            $data->associations->hide_associations = [];
+        }
+
+        if (is_string($data->associations->hide_associations)) {
+            $data->associations->hide_associations = explode(',', $data->associations->hide_associations);
+        }
+
         return $data;
     }
 }
