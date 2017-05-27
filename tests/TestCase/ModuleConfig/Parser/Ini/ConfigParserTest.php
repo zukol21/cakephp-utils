@@ -35,7 +35,7 @@ class ConfigParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse(empty($result['virtualFields']), "Parser missed 'virtualFields' section");
         $this->assertFalse(empty($result['virtualFields']['name']), "Parser missed 'name' key");
-        $this->assertEquals(['foo','bar'], $result['virtualFields']['name'], "Parser misinterpreted 'name' value");
+        $this->assertEquals(['foo', 'bar'], $result['virtualFields']['name'], "Parser misinterpreted 'name' value");
 
         // Defaults parsing
         $this->assertTrue(is_array($result['table']['lookup_fields']), "Parser missed 'lookup_fields' key of [table] section");
