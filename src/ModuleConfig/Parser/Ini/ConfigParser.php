@@ -110,6 +110,17 @@ class ConfigParser extends AbstractIniParser
         }
         $data->notifications->ignored_fields = $this->csv2array($data->notifications->ignored_fields);
 
+        // [manyToMany] section
+        if (!property_exists($data, 'manyToMany')) {
+            $data->manyToMany = new StdClass();
+        }
+
+        // [manyToMany]modules
+        if (!property_exists($data->manyToMany, 'modules')) {
+            $data->manyToMany->modules = [];
+        }
+        $data->manyToMany->modules = $this->csv2array($data->manyToMany->modules);
+
         return $data;
     }
 
