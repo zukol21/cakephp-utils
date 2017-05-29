@@ -108,6 +108,25 @@ class ConfigParser extends AbstractIniParser
             $data->associationLabels = new StdClass();
         }
 
+        // [notifications] section
+        if (!property_exists($data, 'notifications')) {
+            $data->notifications = new StdClass();
+        }
+
+        // [notifications]enable
+        if (!property_exists($data->notifications, 'enable')) {
+            $data->notifications->enable = false;
+        }
+
+        // [notifications]ignored_fields
+        if (!property_exists($data->notifications, 'ignored_fields')) {
+            $data->notifications->ignored_fields = [];
+        }
+
+        if (is_string($data->notifications->ignored_fields)) {
+            $data->notifications->ignored_fields = explode(',', $data->notifications->ignored_fields);
+        }
+
         return $data;
     }
 }
