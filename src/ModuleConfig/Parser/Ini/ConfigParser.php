@@ -94,6 +94,11 @@ class ConfigParser extends AbstractIniParser
             $data->associations->hide_associations = explode(',', $data->associations->hide_associations);
         }
 
+        // [associationLabels] section
+        if (!property_exists($data, 'associationLabels')) {
+            $data->associationLabels = new StdClass();
+        }
+
         return $data;
     }
 }
