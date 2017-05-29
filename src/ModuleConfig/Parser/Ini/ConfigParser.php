@@ -64,6 +64,15 @@ class ConfigParser extends AbstractIniParser
             $data->table->typeahead_fields = explode(',', $data->table->typeahead_fields);
         }
 
+        // [table]allow_reminders
+        if (!property_exists($data->table, 'allow_reminders')) {
+            $data->table->allow_reminders = [];
+        }
+
+        if (is_string($data->table->allow_reminders)) {
+            $data->table->allow_reminders = explode(',', $data->table->allow_reminders);
+        }
+
         // [table]display_field
         if (!property_exists($data->table, 'display_field')) {
             $this->warnings = array_merge($this->warnings, ["'display_field' is not set in 'table' section"]);
