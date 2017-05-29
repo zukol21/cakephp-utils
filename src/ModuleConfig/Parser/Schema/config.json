@@ -21,6 +21,11 @@
             "description": "Basic module configuration parameters and flags",
             "type": "object",
             "properties": {
+                "icon": {
+                    "title": "Module icon",
+                    "description": "Icon to use for the current module",
+                    "type": "string"
+                },
                 "display_field": {
                     "title": "Display field",
                     "description": "Module display field to use in links to records of this module.",
@@ -65,9 +70,24 @@
                             }
                         }
                     ]
-
+                },
+                "allow_reminders": {
+                    "title": "Allow reminders",
+                    "description": "Array or comma-separated string with list of modules for which reminders are allowed",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/moduleName" }
+                                ]
+                            }
+                        }
+                    ]
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "virtualFields": {
             "title": "Module virtual fields configuration",
