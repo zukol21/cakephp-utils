@@ -50,28 +50,19 @@ class ConfigParser extends AbstractIniParser
         if (!property_exists($data->table, 'lookup_fields')) {
             $data->table->lookup_fields = [];
         }
-
-        if (is_string($data->table->lookup_fields)) {
-            $data->table->lookup_fields = explode(',', $data->table->lookup_fields);
-        }
+        $data->table->lookup_fields = $this->csv2array($data->table->lookup_fields);
 
         // [table]typeahead_fields
         if (!property_exists($data->table, 'typeahead_fields')) {
             $data->table->typeahead_fields = [];
         }
-
-        if (is_string($data->table->typeahead_fields)) {
-            $data->table->typeahead_fields = explode(',', $data->table->typeahead_fields);
-        }
+        $data->table->typeahead_fields = $this->csv2array($data->table->typeahead_fields);
 
         // [table]allow_reminders
         if (!property_exists($data->table, 'allow_reminders')) {
             $data->table->allow_reminders = [];
         }
-
-        if (is_string($data->table->allow_reminders)) {
-            $data->table->allow_reminders = explode(',', $data->table->allow_reminders);
-        }
+        $data->table->allow_reminders = $this->csv2array($data->table->allow_reminders);
 
         // [table]display_field
         if (!property_exists($data->table, 'display_field')) {
@@ -84,9 +75,7 @@ class ConfigParser extends AbstractIniParser
         }
         $virtualFields = json_decode(json_encode($data->virtualFields), true);
         foreach ($virtualFields as $virtualField => $realFields) {
-            if (is_string($realFields)) {
-                $data->virtualFields->$virtualField = explode(',', $realFields);
-            }
+            $data->virtualFields->$virtualField = $this->csv2array($realFields);
         }
 
         // [associations] section
@@ -98,10 +87,7 @@ class ConfigParser extends AbstractIniParser
         if (!property_exists($data->associations, 'hide_associations')) {
             $data->associations->hide_associations = [];
         }
-
-        if (is_string($data->associations->hide_associations)) {
-            $data->associations->hide_associations = explode(',', $data->associations->hide_associations);
-        }
+        $data->associations->hide_associations = $this->csv2array($data->associations->hide_associations);
 
         // [associationLabels] section
         if (!property_exists($data, 'associationLabels')) {
@@ -122,11 +108,27 @@ class ConfigParser extends AbstractIniParser
         if (!property_exists($data->notifications, 'ignored_fields')) {
             $data->notifications->ignored_fields = [];
         }
-
-        if (is_string($data->notifications->ignored_fields)) {
-            $data->notifications->ignored_fields = explode(',', $data->notifications->ignored_fields);
-        }
+        $data->notifications->ignored_fields = $this->csv2array($data->notifications->ignored_fields);
 
         return $data;
+    }
+
+    /**
+     * Convert a comma-separated string to array
+     *
+     * If provided $csv is not a string, return as is.
+     *
+     * @param string $csv String to convert
+     * @return array
+     */
+    protected function csv2array($csv)
+    {
+        if (!is_string($csv)) {
+            return $csv;
+        }
+
+        $result = explode(',', $csv);
+
+        return $result;
     }
 }
