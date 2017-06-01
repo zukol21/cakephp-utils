@@ -43,6 +43,11 @@
                     "type": "string",
                     "minLength": 1
                 },
+                "totals": {
+                    "title": "Report totals",
+                    "description": "Comma-separated index of columns with totals",
+                    "type": "string"
+                },
                 "renderAs": {
                     "title": "Report rendering choice",
                     "description": "How the report should be rendered/presented",
