@@ -58,6 +58,12 @@ class ConfigParser extends AbstractIniParser
         }
         $data->table->typeahead_fields = $this->csv2array($data->table->typeahead_fields);
 
+        // [table]basic_search_fields
+        if (!property_exists($data->table, 'basic_search_fields')) {
+            $data->table->basic_search_fields = [];
+        }
+        $data->table->basic_search_fields = $this->csv2array($data->table->basic_search_fields);
+
         // [table]allow_reminders
         if (!property_exists($data->table, 'allow_reminders')) {
             $data->table->allow_reminders = [];

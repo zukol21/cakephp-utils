@@ -71,6 +71,21 @@
                         }
                     ]
                 },
+                "basic_search_fields": {
+                    "title": "Basic search fields",
+                    "description": "Array or comma-separated string with list of fields to use in the basic search",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/fieldName" }
+                                ]
+                            }
+                        }
+                    ]
+                },
                 "allow_reminders": {
                     "title": "Allow reminders",
                     "description": "Array or comma-separated string with list of modules for which reminders are allowed",
