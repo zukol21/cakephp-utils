@@ -1,11 +1,12 @@
 <?php
 namespace Qobo\Utils\Test\TestCase;
 
+use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use PHPUnit_Framework_TestCase;
 use Qobo\Utils\Utility;
 
-class UtilityTest extends PHPUnit_Framework_TestCase
+class UtilityTest extends TestCase
 {
     /**
      * @expectedException InvalidArgumentException
@@ -64,5 +65,61 @@ class UtilityTest extends PHPUnit_Framework_TestCase
         $result = Utility::getModelColumns('Users', 'test');
 
         $this->assertTrue(is_array($result));
+    }
+
+    public function testFindDirs()
+    {
+        // Proper path
+        $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Modules';
+        $result = Utility::findDirs($path);
+        $this->assertTrue(is_array($result));
+        $this->assertFalse(empty($result));
+        $this->assertTrue(in_array('Common', $result), "Failed to find Common directory");
+        $this->assertTrue(in_array('Foo', $result), "Failed to find Foo directory");
+        $this->assertFalse(in_array('.', $result), "Failed to remove dot directory");
+
+        // Path with no directories
+        $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Modules' . DIRECTORY_SEPARATOR . 'Foo' . DIRECTORY_SEPARATOR . 'db';
+        $result = Utility::findDirs($path);
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+
+        // Invalid path
+        $path = 'this_path_does_not_exist';
+        $result = Utility::findDirs($path);
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+    }
+
+    /**
+     * @dataProvider getIconProvider
+     */
+    public function testGetIcons($configFile, $isArray, $isEmpty)
+    {
+        $config = \Cake\Core\Configure::read($configFile);
+        $result = Utility::getIcons($config);
+
+        $this->assertEquals(is_array($result), $isArray);
+        $this->assertEquals(empty($result), $isEmpty);
+    }
+
+    public function getIconProvider()
+    {
+        return [
+            ['Icons', true, false],
+        ];
+    }
+
+    public function testGetColors()
+    {
+        $config = \Cake\Core\Configure::read('Colors');
+        $result = Utility::getColors($config);
+
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
+
+        $result = Utility::getColors($config, false);
+        $this->assertTrue(is_array($result));
+        $this->assertNotEmpty($result);
     }
 }

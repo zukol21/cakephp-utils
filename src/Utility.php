@@ -2,6 +2,7 @@
 namespace Qobo\Utils;
 
 use Cake\Core\App;
+use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
 use Cake\Utility\Inflector;
@@ -168,6 +169,114 @@ class Utility
         foreach ($columns as $column) {
             $result[$column] = $column;
         }
+
+        return $result;
+    }
+
+    /**
+     * Get a list of directories from a given path (non-recursive)
+     *
+     * @param string $path Path to look in
+     * @return array List of directory names
+     */
+    public static function findDirs($path)
+    {
+        $result = [];
+
+        try {
+            self::validatePath($path);
+            $path = new DirectoryIterator($path);
+        } catch (Exception $e) {
+            return $result;
+        }
+
+        foreach ($path as $dir) {
+            if ($dir->isDot()) {
+                continue;
+            }
+            if (!$dir->isDir()) {
+                continue;
+            }
+            $result[] = $dir->getFilename();
+        }
+        asort($result);
+
+        return $result;
+    }
+
+    /**
+     * Get colors for Select2 dropdown
+     *
+     * @param array $config containing colors array
+     * @param bool $pretty to append color identifiers to values.
+     *
+     * @return array $result containing colors list.
+     */
+    public static function getColors($config = [], $pretty = true)
+    {
+        $result = [];
+
+        if (empty($config)) {
+            Configure::load('Qobo/Utils.colors');
+            $config = Configure::read('Colors');
+        }
+
+        if (!$pretty) {
+            return $config;
+        }
+
+        foreach ($config as $k => $v) {
+            $result[$k] = '<div><div style="width:20px;height:20px;margin:0;border:1px solid #eee;float:left;background:' . $k . ';"></div>&nbsp;&nbsp;' . $v . '</div><div style="clear:all"></div>';
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get Fontawesome icons based on config/icons.php
+     *
+     * @param array $config from Cake\Core\Configure containing icon resource
+     *
+     * @return array $result with list of icons.
+     */
+    public static function getIcons($config = [])
+    {
+        $result = [];
+
+        $_requiredIconParams = [
+            'url',
+            'pattern',
+            'default'
+        ];
+
+        // passing default icons if no external config present.
+        if (empty($config)) {
+            Configure::load('Qobo/Utils.icons');
+            $config = Configure::read('Icons');
+        }
+
+        if (empty($config)) {
+            return $result;
+        }
+
+        $diff = array_diff($_requiredIconParams, array_keys($config));
+        if (!empty($diff)) {
+            return $result;
+        }
+
+        $data = file_get_contents($config['url']);
+        preg_match_all($config['pattern'], $data, $matches);
+
+        if (empty($matches[1])) {
+            return $result;
+        }
+
+        $result = array_unique($matches[1]);
+
+        if (!empty($config['ignored'])) {
+            $result = array_diff($result, $config['ignored']);
+        }
+        sort($result);
 
         return $result;
     }

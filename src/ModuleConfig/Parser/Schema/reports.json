@@ -23,7 +23,7 @@
                     "title": "Widget type",
                     "description": "Type of widget used to render report",
                     "type": "string",
-                    "enum": ["report"]
+                    "enum": ["report", "grid"]
                 },
                 "name": {
                     "title": "Report name",
@@ -43,11 +43,16 @@
                     "type": "string",
                     "minLength": 1
                 },
+                "totals": {
+                    "title": "Report totals",
+                    "description": "Comma-separated index of columns with totals",
+                    "type": "string"
+                },
                 "renderAs": {
                     "title": "Report rendering choice",
                     "description": "How the report should be rendered/presented",
                     "type": "string",
-                    "enum": ["barChart", "donutChart", "knobChart", "lineChart"]
+                    "enum": ["barChart", "donutChart", "knobChart", "lineChart", "table"]
                 },
                 "y_axis": {
                     "title": "Y-axis column",
@@ -76,7 +81,7 @@
                 }
             },
             "additionalProperties": false,
-            "required": ["id", "model", "widget_type", "name", "query", "columns", "widget_type"]
+            "required": ["id", "model", "widget_type", "name", "query", "columns"]
         }
     },
     "title": "Reports configuration",
