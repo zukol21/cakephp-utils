@@ -21,6 +21,11 @@
             "description": "Basic module configuration parameters and flags",
             "type": "object",
             "properties": {
+                "icon": {
+                    "title": "Module icon",
+                    "description": "Icon to use for the current module",
+                    "type": "string"
+                },
                 "display_field": {
                     "title": "Display field",
                     "description": "Module display field to use in links to records of this module.",
@@ -38,15 +43,66 @@
                 },
                 "typeahead_fields": {
                     "title": "Type-ahead fields",
-                    "description": "Comma-separated list of fields to use for searching in type-ahead lookups",
-                    "type": "string"
+                    "description": "Array or comma-separated string with list of fields to use for searching in type-ahead lookups",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/fieldName" }
+                                ]
+                            }
+                        }
+                    ]
                 },
                 "lookup_fields": {
                     "title": "Lookup fields",
-                    "description": "Comma-separated list of fields to use in the URL for locating module record",
-                    "type": "string"
+                    "description": "Array or comma-separated string with list of fields to use in the URL for locating module record",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/fieldName" }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "basic_search_fields": {
+                    "title": "Basic search fields",
+                    "description": "Array or comma-separated string with list of fields to use in the basic search",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/fieldName" }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "allow_reminders": {
+                    "title": "Allow reminders",
+                    "description": "Array or comma-separated string with list of modules for which reminders are allowed",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/moduleName" }
+                                ]
+                            }
+                        }
+                    ]
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "virtualFields": {
             "title": "Module virtual fields configuration",
@@ -54,8 +110,16 @@
             "type": "object",
             "properties": {},
             "additionalProperties": {
-                "allOf": [
-                    { "$ref": "#/definitions/fieldName" }
+                "anyOf": [
+                    { "type": "string" },
+                    {
+                        "type": "array",
+                        "items": {
+                            "allOf": [
+                                { "$ref": "#/definitions/fieldName" }
+                            ]
+                        }
+                    }
                 ]
             }
         },
@@ -77,9 +141,17 @@
             "properties": {
                 "modules": {
                     "title": "List of many-to-many modules",
-                    "description": "List of all modules with which current module has many-to-many relationships",
-                    "allOf": [
-                        { "$ref": "#/definitions/moduleName" }
+                    "description": "Array or comma-separated string with list of modules for many-to-many relationship",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/moduleName" }
+                                ]
+                            }
+                        }
                     ]
                 }
             },
@@ -99,11 +171,19 @@
                         { "type": "null" }
                     ]
                 },
-                "ignore_fields": {
+                "ignored_fields": {
                     "title": "Ignore notifications on modified fields",
-                    "description": "Do not send notifications when only these fields are modified",
-                    "allOf": [
-                        { "$ref": "#/definitions/fieldName" }
+                    "description": "Array or comma-separated string with list of fields, which if only these are modified, do not send notifications",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/fieldName" }
+                                ]
+                            }
+                        }
                     ]
                 }
             },
@@ -176,8 +256,18 @@
             "properties": {
                 "hide_associations": {
                     "title": "List of hidden associations",
-                    "description": "Defines a list of associations that should be displayed",
-                    "type": "string"
+                    "description": "Array or comma-separated string with list of associations that should not be displayed",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "type": "string" }
+                                ]
+                            }
+                        }
+                    ]
                 }
             }
         },
