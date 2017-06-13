@@ -70,6 +70,11 @@ class ConfigParser extends AbstractIniParser
         }
         $data->table->allow_reminders = $this->csv2array($data->table->allow_reminders);
 
+        // [table]translatable
+        if (!property_exists($data->table, 'translatable')) {
+            $data->table->translatable = false;
+        }
+
         // [table]display_field
         if (!property_exists($data->table, 'display_field')) {
             $this->warnings = array_merge($this->warnings, ["'display_field' is not set in 'table' section"]);
