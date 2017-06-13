@@ -24,6 +24,35 @@ class ConfigParser extends AbstractIniParser
     protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'config.json';
 
     /**
+     * Default sections and configuration values
+     *
+     * @var array
+     */
+    protected $defaults = [
+        'table' => [
+            'icon' => 'cube',
+            'searchable' => true,
+            'lookup_fields' => [],
+            'typeahead_fields' => [],
+            'basic_search_fields' => [],
+            'allow_reminders' => [],
+            'translatable' => false,
+        ],
+        'virtualFields' => [],
+        'associations' => [
+            'hide_associations' => [],
+        ],
+        'associationLabels' => [],
+        'notifications' => [
+            'enable' => false,
+            'ignored_fields' => [],
+        ],
+        'manyToMany' => [
+            'modules' => [],
+        ],
+    ];
+
+    /**
      * Merge with default values
      *
      * @param object $data Data to merge with defaults
@@ -31,32 +60,8 @@ class ConfigParser extends AbstractIniParser
      */
     protected function mergeWithDefaults($data = null)
     {
-        // Default sections and configuration values
-        $defaults = [
-            'table' => [
-                'icon' => 'cube',
-                'searchable' => true,
-                'lookup_fields' => [],
-                'typeahead_fields' => [],
-                'basic_search_fields' => [],
-                'allow_reminders' => [],
-                'translatable' => false,
-            ],
-            'virtualFields' => [],
-            'associations' => [
-                'hide_associations' => [],
-            ],
-            'associationLabels' => [],
-            'notifications' => [
-                'enable' => false,
-                'ignored_fields' => [],
-            ],
-            'manyToMany' => [
-                'modules' => [],
-            ],
-        ];
-
-        foreach ($defaults as $section => $options) {
+        // Set defaults
+        foreach ($this->defaults as $section => $options) {
             // Make sure the section exists
             if (!property_exists($data, $section)) {
                 $data->$section = new StdClass();
