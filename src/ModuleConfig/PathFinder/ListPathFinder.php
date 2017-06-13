@@ -2,6 +2,7 @@
 namespace Qobo\Utils\ModuleConfig\PathFinder;
 
 use Cake\Core\Configure;
+use InvalidArgumentException;
 
 /**
  * ListPathFinder Class
@@ -56,11 +57,11 @@ class ListPathFinder extends BasePathFinder
         }
 
         if (empty($path)) {
-            $this->fail("Path is not specified");
+            $this->fail(new InvalidArgumentException("Path is not specified"));
         }
 
         if (!is_string($path)) {
-            $this->fail("Path is not a string");
+            $this->fail(new InvalidArgumentException("Path is not a string"));
         }
 
         $extension = pathinfo($path, PATHINFO_EXTENSION);
@@ -73,7 +74,7 @@ class ListPathFinder extends BasePathFinder
             $result = parent::find($module, $path, $validate);
         } catch (\Exception $e) {
             if ($module == self::DEFAULT_MODULE) {
-                $this->fail($e->getMessage());
+                $this->fail($e);
             }
         }
 

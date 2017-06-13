@@ -2,6 +2,7 @@
 namespace Qobo\Utils\ModuleConfig;
 
 use Exception;
+use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
 use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
 use RuntimeException;
@@ -25,6 +26,8 @@ use RuntimeException;
  */
 class ModuleConfig
 {
+    use ErrorTrait;
+
     /**
      * Type for migration configuration (migration.csv)
      */
@@ -111,16 +114,6 @@ class ModuleConfig
      * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
     protected $parser;
-
-    /**
-     * @var array $errors List of errors
-     */
-    protected $errors = [];
-
-    /**
-     * @var array $warnings List of warnings
-     */
-    protected $warnings = [];
 
     /**
      * Class lookup map
@@ -361,41 +354,5 @@ class ModuleConfig
         }, $messages);
 
         return $messages;
-    }
-
-    /**
-     * Fail execution with a given error
-     *
-     * * Adds error to the list of errors
-     * * Throws an exception with the error message
-     *
-     * @throws \RuntimeException
-     * @param string $message Error message
-     * @return void
-     */
-    protected function fail($message)
-    {
-        $this->errors[] = $message;
-        throw new RuntimeException($message);
-    }
-
-    /**
-     * Get parser errors
-     *
-     * @return array List of parser errors
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-    /**
-     * Get parser warnings
-     *
-     * @return array List of parser warnings
-     */
-    public function getWarnings()
-    {
-        return $this->warnings;
     }
 }
