@@ -1,7 +1,6 @@
 <?php
 namespace Qobo\Utils\ModuleConfig;
 
-use BadMethodCallException;
 use Exception;
 use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
 use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
