@@ -53,7 +53,7 @@ class ViewParser extends AbstractCsvParser
             Utility::validatePath($path);
         } catch (Exception $e) {
             // View files are not required
-            $this->warnings[] = "Path does not exist: $path";
+            $this->warnings[] = $e->getMessage();
             $result = $this->mergeWithDefaults($result);
 
             return $result;
