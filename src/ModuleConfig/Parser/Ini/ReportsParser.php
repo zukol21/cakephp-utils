@@ -17,7 +17,7 @@ class ReportsParser extends AbstractIniParser
      * or an StdClass with an instance of an already parsed
      * schema
      *
-     * @var string|StdClass $schema JSON schema
+     * @var string|\StdClass $schema JSON schema
      */
     protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'reports.json';
 }
