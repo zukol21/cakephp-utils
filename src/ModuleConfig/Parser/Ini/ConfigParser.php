@@ -31,106 +31,62 @@ class ConfigParser extends AbstractIniParser
      */
     protected function mergeWithDefaults($data = null)
     {
-        // [table] section
-        if (!property_exists($data, 'table')) {
-            $data->table = new StdClass();
+        // Default sections and configuration values
+        $defaults = [
+            'table' => [
+                'icon' => 'cube',
+                'searchable' => true,
+                'lookup_fields' => [],
+                'typeahead_fields' => [],
+                'basic_search_fields' => [],
+                'allow_reminders' => [],
+                'translatable' => false,
+            ],
+            'virtualFields' => [],
+            'associations' => [
+                'hide_associations' => [],
+            ],
+            'associationLabels' => [],
+            'notifications' => [
+                'enable' => false,
+                'ignored_fields' => [],
+            ],
+            'manyToMany' => [
+                'modules' => [],
+            ],
+        ];
+
+        foreach ($defaults as $section => $options) {
+            // Make sure the section exists
+            if (!property_exists($data, $section)) {
+                $data->$section = new StdClass();
+            }
+            // Make sure default values are set
+            foreach ($options as $option => $value) {
+                if (!property_exists($data->$section, $option)) {
+                    $data->$section->$option = $value;
+                }
+            }
         }
 
-        // [table]icon
-        if (!property_exists($data->table, 'icon') || empty($data->table->icon)) {
-            $data->table->icon = 'cube';
-        }
-
-        // [table]searchable
-        if (!property_exists($data->table, 'searchable')) {
-            $data->table->searchable = true;
-        }
-
-        // [table]lookup_fields
-        if (!property_exists($data->table, 'lookup_fields')) {
-            $data->table->lookup_fields = [];
-        }
+        // Convert CSV string values to arrays
         $data->table->lookup_fields = $this->csv2array($data->table->lookup_fields);
-
-        // [table]typeahead_fields
-        if (!property_exists($data->table, 'typeahead_fields')) {
-            $data->table->typeahead_fields = [];
-        }
         $data->table->typeahead_fields = $this->csv2array($data->table->typeahead_fields);
-
-        // [table]basic_search_fields
-        if (!property_exists($data->table, 'basic_search_fields')) {
-            $data->table->basic_search_fields = [];
-        }
         $data->table->basic_search_fields = $this->csv2array($data->table->basic_search_fields);
-
-        // [table]allow_reminders
-        if (!property_exists($data->table, 'allow_reminders')) {
-            $data->table->allow_reminders = [];
-        }
         $data->table->allow_reminders = $this->csv2array($data->table->allow_reminders);
-
-        // [table]translatable
-        if (!property_exists($data->table, 'translatable')) {
-            $data->table->translatable = false;
-        }
+        $data->associations->hide_associations = $this->csv2array($data->associations->hide_associations);
+        $data->notifications->ignored_fields = $this->csv2array($data->notifications->ignored_fields);
+        $data->manyToMany->modules = $this->csv2array($data->manyToMany->modules);
 
         // [table]display_field
         if (!property_exists($data->table, 'display_field')) {
             $this->warnings = array_merge($this->warnings, ["'display_field' is not set in 'table' section"]);
         }
 
-        // [virtualFields] section
-        if (!property_exists($data, 'virtualFields')) {
-            $data->virtualFields = new StdClass();
-        }
         $virtualFields = json_decode(json_encode($data->virtualFields), true);
         foreach ($virtualFields as $virtualField => $realFields) {
             $data->virtualFields->$virtualField = $this->csv2array($realFields);
         }
-
-        // [associations] section
-        if (!property_exists($data, 'associations')) {
-            $data->associations = new StdClass();
-        }
-
-        // [associations]hide_associations
-        if (!property_exists($data->associations, 'hide_associations')) {
-            $data->associations->hide_associations = [];
-        }
-        $data->associations->hide_associations = $this->csv2array($data->associations->hide_associations);
-
-        // [associationLabels] section
-        if (!property_exists($data, 'associationLabels')) {
-            $data->associationLabels = new StdClass();
-        }
-
-        // [notifications] section
-        if (!property_exists($data, 'notifications')) {
-            $data->notifications = new StdClass();
-        }
-
-        // [notifications]enable
-        if (!property_exists($data->notifications, 'enable')) {
-            $data->notifications->enable = false;
-        }
-
-        // [notifications]ignored_fields
-        if (!property_exists($data->notifications, 'ignored_fields')) {
-            $data->notifications->ignored_fields = [];
-        }
-        $data->notifications->ignored_fields = $this->csv2array($data->notifications->ignored_fields);
-
-        // [manyToMany] section
-        if (!property_exists($data, 'manyToMany')) {
-            $data->manyToMany = new StdClass();
-        }
-
-        // [manyToMany]modules
-        if (!property_exists($data->manyToMany, 'modules')) {
-            $data->manyToMany->modules = [];
-        }
-        $data->manyToMany->modules = $this->csv2array($data->manyToMany->modules);
 
         return $data;
     }
