@@ -100,6 +100,11 @@
                             }
                         }
                     ]
+                },
+                "translatable": {
+                    "title": "Translatable flag",
+                    "description": "Whether or not the module is translatable",
+                    "type": "boolean"
                 }
             },
             "additionalProperties": false

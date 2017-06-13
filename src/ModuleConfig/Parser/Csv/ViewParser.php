@@ -2,6 +2,7 @@
 namespace Qobo\Utils\ModuleConfig\Parser\Csv;
 
 use Exception;
+use InvalidArgumentException;
 use League\Csv\Reader;
 use Qobo\Utils\Utility;
 use StdClass;

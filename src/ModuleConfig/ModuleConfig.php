@@ -102,14 +102,14 @@ class ModuleConfig
     /**
      * Instance of the PathFinder
      *
-     * @var \Qobo\Utils\ModuleConfig\PathFinderInterface
+     * @var \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
      */
     protected $finder;
 
     /**
      * Instance of the Parser
      *
-     * @var \Qobo\Utils\ModuleConfig\ParserInterface
+     * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
     protected $parser;
 
