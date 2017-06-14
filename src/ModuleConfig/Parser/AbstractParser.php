@@ -5,11 +5,14 @@ use Exception;
 use InvalidArgumentException;
 use League\JsonGuard\Dereferencer;
 use League\JsonGuard\Validator;
+use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\Utility;
 use StdClass;
 
 abstract class AbstractParser implements ParserInterface
 {
+    use ErrorTrait;
+
     /**
      * JSON schema
      *
@@ -20,16 +23,6 @@ abstract class AbstractParser implements ParserInterface
      * @var string|StdClass $schema JSON schema
      */
     protected $schema;
-
-    /**
-     * @var array $errors List of errors from last parsing
-     */
-    protected $errors = [];
-
-    /**
-     * @var array $errors List of warnings from last parsing
-     */
-    protected $warnings = [];
 
     /**
      * @var array $options Parsing options
@@ -83,46 +76,10 @@ abstract class AbstractParser implements ParserInterface
             // Validate result
             $this->validateData($result, $schema);
         } catch (Exception $e) {
-            $this->fail("[" . basename($path) . "] : " . $e->getMessage());
+            $this->fail(new InvalidArgumentException("[" . basename($path) . "] : " . $e->getMessage()));
         }
 
         return $result;
-    }
-
-    /**
-     * Fail execution with a given error
-     *
-     * * Adds error to the list of errors
-     * * Throws an exception with the error message
-     *
-     * @throws \InvalidArgumentException
-     * @param string $message Error message
-     * @return void
-     */
-    protected function fail($message)
-    {
-        $this->errors[] = $message;
-        throw new InvalidArgumentException($message);
-    }
-
-    /**
-     * Get parser errors
-     *
-     * @return array List of errors from last parsing
-     */
-    public function getErrors()
-    {
-        return $this->errors;
-    }
-
-    /**
-     * Get parser warnings
-     *
-     * @return array List of warnings from last parsing
-     */
-    public function getWarnings()
-    {
-        return $this->warnings;
     }
 
     /**
@@ -166,7 +123,7 @@ abstract class AbstractParser implements ParserInterface
             return $this->schema;
         }
 
-        $this->fail("Schema is not a string or object: " . gettype($this->schema));
+        $this->fail(new InvalidArgumentException("Schema is not a string or object: " . gettype($this->schema)));
     }
 
     /**

@@ -24,7 +24,7 @@ abstract class AbstractJsonParser extends AbstractParser
             Utility::validatePath($path);
         } catch (Exception $e) {
             // If path is required, child class should check for it.
-            $this->warnings[] = "Path does not exist: $path";
+            $this->warnings[] = $e->getMessage();
             $result = $this->mergeWithDefaults($result);
 
             return $result;
