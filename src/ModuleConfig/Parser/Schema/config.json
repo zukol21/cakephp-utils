@@ -56,6 +56,21 @@
                         }
                     ]
                 },
+                "parent_modules": {
+                    "title": "Parent modules",
+                    "description": "Array or comma-separated string with list of parent modules to use them in access control",
+                    "anyOf": [
+                        { "type": "string" },
+                        {
+                            "type": "array",
+                            "items": {
+                                "allOf": [
+                                    { "$ref": "#/definitions/fieldName" }
+                                ]
+                            }
+                        }
+                    ]
+                },
                 "lookup_fields": {
                     "title": "Lookup fields",
                     "description": "Array or comma-separated string with list of fields to use in the URL for locating module record",
