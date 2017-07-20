@@ -37,7 +37,7 @@ class ConfigParser extends AbstractIniParser
             'basic_search_fields' => [],
             'allow_reminders' => [],
             'translatable' => false,
-            'parent_modules' => [],
+            'permissions_parent_modules' => [],
         ],
         'virtualFields' => [],
         'associations' => [
@@ -78,7 +78,7 @@ class ConfigParser extends AbstractIniParser
         // Convert CSV string values to arrays
         $data->table->lookup_fields = $this->csv2array($data->table->lookup_fields);
         $data->table->typeahead_fields = $this->csv2array($data->table->typeahead_fields);
-        $data->table->parent_modules = $this->csv2array($data->table->parent_modules);
+        $data->table->permissions_parent_modules = $this->csv2array($data->table->permissions_parent_modules);
         $data->table->basic_search_fields = $this->csv2array($data->table->basic_search_fields);
         $data->table->allow_reminders = $this->csv2array($data->table->allow_reminders);
         $data->associations->hide_associations = $this->csv2array($data->associations->hide_associations);
