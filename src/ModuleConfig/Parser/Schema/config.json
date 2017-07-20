@@ -56,7 +56,7 @@
                         }
                     ]
                 },
-                "parent_modules": {
+                "permissions_parent_modules": {
                     "title": "Parent modules",
                     "description": "Array or comma-separated string with list of parent modules to use them in access control",
                     "anyOf": [
