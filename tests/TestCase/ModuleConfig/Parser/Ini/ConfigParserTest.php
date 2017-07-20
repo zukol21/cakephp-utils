@@ -58,6 +58,7 @@ class ConfigParserTest extends PHPUnit_Framework_TestCase
 
         $this->assertFalse(empty($result['table']), "Parser missed 'table' section");
         $this->assertFalse(empty($result['table']['icon']), "Parser missed 'icon' default key");
+        $this->assertInternalType('array', $result['table']['permissions_parent_modules']);
     }
 
     public function testParseTestingArrays()
@@ -73,6 +74,9 @@ class ConfigParserTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('associations', $result, "No associations found in the table config");
         $this->assertArrayHasKey('association_labels', $result['associations'], "No associations found in the table config");
         $this->assertTrue(is_array($result['associations']['association_labels']), "Associations label is not an array");
+        $this->assertTrue(is_array($result['table']['permissions_parent_modules']));
+        $this->assertContains('Foo', $result['table']['permissions_parent_modules']);
+        $this->assertContains('Bar', $result['table']['permissions_parent_modules']);
     }
 
     public function testParseMissing()
