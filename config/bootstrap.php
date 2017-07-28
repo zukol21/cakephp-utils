@@ -14,12 +14,42 @@ $config = $config ? $config : [];
 
 // load default plugin config
 Configure::load('Qobo/Utils.file_storage');
-Configure::load('Qobo/Utils.icons');
-Configure::load('Qobo/Utils.colors');
 
 // overwrite default plugin config by app level config
 Configure::write('FileStorage', array_replace_recursive(
     Configure::read('FileStorage'),
+    $config
+));
+
+/**
+ * Icons configuration
+ */
+// get app level config
+$config = Configure::read('Icons');
+$config = $config ? $config : [];
+
+// load default plugin config
+Configure::load('Qobo/Utils.icons');
+
+// overwrite default plugin config by app level config
+Configure::write('Icons', array_replace_recursive(
+    Configure::read('Icons'),
+    $config
+));
+
+/**
+ * Colors configuration
+ */
+// get app level config
+$config = Configure::read('Colors');
+$config = $config ? $config : [];
+
+// load default plugin config
+Configure::load('Qobo/Utils.colors');
+
+// overwrite default plugin config by app level config
+Configure::write('Colors', array_replace_recursive(
+    Configure::read('Colors'),
     $config
 ));
 
