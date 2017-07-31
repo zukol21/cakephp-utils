@@ -35,9 +35,75 @@ The above should output the list of loaded plugins, with `Qobo/Utils` being
 one of them.
 
 Functionality
------
+-------------
 
-* [AdminLTE](https://github.com/maiconpinto/cakephp-adminlte-theme)
-* PathFinder for CSV work.
-* Parser for CSV files.
-* ...And many others that will land here eventually...
+## AdminLTE
+
+One of the primary objectives of this plugin is to simplify the loading
+and configuration of the [AdminLTE](https://github.com/maiconpinto/cakephp-adminlte-theme)
+theme CakePHP plugin.  Here is what you need to set it up.
+
+Load the AdminLTE plugin:
+
+```bash
+bin/cake plugin load AdminLTE --routes --bootstrap
+```
+
+Load AdminLTE plugin configuration at the bottom of `config/bootstrap.php`:
+
+```php
+Configure::load('admin_lte', 'default');
+```
+
+Here is an example configuration you can stick into `config/admin_lte.php`:
+
+```php
+<?php
+return [
+    'Theme' => [
+        'folder' => ROOT,
+        'title' => 'My App',
+        'logo' => [
+            // This will be displayed when main menu is collapsed.
+            // You can use an <img> tag in here or anything else you want.
+            'mini' => 'A',
+            // This will be displayed when main menu is expanded.
+            // You can use an <img> tag in here or anything else you want.
+            'large' => 'Test ZZZ',
+        ],
+        'login' => [
+            'show_remember' => true,
+            'show_register' => false,
+            'show_social' => false,
+        ],
+    ],
+];
+```
+
+Load AdminLTE theme in `beforeRender()` method of `src/Controller/AppController.php`:
+
+```php
+// At the top of the file, together with other use statements:
+use Cake\Core\Configure;
+
+public function beforeRender(Event $event)
+{
+    $this->viewBuilder()->theme('AdminLTE');
+    $this->set('theme', Configure::read('Theme'));
+    // $this->set('user', $this->Auth->user());
+    $this->set('user', []);
+}
+```
+
+Load AdminLTE Form Helper in `initialize()` method of `src/View/AppView.php`:
+
+```php
+public function initialize()
+{
+    $this->loadHelper('Form', ['className' => 'AdminLTE.Form']);
+}
+```
+
+For more information on initializing and configuring the AdminLTE theme,
+see [plugin documentation](https://github.com/maiconpinto/cakephp-adminlte-theme)
+
