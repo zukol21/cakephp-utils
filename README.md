@@ -69,7 +69,7 @@ return [
             'mini' => 'A',
             // This will be displayed when main menu is expanded.
             // You can use an <img> tag in here or anything else you want.
-            'large' => 'Test ZZZ',
+            'large' => 'My App',
         ],
         'login' => [
             'show_remember' => true,
