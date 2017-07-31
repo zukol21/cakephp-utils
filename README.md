@@ -37,6 +37,7 @@ one of them.
 Functionality
 -----
 
+* [AdminLTE](https://github.com/maiconpinto/cakephp-adminlte-theme)
 * PathFinder for CSV work.
 * Parser for CSV files.
 * ...And many others that will land here eventually...
