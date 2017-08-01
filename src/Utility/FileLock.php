@@ -28,10 +28,17 @@ final class FileLock
      */
     public function __construct($filename)
     {
-        $filename = basename(trim($filename));
-        if (empty($filename) || !is_string($filename)) {
-            throw new InvalidArgumentException('Lock filename is required and must be a string');
+        if (!is_string($filename)) {
+            throw new InvalidArgumentException('Lock filename must be a string');
         }
+
+        $filename = trim($filename);
+
+        if (empty($filename)) {
+            throw new InvalidArgumentException('Lock filename is required');
+        }
+
+        $filename = basename($filename);
 
         $this->_path = sys_get_temp_dir() . DS . $filename;
 
