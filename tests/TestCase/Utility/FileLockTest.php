@@ -10,9 +10,16 @@ class FileLockTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testInitInvalidFileName()
+    public function testInitEmptyFileName()
     {
         new FileLock('');
+    }
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testInitInvalidFileName()
+    {
+        new FileLock([]);
     }
 
     public function testInit()
