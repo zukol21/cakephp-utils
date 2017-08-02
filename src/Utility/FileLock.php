@@ -7,11 +7,11 @@ use RuntimeException;
 final class FileLock
 {
     /**
-     * Lock file pointer.
+     * Lock file handler.
      *
      * @var resource
      */
-    protected $fp;
+    protected $handler;
 
     /**
      * Lock file path.
@@ -48,7 +48,7 @@ final class FileLock
             throw new RuntimeException('Fail to create lock file [' . $this->path . ']');
         }
 
-        $this->fp = $result;
+        $this->handler = $result;
 
         return $this;
     }
@@ -60,7 +60,7 @@ final class FileLock
      */
     public function lock()
     {
-        return flock($this->fp, LOCK_EX | LOCK_NB);
+        return flock($this->handler, LOCK_EX | LOCK_NB);
     }
 
     /**
@@ -70,9 +70,9 @@ final class FileLock
      */
     public function unlock()
     {
-        $result = flock($this->fp, LOCK_UN);
+        $result = flock($this->handler, LOCK_UN);
 
-        fclose($this->fp);
+        fclose($this->handler);
 
         unlink($this->path);
 
