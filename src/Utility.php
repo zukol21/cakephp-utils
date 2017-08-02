@@ -243,7 +243,7 @@ class Utility
     {
         $result = [];
 
-        $_requiredIconParams = [
+        $requiredIconParams = [
             'url',
             'pattern',
             'default'
@@ -259,7 +259,7 @@ class Utility
             return $result;
         }
 
-        $diff = array_diff($_requiredIconParams, array_keys($config));
+        $diff = array_diff($requiredIconParams, array_keys($config));
         if (!empty($diff)) {
             return $result;
         }

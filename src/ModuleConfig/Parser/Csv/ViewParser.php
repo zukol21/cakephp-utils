@@ -59,7 +59,7 @@ class ViewParser extends AbstractCsvParser
             return $result;
         }
 
-        $reader = Reader::createFromPath($path, $this->open_mode);
+        $reader = Reader::createFromPath($path, $this->mode);
         $rows = $reader->setOffset(1)->fetchAll();
         foreach ($rows as $row) {
             $row = json_encode($row);
