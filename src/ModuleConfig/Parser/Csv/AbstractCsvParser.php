@@ -13,7 +13,7 @@ abstract class AbstractCsvParser extends AbstractParser
     /**
      * Mode to use for opening CSV files
      */
-    protected $open_mode = 'r';
+    protected $mode = 'r';
 
     /**
      * CSV file structure
@@ -52,7 +52,7 @@ abstract class AbstractCsvParser extends AbstractParser
             throw new InvalidArgumentException("No structure defined fro reading path: $path");
         }
 
-        $reader = Reader::createFromPath($path, $this->open_mode);
+        $reader = Reader::createFromPath($path, $this->mode);
         $rows = $reader->setOffset(1)->fetchAssoc($this->structure);
         foreach ($rows as $row) {
             $row = json_encode($row);
