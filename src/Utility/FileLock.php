@@ -11,14 +11,14 @@ final class FileLock
      *
      * @var resource
      */
-    protected $_fp;
+    protected $fp;
 
     /**
      * Lock file path.
      *
      * @var string
      */
-    protected $_path;
+    protected $path;
 
     /**
      * Initialize lock functionality by creating the lock file.
@@ -40,15 +40,15 @@ final class FileLock
 
         $filename = basename($filename);
 
-        $this->_path = sys_get_temp_dir() . DS . $filename;
+        $this->path = sys_get_temp_dir() . DS . $filename;
 
-        $result = @fopen($this->_path, 'w+');
+        $result = @fopen($this->path, 'w+');
 
         if (!is_resource($result)) {
-            throw new RuntimeException('Fail to create lock file [' . $this->_path . ']');
+            throw new RuntimeException('Fail to create lock file [' . $this->path . ']');
         }
 
-        $this->_fp = $result;
+        $this->fp = $result;
 
         return $this;
     }
@@ -60,7 +60,7 @@ final class FileLock
      */
     public function lock()
     {
-        return flock($this->_fp, LOCK_EX | LOCK_NB);
+        return flock($this->fp, LOCK_EX | LOCK_NB);
     }
 
     /**
@@ -70,11 +70,11 @@ final class FileLock
      */
     public function unlock()
     {
-        $result = flock($this->_fp, LOCK_UN);
+        $result = flock($this->fp, LOCK_UN);
 
-        fclose($this->_fp);
+        fclose($this->fp);
 
-        unlink($this->_path);
+        unlink($this->path);
 
         return $result;
     }
