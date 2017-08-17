@@ -10,6 +10,7 @@
         "burzum/cakephp-file-storage": "^1.2",
         "burzum/cakephp-imagine-plugin": "^2.1",
         "muffin/trash": "^1.1",
+        "myclabs/php-enum": "^1.5",
         "league/csv": "^8.1",
         "league/json-guard": "^0.5",
         "piwik/ini": "^1.0",
