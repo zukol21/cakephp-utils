@@ -330,19 +330,21 @@ class ModuleConfig
      * Prefix all given messages with a string
      *
      * @param string|array $messages One or more messages to prefix
-     * @param string $caller Caller that generated a message
+     * @param string $prefix Prefix to prepend to all messages
      * @return array List of prefixed messages
      */
-    protected function prefixMessages($messages, $caller = 'ModuleConfig')
+    protected function prefixMessages($messages, $prefix)
     {
+        $prefix = (string) $prefix;
+
         // Convert single messages to array
         if (is_string($messages)) {
             $messages = [$messages];
         }
 
         // Prefix all messages
-        $messages = array_map(function ($item) use ($caller) {
-            return sprintf("[%s][%s] %s : %s", $this->module, $this->configType, $caller, $item);
+        $messages = array_map(function ($item) use ($prefix) {
+            return sprintf("[%s][%s] %s : %s", $this->module, $this->configType, $prefix, $item);
         }, $messages);
 
         return $messages;
