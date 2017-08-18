@@ -116,42 +116,6 @@ class ModuleConfig
     protected $parser;
 
     /**
-     * Class lookup map
-     *
-     * @var array
-     */
-    protected $lookup = [
-        self::CONFIG_TYPE_MIGRATION => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\MigrationPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\MigrationParser',
-        ],
-        self::CONFIG_TYPE_MODULE => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ConfigPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\ConfigParser',
-        ],
-        self::CONFIG_TYPE_LIST => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ListPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\ListParser',
-        ],
-        self::CONFIG_TYPE_FIELDS => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\FieldsPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\FieldsParser',
-        ],
-        self::CONFIG_TYPE_MENUS => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\MenusPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Json\\MenusParser',
-        ],
-        self::CONFIG_TYPE_REPORTS => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ReportsPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\ReportsParser',
-        ],
-        self::CONFIG_TYPE_VIEW => [
-            self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ViewPathFinder',
-            self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\ViewParser',
-        ],
-    ];
-
-    /**
      * Constructor
      *
      * @param string $configType Type of configuration
@@ -168,6 +132,50 @@ class ModuleConfig
     }
 
     /**
+     * Get class map
+     *
+     * Return a mapping of finder and parser classes
+     * for each supported configuration type.
+     *
+     * @return array
+     */
+    protected function getClassMap()
+    {
+        $result = [
+            self::CONFIG_TYPE_MIGRATION => [
+                self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\MigrationPathFinder',
+                self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\MigrationParser',
+            ],
+            self::CONFIG_TYPE_MODULE => [
+                self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ConfigPathFinder',
+                self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\ConfigParser',
+            ],
+            self::CONFIG_TYPE_LIST => [
+                self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ListPathFinder',
+                self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\ListParser',
+            ],
+            self::CONFIG_TYPE_FIELDS => [
+                self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\FieldsPathFinder',
+                self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\FieldsParser',
+            ],
+            self::CONFIG_TYPE_MENUS => [
+                self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\MenusPathFinder',
+                self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Json\\MenusParser',
+            ],
+            self::CONFIG_TYPE_REPORTS => [
+                self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ReportsPathFinder',
+                self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\ReportsParser',
+            ],
+            self::CONFIG_TYPE_VIEW => [
+                self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ViewPathFinder',
+                self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\ViewParser',
+            ],
+        ];
+
+        return $result;
+    }
+
+    /**
      * Get class name by type
      *
      * This is a factory method, which finds the appropriate class
@@ -180,10 +188,11 @@ class ModuleConfig
     {
         $result = null;
 
-        if (empty($this->lookup[$this->configType][$classType])) {
+        $classMap = $this->getClassMap();
+        if (empty($classMap[$this->configType][$classType])) {
             $this->fail("Module Config : No [$classType] found for configurationi type [" . $this->configType . "]");
         }
-        $result = $this->lookup[$this->configType][$classType];
+        $result = $classMap[$this->configType][$classType];
 
         return $result;
     }
