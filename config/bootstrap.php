@@ -22,6 +22,22 @@ Configure::write('FileStorage', array_replace_recursive(
 ));
 
 /**
+ * ModuleConfig configuration
+ */
+// get app level config
+$config = Configure::read('ModuleConfig');
+$config = $config ? $config : [];
+
+// load default plugin config
+Configure::load('Qobo/Utils.module_config');
+
+// overwrite default plugin config by app level config
+Configure::write('ModuleConfig', array_replace_recursive(
+    Configure::read('ModuleConfig'),
+    $config
+));
+
+/**
  * Icons configuration
  */
 // get app level config

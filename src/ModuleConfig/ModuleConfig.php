@@ -1,6 +1,7 @@
 <?php
 namespace Qobo\Utils\ModuleConfig;
 
+use Cake\Core\Configure;
 use Exception;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
@@ -150,36 +151,8 @@ class ModuleConfig
     public function setClassMap(array $classMap = [])
     {
         if (empty($classMap)) {
-            $classMap = [
-                self::CONFIG_TYPE_MIGRATION => [
-                    self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\MigrationPathFinder',
-                    self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\MigrationParser',
-                ],
-                self::CONFIG_TYPE_MODULE => [
-                    self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ConfigPathFinder',
-                    self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\ConfigParser',
-                ],
-                self::CONFIG_TYPE_LIST => [
-                    self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ListPathFinder',
-                    self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\ListParser',
-                ],
-                self::CONFIG_TYPE_FIELDS => [
-                    self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\FieldsPathFinder',
-                    self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\FieldsParser',
-                ],
-                self::CONFIG_TYPE_MENUS => [
-                    self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\MenusPathFinder',
-                    self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Json\\MenusParser',
-                ],
-                self::CONFIG_TYPE_REPORTS => [
-                    self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ReportsPathFinder',
-                    self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Ini\\ReportsParser',
-                ],
-                self::CONFIG_TYPE_VIEW => [
-                    self::CLASS_TYPE_FINDER => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\ViewPathFinder',
-                    self::CLASS_TYPE_PARSER => 'Qobo\\Utils\\ModuleConfig\\Parser\\Csv\\ViewParser',
-                ],
-            ];
+            Configure::load('Qobo/Utils.module_config');
+            $classMap = Configure::read('ModuleConfig.classMap');
         }
 
         $this->classMap = $classMap;
