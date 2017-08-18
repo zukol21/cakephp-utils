@@ -335,7 +335,7 @@ class ModuleConfig
      */
     protected function prefixMessages($messages, $prefix)
     {
-        $prefix = (string) $prefix;
+        $prefix = (string)$prefix;
 
         // Convert single messages to array
         if (is_string($messages)) {
@@ -368,6 +368,7 @@ class ModuleConfig
 
         if (is_a($source, '\Exception')) {
             $this->errors = array_merge($this->errors, $this->prefixMessages($source->getMessage(), $caller));
+
             return;
         }
 
