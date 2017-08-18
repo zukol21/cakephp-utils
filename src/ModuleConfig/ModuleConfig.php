@@ -281,8 +281,7 @@ class ModuleConfig
         try {
             $finder = $this->getFinder();
             $result = $finder->find($this->module, $this->configFile, $validate);
-        } catch (Exception $e) {
-            $exception = $e;
+        } catch (Exception $exception) {
             $this->mergeMessages($exception, __FUNCTION__);
         }
 
@@ -310,8 +309,7 @@ class ModuleConfig
             $path = $this->find(false);
             $parser = $this->getParser();
             $result = $parser->parse($path, $this->options);
-        } catch (Exception $e) {
-            $exception = $e;
+        } catch (Exception $exception) {
             $this->mergeMessages($exception, __FUNCTION__);
         }
 
