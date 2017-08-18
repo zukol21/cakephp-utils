@@ -2,18 +2,18 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig;
 
 use Cake\Core\Configure;
+use Cake\TestSuite\TestCase;
 use Exception;
-use PHPUnit_Framework_TestCase;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
 use Qobo\Utils\ModuleConfig\Parser\Ini\ConfigParser;
 use Qobo\Utils\ModuleConfig\PathFinder\ConfigPathFinder;
 
-class ModuleConfigTest extends PHPUnit_Framework_TestCase
+class ModuleConfigTest extends TestCase
 {
     protected $pf;
     protected $dataDir;
 
-    protected function setUp()
+    public function setUp()
     {
         $this->dataDir = dirname(dirname(__DIR__)) . DS . 'data' . DS . 'Modules' . DS;
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
