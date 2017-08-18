@@ -283,14 +283,11 @@ class ModuleConfig
             $result = $finder->find($this->module, $this->configFile, $validate);
         } catch (Exception $e) {
             $exception = $e;
-            $this->errors = array_merge($this->errors, $this->prefixMessages($e->getMessage(), __FUNCTION__));
+            $this->mergeMessages($exception, __FUNCTION__);
         }
 
         // Get finder errors and warnings, if any
-        if (is_object($finder)) {
-            $this->errors = array_merge($this->errors, $this->prefixMessages($finder->getErrors(), __FUNCTION__));
-            $this->warnings = array_merge($this->warnings, $this->prefixMessages($finder->getWarnings(), __FUNCTION__));
-        }
+        $this->mergeMessages($finder, __FUNCTION__);
 
         // Re-throw finder exception
         if ($exception) {
@@ -315,14 +312,11 @@ class ModuleConfig
             $result = $parser->parse($path, $this->options);
         } catch (Exception $e) {
             $exception = $e;
-            $this->errors = array_merge($this->errors, $this->prefixMessages($e->getMessage(), __FUNCTION__));
+            $this->mergeMessages($exception, __FUNCTION__);
         }
 
         // Get parser errors and warnings, if any
-        if (is_object($parser)) {
-            $this->errors = array_merge($this->errors, $this->prefixMessages($parser->getErrors(), __FUNCTION__));
-            $this->warnings = array_merge($this->warnings, $this->prefixMessages($parser->getWarnings(), __FUNCTION__));
-        }
+        $this->mergeMessages($parser, __FUNCTION__);
 
         // Re-throw parser exception
         if ($exception) {
@@ -354,5 +348,35 @@ class ModuleConfig
         }, $messages);
 
         return $messages;
+    }
+
+    /**
+     * Merge warning and error messages
+     *
+     * Merge warning and error messages from a given source
+     * object into our warnings and messages.
+     *
+     * @param object $source Source object (ideally one using ErrorTrait)
+     * @param string $caller Caller that generated a message
+     * @return void
+     */
+    protected function mergeMessages($source, $caller = 'ModuleConfig')
+    {
+        if (!is_object($source)) {
+            return;
+        }
+
+        if (is_a($source, '\Exception')) {
+            $this->errors = array_merge($this->errors, $this->prefixMessages($source->getMessage(), $caller));
+            return;
+        }
+
+        if (method_exists($source, 'getErrors') && is_callable([$source, 'getErrors'])) {
+            $this->errors = array_merge($this->errors, $this->prefixMessages($source->getErrors(), $caller));
+        }
+
+        if (method_exists($source, 'getWarnings') && is_callable([$source, 'getWarnings'])) {
+            $this->warnings = array_merge($this->warnings, $this->prefixMessages($source->getWarnings(), $caller));
+        }
     }
 }
