@@ -33,15 +33,9 @@ class ClassFactory
         }
 
         $className = $classMap[$configType][$classType];
-        if (!is_string($className)) {
-            throw new RuntimeException("Class name is not a string for [$configType] [$classType]");
-        }
+        $result = static::getInstance($className);
 
-        if (!class_exists($className)) {
-            throw new RuntimeException("Class [$className] does not exist");
-        }
-
-        return new $className;
+        return $result;
     }
 
     /**
@@ -62,5 +56,31 @@ class ClassFactory
         }
 
         return $classMap;
+    }
+
+    /**
+     * Get an instance of a given class
+     *
+     * This method is public because it is useful in a variety of
+     * situations, not just for the factory via class map.
+     *
+     * RuntimeException is used instead of InvalidArgumentException
+     * purely for backward compatibiilty reasons.
+     *
+     * @throws \RuntimeException when cannot create instance
+     * @param string $class Class name to instantiate
+     * @return object
+     */
+    public static function getInstance($class)
+    {
+        if (!is_string($class)) {
+            throw RuntimeException("Class name name must be string. [" . gettype($class) . "] given");
+        }
+
+        if (!class_exists($class)) {
+            throw RuntimeException("Class [$class] does not exist");
+        }
+
+        return new $class;
     }
 }
