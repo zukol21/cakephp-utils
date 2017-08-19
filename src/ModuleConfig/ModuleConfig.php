@@ -150,11 +150,6 @@ class ModuleConfig
      */
     public function setClassMap(array $classMap = [])
     {
-        if (empty($classMap)) {
-            Configure::load('Qobo/Utils.module_config');
-            $classMap = Configure::read('ModuleConfig.classMap');
-        }
-
         $this->classMap = $classMap;
     }
 
@@ -175,48 +170,6 @@ class ModuleConfig
         }
 
         return $result;
-    }
-
-    /**
-     * Get class name by type
-     *
-     * This is a factory method, which finds the appropriate class
-     * name for a given configuration type.
-     *
-     * @param string $classType Type of class to find
-     * @return string
-     */
-    protected function getClassByType($classType)
-    {
-        $result = null;
-
-        $classMap = $this->getClassMap();
-        if (empty($classMap[$this->configType][$classType])) {
-            $this->fail("Module Config : No [$classType] found for configurationi type [" . $this->configType . "]");
-        }
-        $result = $classMap[$this->configType][$classType];
-
-        return $result;
-    }
-
-    /**
-     * Get class instance by type
-     *
-     * This is a factory method, which finds the appropriate class
-     * for a given configuration type and returns an instance of it.
-     *
-     * @param string $classType Type of class to find
-     * @return object
-     */
-    protected function getInstanceByType($classType)
-    {
-        $className = $this->getClassByType($classType);
-
-        if (!class_exists($className)) {
-            $this->fail("Module Config : Class [$className] does not exist");
-        }
-
-        return new $className;
     }
 
     /**
@@ -244,7 +197,8 @@ class ModuleConfig
             return $this->finder;
         }
 
-        $this->setFinder($this->getInstanceByType(self::CLASS_TYPE_FINDER));
+        $finder = ClassFactory::create($this->configType, self::CLASS_TYPE_FINDER, $this->getClassMap());
+        $this->setFinder($finder);
 
         return $this->finder;
     }
@@ -274,7 +228,8 @@ class ModuleConfig
             return $this->parser;
         }
 
-        $this->setParser($this->getInstanceByType(self::CLASS_TYPE_PARSER));
+        $parser = ClassFactory::create($this->configType, self::CLASS_TYPE_PARSER, $this->getClassMap());
+        $this->setParser($parser);
 
         return $this->parser;
     }
