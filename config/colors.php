@@ -1,5 +1,6 @@
 <?php
 // Colors configuration
+
 return [
     'Colors' => [
         '#e3910f' => 'Orange',
