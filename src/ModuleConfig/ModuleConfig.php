@@ -104,6 +104,13 @@ class ModuleConfig
     protected $options;
 
     /**
+     * Cache key, to avoid unnecessary computations
+     *
+     * @var string
+     */
+    protected $cacheKey;
+
+    /**
      * Constructor
      *
      * @param string $configType Type of configuration
@@ -217,9 +224,11 @@ class ModuleConfig
      */
     protected function getCacheKey($path)
     {
-        $result = md5($path) . '_' . md5(json_encode($this->options));
+        if (empty($this->cacheKey)) {
+            $this->cacheKey = md5($path) . '_' . md5(json_encode($this->options));
+        }
 
-        return $result;
+        return $this->cacheKey;
     }
 
     /**
