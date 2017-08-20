@@ -27,8 +27,7 @@ class ClassFactory
         $configType = (string)$configType;
         $classType = (string)$classType;
 
-        $classMap = empty($options['classMap']) ? [] : (array)$options['classMap'];
-        $classMap = static::getClassMap($classMap);
+        $classMap = empty($options['classMap']) ? Configure::read('ModuleConfig.classMap') : (array)$options['classMap'];
         if (empty($classMap[$configType][$classType])) {
             throw new RuntimeException("No [$classType] found for configurationi type [$configType]");
         }
@@ -37,26 +36,6 @@ class ClassFactory
         $result = static::getInstance($className);
 
         return $result;
-    }
-
-    /**
-     * Get class map
-     *
-     * If no class map given, a default one will be returned.  Otherwise,
-     * a given class map will be returned as is.  In the future, this can
-     * be extended to validate/filter/adjust the provided class map.
-     *
-     * @param array $classMap Class map
-     * @return array
-     */
-    protected static function getClassMap(array $classMap = [])
-    {
-        if (empty($classMap)) {
-            Configure::load('Qobo/Utils.module_config');
-            $classMap = Configure::read('ModuleConfig.classMap');
-        }
-
-        return $classMap;
     }
 
     /**

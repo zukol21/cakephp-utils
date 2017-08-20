@@ -215,7 +215,6 @@ class Utility
         $result = [];
 
         if (empty($config)) {
-            Configure::load('Qobo/Utils.colors');
             $config = Configure::read('Colors');
         }
 
@@ -249,7 +248,6 @@ class Utility
 
         // passing default icons if no external config present.
         if (empty($config)) {
-            Configure::load('Qobo/Utils.icons');
             $config = Configure::read('Icons');
         }
 
