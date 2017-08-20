@@ -1,13 +1,10 @@
 <?php
 namespace Qobo\Utils\ModuleConfig;
 
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
 use Exception;
 use Qobo\Utils\ErrorTrait;
-use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
-use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
-use RuntimeException;
+use Qobo\Utils\ModuleConfig\Cache\Cache;
+use Qobo\Utils\ModuleConfig\Cache\PathCache;
 
 /**
  * ModuleConfig Class
@@ -104,13 +101,6 @@ class ModuleConfig
     protected $options;
 
     /**
-     * Cache key, to avoid unnecessary computations
-     *
-     * @var string
-     */
-    protected $cacheKey;
-
-    /**
      * Constructor
      *
      * @param string $configType Type of configuration
@@ -158,9 +148,16 @@ class ModuleConfig
      */
     public function find($validate = true)
     {
+        $cache = null;
         $finder = null;
         $exception = null;
         try {
+            $cache = new Cache(__FUNCTION__, $this->options);
+            $cacheKey = $cache->getKey([$this->module, $this->configType, $this->configFile, $validate]);
+            $result = $cache->readFrom($cacheKey);
+            if ($result !== false) {
+                return $result;
+            }
             $finder = $this->getFinder();
             $result = $finder->find($this->module, $this->configFile, $validate);
         } catch (Exception $exception) {
@@ -169,11 +166,13 @@ class ModuleConfig
 
         // Get finder errors and warnings, if any
         $this->mergeMessages($finder, __FUNCTION__);
+        $this->mergeMessages($cache, __FUNCTION__);
 
         // Re-throw finder exception
         if ($exception) {
             throw $exception;
         }
+        $cache->writeTo($cacheKey, $result);
 
         return $result;
     }
@@ -185,11 +184,14 @@ class ModuleConfig
      */
     public function parse()
     {
+        $cache = null;
         $parser = null;
         $exception = null;
         try {
             $path = $this->find(false);
-            $result = $this->readFromCache($path);
+            $cache = new PathCache(__FUNCTION__, $this->options);
+            $cacheKey = $cache->getKey([$path]);
+            $result = $cache->readFrom($cacheKey);
             if ($result !== false) {
                 return $result;
             }
@@ -201,136 +203,13 @@ class ModuleConfig
 
         // Get parser errors and warnings, if any
         $this->mergeMessages($parser, __FUNCTION__);
+        $this->mergeMessages($cache, __FUNCTION__);
 
         // Re-throw parser exception
         if ($exception) {
             throw $exception;
         }
-        $this->writeToCache($path, $result);
-
-        return $result;
-    }
-
-    /**
-     * Get cache key
-     *
-     * The key is combined from the path the parsed configuration file
-     * and the options which were used to parse it.  Since the path
-     * can get quite long, and options are an array, we md5 each of
-     * these parts and then combine them together.
-     *
-     * @param string $path Path to configuration file
-     * @return string
-     */
-    protected function getCacheKey($path)
-    {
-        if (empty($this->cacheKey)) {
-            $this->cacheKey = md5($path) . '_' . md5(json_encode($this->options));
-        }
-
-        return $this->cacheKey;
-    }
-
-    /**
-     * Figure out which cache configuration to use
-     *
-     * If the cache configuration specified in `cacheConfig` key of the
-     * options, use that.  Otherwise return the 'default'.
-     *
-     * @return string Cache configuration to use
-     */
-    protected function getCacheConfig()
-    {
-        $result = 'default';
-
-        if (empty($this->options['cacheConfig'])) {
-            return $result;
-        }
-
-        $result = (string)$this->options['cacheConfig'];
-
-        return $result;
-    }
-
-    /**
-     * Check if the caching should be skipped or not
-     *
-     * @return bool True if skipping, false otherwise
-     */
-    protected function skipCache()
-    {
-        $result = false;
-        // Skip cache altogether if the options demand so
-        if (!empty($this->options['cacheSkip']) && $this->options['cacheSkip']) {
-            $result = true;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Read parsed result from cache
-     *
-     * @param string $path Path to configuration file
-     * @return false|object False if no cache, object otherwise
-     */
-    protected function readFromCache($path)
-    {
-        $result = false;
-
-        if ($this->skipCache()) {
-            $this->warnings[] = 'Skipping read from cache';
-
-            return $result;
-        }
-
-        $cachedData = Cache::read($this->getCacheKey($path), $this->getCacheConfig());
-        if ($cachedData === false) {
-            $this->warnings[] = 'Value not found in cache';
-
-            return $result;
-        }
-
-        // Check if the config file was modified since it's
-        // parsed value was cached
-        if (md5($cachedData['path']) <> $cachedData['md5']) {
-            $this->warnings[] = 'Stale cache found. Cleaning up and ignoring';
-            Cache::delete($this->getCacheKey($path), $this->getCacheConfig());
-
-            return $result;
-        }
-
-        $result = $cachedData['data'];
-
-        return $result;
-    }
-
-    /**
-     * Write parsed result to cache
-     *
-     * @param string $path Path to configuration file
-     * @param object $data Parsed config
-     * @return bool True if the data was successfully cached, false on failure
-     */
-    protected function writeToCache($path, $data)
-    {
-        $result = false;
-
-        if ($this->skipCache()) {
-            $this->warnings[] = 'Skipping write to cache';
-
-            return $result;
-        }
-
-        $cachedData = [
-            'path' => $path,
-            'md5' => md5($path),
-            'data' => $data,
-        ];
-        $result = Cache::write($this->getCacheKey($path), $cachedData, $this->getCacheConfig());
-        if (!$result) {
-            $this->errors[] = 'Failed to write value to cache';
-        }
+        $cache->writeTo($cacheKey, $result, ['path' => $path]);
 
         return $result;
     }

@@ -1,0 +1,264 @@
+<?php
+namespace Qobo\Utils\ModuleConfig\Cache;
+
+use Cake\Cache\Cache as CakeCache;
+use InvalidArgumentException;
+use Qobo\Utils\ErrorTrait;
+
+/**
+ * Cache Class
+ *
+ * This class caches values consistently as an asociative
+ * array with the value being stored in the 'data' key.
+ *
+ * @author Leonid Mamchenkov <l.mamchenkov@qobo.biz>
+ */
+class Cache
+{
+    use ErrorTrait;
+
+    /**
+     * Name of default CakePHP cache configuration
+     */
+    const DEFAULT_CONFIG = 'default';
+
+    /**
+     * Name of the current cache instance
+     *
+     * This is mostly useful for prefixing the keys
+     * of the cache to avoid any name clashing.
+     *
+     * @var string $name Name of the cache
+     */
+    protected $name;
+
+    /**
+     * Associative array of options
+     *
+     * @var array $options
+     */
+    protected $options;
+
+    /**
+     * Required keys for the cached value
+     *
+     * Configuration for validating cached values.  An
+     * associative array of keys to check for presence,
+     * and the boolean for whether or not empty values
+     * are allowed.
+     *
+     * @param array $requiredKeys Cached value validation
+     */
+    protected $requiredKeys = [
+            'data' => false,
+        ];
+
+    /**
+     * Constructor
+     *
+     * @throws \InvalidArgumentException when no name given
+     * @param string $name Name of the current cache instance (think prefix)
+     * @param array $options Options
+     */
+    public function __construct($name, array $options = [])
+    {
+        $name = (string)$name;
+        if (empty($name)) {
+            throw InvalidArgumentException("Cache name is required and cannot be empty");
+        }
+
+        $this->name = $name;
+        $this->options = $options;
+    }
+
+    /**
+     * Generate cache key
+     *
+     * In order to avoid hardcoding any particular values
+     * in the cache key, we instead rely on a given array
+     * of parameters.  Each parameter will be converted to
+     * a string and appended to the key, which then be
+     * shortened using an md5 checksum.
+     *
+     * Name of the current cache instance is used as a prefix.
+     * And just for convenience, the array of current instance
+     * options is appended to key parameters.
+     *
+     * @param array $params Parameters for key generation
+     * @return string
+     */
+    public function getKey(array $params)
+    {
+        // Push current options to the list of
+        // params to ensure unique cache key for
+        // each set of options.
+        $params[] = $this->options;
+
+        $keyString = '_';
+        foreach ($params as $param) {
+            $keyString .= '_' . $this->valueToString($param);
+        }
+        $keyString = $this->name . '_' . $keyString;
+        $result = md5($keyString);
+
+        return $result;
+    }
+
+    /**
+     * Convert a given value to string
+     *
+     * @param mixed $value Value to convert
+     * @return string
+     */
+    protected function valueToString($value)
+    {
+        if (is_string($value)) {
+            return $value;
+        }
+
+        if (is_object($value) || is_array($value)) {
+            return json_encode($value);
+        }
+
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+
+        return (string)$value;
+    }
+
+    /**
+     * Get cache configuration name
+     *
+     * @return string
+     */
+    public function getConfig()
+    {
+        $result = static::DEFAULT_CONFIG;
+
+        if (empty($this->options['cacheConfig'])) {
+            return $result;
+        }
+
+        $result = (string)$this->options['cacheConfig'];
+
+        return $result;
+    }
+
+    /**
+     * Check if the caching should be skipped or not
+     *
+     * @return bool True if skipping, false otherwise
+     */
+    public function skipCache()
+    {
+        $result = false;
+        // Skip cache altogether if the options demand so
+        if (!empty($this->options['cacheSkip']) && $this->options['cacheSkip']) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Read cached value from a given key
+     *
+     * @param string $key Cache key
+     * @return mixed False on failure, cached value otherwise
+     */
+    public function readFrom($key)
+    {
+        $result = false;
+
+        if ($this->skipCache()) {
+            $this->warnings[] = 'Skipping read from cache';
+
+            return $result;
+        }
+
+        $cachedData = CakeCache::read($key, $this->getConfig());
+        if (!$this->isValidCache($cachedData)) {
+            CakeCache::delete($key, $this->getConfig());
+
+            return $result;
+        }
+        $result = $cachedData['data'];
+
+        return $result;
+    }
+
+    /**
+     * Write a value to cache key
+     *
+     * @param string $key Cache key
+     * @param mixed $data Data to cache
+     * @param array $params Additional parameters
+     * @return bool False on failure, true on success
+     */
+    public function writeTo($key, $data, array $params = [])
+    {
+        $result = false;
+
+        if ($this->skipCache()) {
+            $this->warnings[] = 'Skipping writing to cache';
+
+            return $result;
+        }
+
+        $cachedData['data'] = $data;
+        if (!empty($params['raw']) && $params['raw']) {
+            if (empty($data['data'])) {
+                $this->errors[] = "Raw data is missing 'data' key";
+
+                return $result;
+            }
+            $cachedData = $data;
+        }
+
+        $result = CakeCache::write($key, $cachedData, $this->getConfig());
+        if (!$result) {
+            $this->errors[] = 'Failed to write value to cache';
+        }
+
+        return $result;
+    }
+
+    /**
+     * Validate the value
+     *
+     * @param mixed $value Value to check
+     * @return bool False if invalid, true if valid
+     */
+    protected function isValidCache($value)
+    {
+        $result = false;
+
+        if ($value === false) {
+            $this->warnings[] = 'Value not found in cache';
+
+            return $result;
+        }
+
+        if (!is_array($value)) {
+            $this->errors[] = "Cached value is not an array";
+
+            return $result;
+        }
+
+        foreach ($this->requiredKeys as $key => $notEmpty) {
+            if (!array_key_exists($key, $value)) {
+                $this->errors[] = "Cached value is missing '$key'";
+
+                return $result;
+            }
+            if ($notEmpty && empty($value[$key])) {
+                $this->errors[] = "Cached value is empty for key '$key'";
+
+                return $result;
+            }
+        }
+
+        return true;
+    }
+}
