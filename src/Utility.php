@@ -122,10 +122,8 @@ class Utility
         }
 
         foreach ($tables as $table) {
-            if ($excludePhinxlog) {
-                if (preg_match('/phinxlog/', $table)) {
-                    continue;
-                }
+            if ($excludePhinxlog && preg_match('/phinxlog/', $table)) {
+                continue;
             }
 
             $result[$table] = Inflector::humanize($table);
