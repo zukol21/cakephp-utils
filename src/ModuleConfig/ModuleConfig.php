@@ -190,7 +190,7 @@ class ModuleConfig
         try {
             $path = $this->find(false);
             $result = $this->readFromCache($path);
-            if ($result) {
+            if ($result !== false) {
                 return $result;
             }
             $parser = $this->getParser();
@@ -272,11 +272,11 @@ class ModuleConfig
      * Read parsed result from cache
      *
      * @param string $path Path to configuration file
-     * @return null|object Null if no cache, object otherwise
+     * @return false|object False if no cache, object otherwise
      */
     protected function readFromCache($path)
     {
-        $result = null;
+        $result = false;
 
         if ($this->skipCache()) {
             $this->warnings[] = 'Skipping read from cache';
@@ -285,7 +285,7 @@ class ModuleConfig
         }
 
         $cachedData = Cache::read($this->getCacheKey($path), $this->getCacheConfig());
-        if (!$cachedData) {
+        if ($cachedData === false) {
             $this->warnings[] = 'Value not found in cache';
 
             return $result;
