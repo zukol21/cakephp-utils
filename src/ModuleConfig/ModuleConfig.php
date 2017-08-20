@@ -178,16 +178,16 @@ class ModuleConfig
      */
     public function parse()
     {
-        $result = $this->readFromCache();
-        if ($result) {
-            return $result;
-        }
-
         $parser = null;
         $exception = null;
         try {
+            $path = $this->find(false);
+            $result = $this->readFromCache($path);
+            if ($result) {
+                return $result;
+            }
             $parser = $this->getParser();
-            $result = $parser->parse($this->find(false), $this->options);
+            $result = $parser->parse($path, $this->options);
         } catch (Exception $exception) {
             $this->mergeMessages($exception, __FUNCTION__);
         }
@@ -199,7 +199,7 @@ class ModuleConfig
         if ($exception) {
             throw $exception;
         }
-        $this->writeToCache($result);
+        $this->writeToCache($path, $result);
 
         return $result;
     }
@@ -212,11 +212,12 @@ class ModuleConfig
      * can get quite long, and options are an array, we md5 each of
      * these parts and then combine them together.
      *
+     * @param string $path Path to configuration file
      * @return string
      */
-    protected function getCacheKey()
+    protected function getCacheKey($path)
     {
-        $result = md5($this->find(false)) . '_' . md5(json_encode($this->options));
+        $result = md5($path) . '_' . md5(json_encode($this->options));
 
         return $result;
     }
@@ -261,9 +262,10 @@ class ModuleConfig
     /**
      * Read parsed result from cache
      *
+     * @param string $path Path to configuration file
      * @return null|object Null if no cache, object otherwise
      */
-    protected function readFromCache()
+    protected function readFromCache($path)
     {
         $result = null;
 
@@ -273,7 +275,7 @@ class ModuleConfig
             return $result;
         }
 
-        $cachedData = Cache::read($this->getCacheKey(), $this->getCacheConfig());
+        $cachedData = Cache::read($this->getCacheKey($path), $this->getCacheConfig());
         if (!$cachedData) {
             $this->warnings[] = 'Value not found in cache';
 
@@ -284,7 +286,7 @@ class ModuleConfig
         // parsed value was cached
         if (md5($cachedData['path']) <> $cachedData['md5']) {
             $this->warnings[] = 'Stale cache found. Cleaning up and ignoring';
-            Cache::delete($this->getCacheKey(), $this->getCacheConfig());
+            Cache::delete($this->getCacheKey($path), $this->getCacheConfig());
 
             return $result;
         }
@@ -297,10 +299,11 @@ class ModuleConfig
     /**
      * Write parsed result to cache
      *
+     * @param string $path Path to configuration file
      * @param object $data Parsed config
      * @return bool True if the data was successfully cached, false on failure
      */
-    protected function writeToCache($data)
+    protected function writeToCache($path, $data)
     {
         $result = false;
 
@@ -310,13 +313,12 @@ class ModuleConfig
             return $result;
         }
 
-        $path = $this->find(false);
         $cachedData = [
             'path' => $path,
             'md5' => md5($path),
             'data' => $data,
         ];
-        $result = Cache::write($this->getCacheKey(), $cachedData, $this->getCacheConfig());
+        $result = Cache::write($this->getCacheKey($path), $cachedData, $this->getCacheConfig());
         if (!$result) {
             $this->errors[] = 'Failed to write value to cache';
         }
