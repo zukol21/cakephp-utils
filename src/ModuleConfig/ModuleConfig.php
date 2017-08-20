@@ -103,27 +103,6 @@ class ModuleConfig
     protected $options;
 
     /**
-     * Instance of the PathFinder
-     *
-     * @var \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
-     */
-    protected $finder;
-
-    /**
-     * Instance of the Parser
-     *
-     * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface
-     */
-    protected $parser;
-
-    /**
-     * Class map
-     *
-     * @var array
-     */
-    protected $classMap;
-
-    /**
      * Constructor
      *
      * @param string $configType Type of configuration
@@ -140,98 +119,27 @@ class ModuleConfig
     }
 
     /**
-     * Set class map
+     * Get path finder instance
      *
-     * Set class map of finders and parser for each
-     * supported configuration.
-     *
-     * @param array $classMap Class map
-     * @return void
+     * @return \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
      */
-    public function setClassMap(array $classMap = [])
+    protected function getFinder()
     {
-        $this->classMap = $classMap;
-    }
-
-    /**
-     * Get class map
-     *
-     * Return a mapping of finder and parser classes
-     * for each supported configuration type.
-     *
-     * @return array
-     */
-    public function getClassMap()
-    {
-        $result = $this->classMap;
-        if (empty($this->classMap)) {
-            $this->setClassMap();
-            $result = $this->classMap;
-        }
+        $result = ClassFactory::create($this->configType, self::CLASS_TYPE_FINDER, $this->options);
 
         return $result;
     }
 
     /**
-     * Set path finder instance
-     *
-     * @param \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface $finder Finder instance
-     * @return void
-     */
-    public function setFinder(PathFinderInterface $finder)
-    {
-        $this->finder = $finder;
-    }
-
-    /**
-     * Get path finder instance
-     *
-     * If the specific instance wasn't set, the automagic kicks in to
-     * figure out which class is the most appropriate.
-     *
-     * @return \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
-     */
-    public function getFinder()
-    {
-        if ($this->finder) {
-            return $this->finder;
-        }
-
-        $finder = ClassFactory::create($this->configType, self::CLASS_TYPE_FINDER, $this->getClassMap());
-        $this->setFinder($finder);
-
-        return $this->finder;
-    }
-
-    /**
-     * Set parser instance
-     *
-     * @param \Qobo\Utils\ModuleConfig\Parser\ParserInterface $parser Parser instance
-     * @return void
-     */
-    public function setParser(ParserInterface $parser)
-    {
-        $this->parser = $parser;
-    }
-
-    /**
      * Get parser instance
-     *
-     * If the specific instance wasn't set, the automagic kicks in to
-     * figure out which class is the most appropriate.
      *
      * @return \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
-    public function getParser()
+    protected function getParser()
     {
-        if ($this->parser) {
-            return $this->parser;
-        }
+        $result = ClassFactory::create($this->configType, self::CLASS_TYPE_PARSER, $this->options);
 
-        $parser = ClassFactory::create($this->configType, self::CLASS_TYPE_PARSER, $this->getClassMap());
-        $this->setParser($parser);
-
-        return $this->parser;
+        return $result;
     }
 
     /**

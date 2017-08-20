@@ -19,44 +19,6 @@ class ModuleConfigTest extends TestCase
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
     }
 
-    public function testSetFinder()
-    {
-        $expected = new ConfigPathFinder();
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
-        $mc->setFinder($expected);
-        $result = $mc->getFinder();
-        $this->assertFalse(empty($result), "Path finder is empty");
-        $this->assertEquals($expected, $result, "Setting path finder is broken");
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testGetFinderException()
-    {
-        $mc = new ModuleConfig('unsupportedType', 'Foo');
-        $mc->getFinder();
-    }
-
-    public function testSetParser()
-    {
-        $expected = new ConfigParser();
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
-        $mc->setParser($expected);
-        $result = $mc->getParser();
-        $this->assertFalse(empty($result), "Parser is empty");
-        $this->assertEquals($expected, $result, "Setting parser is broken");
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testGetParserException()
-    {
-        $mc = new ModuleConfig('unsupportedType', 'Foo');
-        $mc->getParser();
-    }
-
     public function testFind()
     {
         $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');

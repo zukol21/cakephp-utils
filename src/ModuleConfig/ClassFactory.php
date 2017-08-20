@@ -19,14 +19,15 @@ class ClassFactory
      * @throws \RuntimeException when cannot create instance
      * @param string $configType Configuration type
      * @param string $classType Class type
-     * @param array $classMap Class map
+     * @param array $options Options
      * @return object
      */
-    public static function create($configType, $classType, array $classMap = [])
+    public static function create($configType, $classType, array $options = [])
     {
         $configType = (string)$configType;
         $classType = (string)$classType;
 
+        $classMap = empty($options['classMap']) ? [] : (array)$options['classMap'];
         $classMap = static::getClassMap($classMap);
         if (empty($classMap[$configType][$classType])) {
             throw new RuntimeException("No [$classType] found for configurationi type [$configType]");
