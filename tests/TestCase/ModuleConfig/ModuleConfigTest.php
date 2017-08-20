@@ -57,7 +57,9 @@ class ModuleConfigTest extends TestCase
         try {
             $result = $mc->parse();
         } catch (Exception $e) {
-            print_r($mc->getErrors());
+            debug($e->getMessage());
+            debug($mc->getErrors());
+            debug($mc->getWarnings());
         }
         $this->assertTrue(is_object($result), "Result is not an object");
         $this->assertFalse(empty(json_decode(json_encode($result), true)), "Result is empty");

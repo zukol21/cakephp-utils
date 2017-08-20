@@ -1,6 +1,7 @@
 <?php
 namespace Qobo\Utils\ModuleConfig;
 
+use Cake\Cache\Cache;
 use Cake\Core\Configure;
 use Exception;
 use Qobo\Utils\ErrorTrait;
@@ -177,12 +178,16 @@ class ModuleConfig
      */
     public function parse()
     {
+        $result = $this->readFromCache();
+        if ($result) {
+            return $result;
+        }
+
         $parser = null;
         $exception = null;
         try {
-            $path = $this->find(false);
             $parser = $this->getParser();
-            $result = $parser->parse($path, $this->options);
+            $result = $parser->parse($this->find(false), $this->options);
         } catch (Exception $exception) {
             $this->mergeMessages($exception, __FUNCTION__);
         }
@@ -193,6 +198,127 @@ class ModuleConfig
         // Re-throw parser exception
         if ($exception) {
             throw $exception;
+        }
+        $this->writeToCache($result);
+
+        return $result;
+    }
+
+    /**
+     * Get cache key
+     *
+     * The key is combined from the path the parsed configuration file
+     * and the options which were used to parse it.  Since the path
+     * can get quite long, and options are an array, we md5 each of
+     * these parts and then combine them together.
+     *
+     * @return string
+     */
+    protected function getCacheKey()
+    {
+        $result = md5($this->find(false)) . '_' . md5(json_encode($this->options));
+
+        return $result;
+    }
+
+    /**
+     * Figure out which cache configuration to use
+     *
+     * If the cache configuration specified in `cacheConfig` key of the
+     * options, use that.  Otherwise return the 'default'.
+     *
+     * @return string Cache configuration to use
+     */
+    protected function getCacheConfig()
+    {
+        $result = 'default';
+
+        if (empty($this->options['cacheConfig'])) {
+            return $result;
+        }
+
+        $result = (string)$this->options['cacheConfig'];
+
+        return $result;
+    }
+
+    /**
+     * Check if the caching should be skipped or not
+     *
+     * @return bool True if skipping, false otherwise
+     */
+    protected function skipCache()
+    {
+        $result = false;
+        // Skip cache altogether if the options demand so
+        if (!empty($this->options['cacheSkip']) && $this->options['cacheSkip']) {
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Read parsed result from cache
+     *
+     * @return null|object Null if no cache, object otherwise
+     */
+    protected function readFromCache()
+    {
+        $result = null;
+
+        if ($this->skipCache()) {
+            $this->warnings[] = 'Skipping read from cache';
+
+            return $result;
+        }
+
+        $cachedData = Cache::read($this->getCacheKey(), $this->getCacheConfig());
+        if (!$cachedData) {
+            $this->warnings[] = 'Value not found in cache';
+
+            return $result;
+        }
+
+        // Check if the config file was modified since it's
+        // parsed value was cached
+        if (md5($cachedData['path']) <> $cachedData['md5']) {
+            $this->warnings[] = 'Stale cache found. Cleaning up and ignoring';
+            Cache::delete($this->getCacheKey(), $this->getCacheConfig());
+
+            return $result;
+        }
+
+        $result = $cachedData['data'];
+
+        return $result;
+    }
+
+    /**
+     * Write parsed result to cache
+     *
+     * @param object $data Parsed config
+     * @return bool True if the data was successfully cached, false on failure
+     */
+    protected function writeToCache($data)
+    {
+        $result = false;
+
+        if ($this->skipCache()) {
+            $this->warnings[] = 'Skipping write to cache';
+
+            return $result;
+        }
+
+        $path = $this->find(false);
+        $cachedData = [
+            'path' => $path,
+            'md5' => md5($path),
+            'data' => $data,
+        ];
+        $result = Cache::write($this->getCacheKey(), $cachedData, $this->getCacheConfig());
+        if (!$result) {
+            $this->errors[] = 'Failed to write value to cache';
         }
 
         return $result;
