@@ -346,6 +346,8 @@ class ModuleConfig
      */
     protected function prefixMessages($messages, $prefix)
     {
+        $result = [];
+
         $prefix = (string)$prefix;
 
         // Convert single messages to array
@@ -354,9 +356,9 @@ class ModuleConfig
         }
 
         // Prefix all messages
-        $messages = array_map(function ($item) use ($prefix) {
-            return sprintf("[%s][%s] %s : %s", $this->module, $this->configType, $prefix, $item);
-        }, $messages);
+        foreach ($messages as $message) {
+            $result[] = sprintf("[%s][%s] %s : %s", $this->module, $this->configType, $prefix, $message);
+        }
 
         return $messages;
     }
