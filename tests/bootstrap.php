@@ -108,6 +108,7 @@ Cake\Datasource\ConnectionManager::config('test', [
 // loading test icons.php from test/config/icons.php
 Cake\Core\Configure::load('icons', 'default');
 Cake\Core\Configure::load('colors', 'default');
+Cake\Core\Configure::load('module_config', 'default');
 
 // Alias AppController to the test App
 class_alias('Qobo\\' . $pluginName . '\Test\App\Controller\AppController', 'App\Controller\AppController');
