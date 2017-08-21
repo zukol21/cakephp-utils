@@ -212,8 +212,9 @@ class Cache
         }
 
         $cachedData['data'] = $data;
-        if (!empty($params['raw']) && $params['raw']) {
-            if (empty($data['data'])) {
+        $raw = empty($params['raw']) ? false : (bool)$params['raw'];
+        if ($raw) {
+            if (!array_key_exists('data', $data)) {
                 $this->errors[] = "Raw data is missing 'data' key";
 
                 return $result;
