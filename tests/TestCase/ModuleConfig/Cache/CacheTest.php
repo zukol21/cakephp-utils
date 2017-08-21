@@ -69,4 +69,13 @@ class CacheTest extends TestCase
         $this->assertTrue(is_string($result), "getKey() returned a non-string result");
         $this->assertEquals($expected, $result, "getKey() returned a wrong key value");
     }
+
+    public function testWriteToRaw()
+    {
+        $cache = new Cache('foo');
+        $data = ['array' => 'with no data key'];
+        $result = $cache->writeTo('raw_key', $data, ['raw' => true]);
+        $this->assertTrue(is_bool($result), "writeTo() returned a non-boolean result");
+        $this->assertFalse($result, "writeTo() cached value without 'data' key");
+    }
 }
