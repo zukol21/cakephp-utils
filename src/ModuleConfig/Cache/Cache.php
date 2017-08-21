@@ -91,7 +91,7 @@ class Cache
     {
         $name = (string)$name;
         if (empty($name)) {
-            throw InvalidArgumentException("Cache name is required and cannot be empty");
+            throw new InvalidArgumentException("Cache name is required and cannot be empty");
         }
 
         $this->name = $name;

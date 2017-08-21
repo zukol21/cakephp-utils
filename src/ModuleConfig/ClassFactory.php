@@ -54,11 +54,11 @@ class ClassFactory
     public static function getInstance($class)
     {
         if (!is_string($class)) {
-            throw RuntimeException("Class name name must be string. [" . gettype($class) . "] given");
+            throw new RuntimeException("Class name name must be string. [" . gettype($class) . "] given");
         }
 
         if (!class_exists($class)) {
-            throw RuntimeException("Class [$class] does not exist");
+            throw new RuntimeException("Class [$class] does not exist");
         }
 
         return new $class;
