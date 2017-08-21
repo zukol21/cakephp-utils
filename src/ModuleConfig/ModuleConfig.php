@@ -210,15 +210,15 @@ class ModuleConfig
     }
 
     /**
-     * Prefix messages
+     * Format messages
      *
-     * Prefix all given messages with a string
+     * Format and prefix all given messages with a given string.
      *
      * @param string|array $messages One or more messages to prefix
      * @param string $prefix Prefix to prepend to all messages
      * @return array List of prefixed messages
      */
-    protected function prefixMessages($messages, $prefix)
+    protected function formatMessages($messages, $prefix)
     {
         $result = [];
 
@@ -252,17 +252,17 @@ class ModuleConfig
         $source = is_object($source) ? $source : new StdClass();
 
         if (is_a($source, '\Exception')) {
-            $this->errors = array_merge($this->errors, $this->prefixMessages($source->getMessage(), $caller));
+            $this->errors = array_merge($this->errors, $this->formatMessages($source->getMessage(), $caller));
 
             return;
         }
 
         if (method_exists($source, 'getErrors') && is_callable([$source, 'getErrors'])) {
-            $this->errors = array_merge($this->errors, $this->prefixMessages($source->getErrors(), $caller));
+            $this->errors = array_merge($this->errors, $this->formatMessages($source->getErrors(), $caller));
         }
 
         if (method_exists($source, 'getWarnings') && is_callable([$source, 'getWarnings'])) {
-            $this->warnings = array_merge($this->warnings, $this->prefixMessages($source->getWarnings(), $caller));
+            $this->warnings = array_merge($this->warnings, $this->formatMessages($source->getWarnings(), $caller));
         }
     }
 }
