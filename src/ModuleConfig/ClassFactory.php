@@ -18,17 +18,16 @@ class ClassFactory
      *
      * @throws \RuntimeException when cannot create instance
      * @param string $configType Configuration type
-     * @param string $classType Class type
+     * @param \Qobo\Utils\ModuleConfig\ClassType $classType Class type
      * @param array $options Options
      * @return object
      */
-    public static function create($configType, $classType, array $options = [])
+    public static function create($configType, ClassType $classType, array $options = [])
     {
         $configType = (string)$configType;
         $classType = (string)$classType;
 
-        $classMap = empty($options['classMap']) ? [] : (array)$options['classMap'];
-        $classMap = static::getClassMap($classMap);
+        $classMap = empty($options['classMap']) ? Configure::read('ModuleConfig.classMap') : (array)$options['classMap'];
         if (empty($classMap[$configType][$classType])) {
             throw new RuntimeException("No [$classType] found for configurationi type [$configType]");
         }
@@ -37,26 +36,6 @@ class ClassFactory
         $result = static::getInstance($className);
 
         return $result;
-    }
-
-    /**
-     * Get class map
-     *
-     * If no class map given, a default one will be returned.  Otherwise,
-     * a given class map will be returned as is.  In the future, this can
-     * be extended to validate/filter/adjust the provided class map.
-     *
-     * @param array $classMap Class map
-     * @return array
-     */
-    protected static function getClassMap(array $classMap = [])
-    {
-        if (empty($classMap)) {
-            Configure::load('Qobo/Utils.module_config');
-            $classMap = Configure::read('ModuleConfig.classMap');
-        }
-
-        return $classMap;
     }
 
     /**
@@ -75,11 +54,11 @@ class ClassFactory
     public static function getInstance($class)
     {
         if (!is_string($class)) {
-            throw RuntimeException("Class name name must be string. [" . gettype($class) . "] given");
+            throw new RuntimeException("Class name name must be string. [" . gettype($class) . "] given");
         }
 
         if (!class_exists($class)) {
-            throw RuntimeException("Class [$class] does not exist");
+            throw new RuntimeException("Class [$class] does not exist");
         }
 
         return new $class;

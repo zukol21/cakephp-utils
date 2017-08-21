@@ -1,12 +1,11 @@
 <?php
 namespace Qobo\Utils\ModuleConfig;
 
-use Cake\Core\Configure;
 use Exception;
 use Qobo\Utils\ErrorTrait;
-use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
-use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
-use RuntimeException;
+use Qobo\Utils\ModuleConfig\Cache\Cache;
+use Qobo\Utils\ModuleConfig\Cache\PathCache;
+use StdClass;
 
 /**
  * ModuleConfig Class
@@ -28,51 +27,6 @@ use RuntimeException;
 class ModuleConfig
 {
     use ErrorTrait;
-
-    /**
-     * Type for migration configuration (migration.csv)
-     */
-    const CONFIG_TYPE_MIGRATION = 'migration';
-
-    /**
-     * Type for module configuration (config.ini)
-     */
-    const CONFIG_TYPE_MODULE = 'module';
-
-    /**
-     * Type for menus configuration (menus.json)
-     */
-    const CONFIG_TYPE_MENUS = 'menus';
-
-    /**
-     * Type for fields configuration (fields.ini)
-     */
-    const CONFIG_TYPE_FIELDS = 'fields';
-
-    /**
-     * Type for reports configuration (reports.ini)
-     */
-    const CONFIG_TYPE_REPORTS = 'reports';
-
-    /**
-     * Type for list configuration (list.csv)
-     */
-    const CONFIG_TYPE_LIST = 'list';
-
-    /**
-     * Type for view configuration (index.csv)
-     */
-    const CONFIG_TYPE_VIEW = 'view';
-
-    /**
-     * Class type for path finders
-     */
-    const CLASS_TYPE_FINDER = 'finder';
-
-    /**
-     * Class type for parsers
-     */
-    const CLASS_TYPE_PARSER = 'parser';
 
     /**
      * Configuration type, e.g.: migration, list, view, etc.
@@ -105,12 +59,12 @@ class ModuleConfig
     /**
      * Constructor
      *
-     * @param string $configType Type of configuration
+     * @param string \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
      * @param string $module     Module name
      * @param string $configFile (Optional) name of the config file
      * @param array  $options    (Optional) Finding, parsing, etc. options
      */
-    public function __construct($configType, $module, $configFile = '', array $options = [])
+    public function __construct(ConfigType $configType, $module, $configFile = '', array $options = [])
     {
         $this->configType = (string)$configType;
         $this->module = (string)$module;
@@ -125,7 +79,7 @@ class ModuleConfig
      */
     protected function getFinder()
     {
-        $result = ClassFactory::create($this->configType, self::CLASS_TYPE_FINDER, $this->options);
+        $result = ClassFactory::create($this->configType, ClassType::FINDER(), $this->options);
 
         return $result;
     }
@@ -137,7 +91,7 @@ class ModuleConfig
      */
     protected function getParser()
     {
-        $result = ClassFactory::create($this->configType, self::CLASS_TYPE_PARSER, $this->options);
+        $result = ClassFactory::create($this->configType, ClassType::PARSER(), $this->options);
 
         return $result;
     }
@@ -150,9 +104,18 @@ class ModuleConfig
      */
     public function find($validate = true)
     {
+        $cache = null;
         $finder = null;
         $exception = null;
         try {
+            // Cached response
+            $cache = new Cache(__FUNCTION__, $this->options);
+            $cacheKey = $cache->getKey([$this->module, $this->configType, $this->configFile, $validate]);
+            $result = $cache->readFrom($cacheKey);
+            if ($result !== false) {
+                return $result;
+            }
+            // Real response
             $finder = $this->getFinder();
             $result = $finder->find($this->module, $this->configFile, $validate);
         } catch (Exception $exception) {
@@ -161,11 +124,13 @@ class ModuleConfig
 
         // Get finder errors and warnings, if any
         $this->mergeMessages($finder, __FUNCTION__);
+        $this->mergeMessages($cache, __FUNCTION__);
 
         // Re-throw finder exception
         if ($exception) {
             throw $exception;
         }
+        $cache->writeTo($cacheKey, $result);
 
         return $result;
     }
@@ -177,10 +142,19 @@ class ModuleConfig
      */
     public function parse()
     {
+        $cache = null;
         $parser = null;
         $exception = null;
         try {
             $path = $this->find(false);
+            // Cached response
+            $cache = new PathCache(__FUNCTION__, $this->options);
+            $cacheKey = $cache->getKey([$path]);
+            $result = $cache->readFrom($cacheKey);
+            if ($result !== false) {
+                return $result;
+            }
+            // Real response
             $parser = $this->getParser();
             $result = $parser->parse($path, $this->options);
         } catch (Exception $exception) {
@@ -189,26 +163,30 @@ class ModuleConfig
 
         // Get parser errors and warnings, if any
         $this->mergeMessages($parser, __FUNCTION__);
+        $this->mergeMessages($cache, __FUNCTION__);
 
         // Re-throw parser exception
         if ($exception) {
             throw $exception;
         }
+        $cache->writeTo($cacheKey, $result, ['path' => $path]);
 
         return $result;
     }
 
     /**
-     * Prefix messages
+     * Format messages
      *
-     * Prefix all given messages with a string
+     * Format and prefix all given messages with a given string.
      *
      * @param string|array $messages One or more messages to prefix
      * @param string $prefix Prefix to prepend to all messages
      * @return array List of prefixed messages
      */
-    protected function prefixMessages($messages, $prefix)
+    protected function formatMessages($messages, $prefix)
     {
+        $result = [];
+
         $prefix = (string)$prefix;
 
         // Convert single messages to array
@@ -217,9 +195,9 @@ class ModuleConfig
         }
 
         // Prefix all messages
-        $messages = array_map(function ($item) use ($prefix) {
-            return sprintf("[%s][%s] %s : %s", $this->module, $this->configType, $prefix, $item);
-        }, $messages);
+        foreach ($messages as $message) {
+            $result[] = sprintf("[%s][%s] %s : %s", $this->module, $this->configType, $prefix, $message);
+        }
 
         return $messages;
     }
@@ -236,22 +214,20 @@ class ModuleConfig
      */
     protected function mergeMessages($source, $caller = 'ModuleConfig')
     {
-        if (!is_object($source)) {
-            return;
-        }
+        $source = is_object($source) ? $source : new StdClass();
 
         if (is_a($source, '\Exception')) {
-            $this->errors = array_merge($this->errors, $this->prefixMessages($source->getMessage(), $caller));
+            $this->errors = array_merge($this->errors, $this->formatMessages($source->getMessage(), $caller));
 
             return;
         }
 
         if (method_exists($source, 'getErrors') && is_callable([$source, 'getErrors'])) {
-            $this->errors = array_merge($this->errors, $this->prefixMessages($source->getErrors(), $caller));
+            $this->errors = array_merge($this->errors, $this->formatMessages($source->getErrors(), $caller));
         }
 
         if (method_exists($source, 'getWarnings') && is_callable([$source, 'getWarnings'])) {
-            $this->warnings = array_merge($this->warnings, $this->prefixMessages($source->getWarnings(), $caller));
+            $this->warnings = array_merge($this->warnings, $this->formatMessages($source->getWarnings(), $caller));
         }
     }
 }
