@@ -40,6 +40,20 @@ class Cache
     protected $options;
 
     /**
+     * CakePHP Cache configuration name
+     *
+     * @var string $configName
+     */
+    protected $configName;
+
+    /**
+     * Skip caching altogether
+     *
+     * @var bool $skipCache
+     */
+    protected $skipCache;
+
+    /**
      * Required keys for the cached value
      *
      * Configuration for validating cached values.  An
@@ -62,13 +76,58 @@ class Cache
      */
     public function __construct($name, array $options = [])
     {
+        $this->setName($name);
+        $this->setOptions($options);
+    }
+
+    /**
+     * Set cache instance name
+     *
+     * @throws \InvalidArgumentException when name is empty
+     * @param string $name Name of cache instance
+     * @return void
+     */
+    protected function setName($name)
+    {
         $name = (string)$name;
         if (empty($name)) {
             throw InvalidArgumentException("Cache name is required and cannot be empty");
         }
 
         $this->name = $name;
+    }
+
+    /**
+     * Set cache options
+     *
+     * @param array $options Cache options
+     * @return void
+     */
+    protected function setOptions(array $options = [])
+    {
         $this->options = $options;
+        $this->configName = empty($options['cacheConfig']) ? static::DEFAULT_CONFIG : (string)$options['cacheConfig'];
+        $this->skipCache = empty($this->options['cacheSkip']) ? false : (bool)$this->options['cacheSkip'];
+    }
+
+    /**
+     * Get cache configuration name
+     *
+     * @return string
+     */
+    public function getConfig()
+    {
+        return $this->configName;
+    }
+
+    /**
+     * Check if the caching should be skipped or not
+     *
+     * @return bool True if skipping, false otherwise
+     */
+    public function skipCache()
+    {
+        return $this->skipCache;
     }
 
     /**
@@ -76,9 +135,13 @@ class Cache
      *
      * In order to avoid hardcoding any particular values
      * in the cache key, we instead rely on a given array
-     * of parameters.  Each parameter will be converted to
-     * a string and appended to the key, which then be
-     * shortened using an md5 checksum.
+     * of parameters.  The array will be converted to
+     * a string via json_encode() and shortened using an
+     * md5 checksum.
+     *
+     * For those cases where json_encode() fails, the current
+     * microtime() will be used, as it's better to have at
+     * least some cache key than nothing at all.
      *
      * Name of the current cache instance is used as a prefix.
      * And just for convenience, the array of current instance
@@ -94,69 +157,11 @@ class Cache
         // each set of options.
         $params[] = $this->options;
 
-        $keyString = '_';
-        foreach ($params as $param) {
-            $keyString .= '_' . $this->valueToString($param);
-        }
-        $keyString = $this->name . '_' . $keyString;
-        $result = md5($keyString);
+        $params = json_encode($params);
+        $params = $params ?: microtime();
+        $params = md5($params);
 
-        return $result;
-    }
-
-    /**
-     * Convert a given value to string
-     *
-     * @param mixed $value Value to convert
-     * @return string
-     */
-    protected function valueToString($value)
-    {
-        if (is_string($value)) {
-            return $value;
-        }
-
-        if (is_object($value) || is_array($value)) {
-            return json_encode($value);
-        }
-
-        if (is_bool($value)) {
-            return $value ? '1' : '0';
-        }
-
-        return (string)$value;
-    }
-
-    /**
-     * Get cache configuration name
-     *
-     * @return string
-     */
-    public function getConfig()
-    {
-        $result = static::DEFAULT_CONFIG;
-
-        if (empty($this->options['cacheConfig'])) {
-            return $result;
-        }
-
-        $result = (string)$this->options['cacheConfig'];
-
-        return $result;
-    }
-
-    /**
-     * Check if the caching should be skipped or not
-     *
-     * @return bool True if skipping, false otherwise
-     */
-    public function skipCache()
-    {
-        $result = false;
-        // Skip cache altogether if the options demand so
-        if (!empty($this->options['cacheSkip']) && $this->options['cacheSkip']) {
-            $result = true;
-        }
+        $result = $this->name . '_' . $params;
 
         return $result;
     }
@@ -247,11 +252,13 @@ class Cache
         }
 
         foreach ($this->requiredKeys as $key => $notEmpty) {
+            // Key exists
             if (!array_key_exists($key, $value)) {
                 $this->errors[] = "Cached value is missing '$key'";
 
                 return $result;
             }
+            // Value is not empty
             if ($notEmpty && empty($value[$key])) {
                 $this->errors[] = "Cached value is empty for key '$key'";
 
