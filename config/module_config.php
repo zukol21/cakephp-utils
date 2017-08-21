@@ -1,7 +1,6 @@
 <?php
 use Qobo\Utils\ModuleConfig\ClassType;
 use Qobo\Utils\ModuleConfig\ConfigType;
-use Qobo\Utils\ModuleConfig\ModuleConfig;
 
 // Class map of finders and parser for each
 // support configuration type
