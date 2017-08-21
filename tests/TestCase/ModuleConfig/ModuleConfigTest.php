@@ -4,6 +4,7 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig;
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use Exception;
+use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
 use Qobo\Utils\ModuleConfig\Parser\Ini\ConfigParser;
 use Qobo\Utils\ModuleConfig\PathFinder\ConfigPathFinder;
@@ -31,7 +32,7 @@ class ModuleConfigTest extends TestCase
      */
     public function testFind($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', null, $options);
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
         $path = $mc->find();
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
@@ -45,7 +46,7 @@ class ModuleConfigTest extends TestCase
      */
     public function testFindOther($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', 'other_config.ini', $options);
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'other_config.ini', $options);
         $path = $mc->find();
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
@@ -60,7 +61,7 @@ class ModuleConfigTest extends TestCase
      */
     public function testFindNotFoundException($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', 'this_file_is_not.there', $options);
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'this_file_is_not.there', $options);
         $path = $mc->find();
     }
 
@@ -69,7 +70,7 @@ class ModuleConfigTest extends TestCase
      */
     public function testParse($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', null, $options);
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
         $result = null;
         try {
             $result = $mc->parse();
@@ -88,7 +89,7 @@ class ModuleConfigTest extends TestCase
      */
     public function testParseInvalidException($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_LIST, 'Foo', 'invalid_list.csv', $options);
+        $mc = new ModuleConfig(ConfigType::LISTS(), 'Foo', 'invalid_list.csv', $options);
         $parser = $mc->parse();
     }
 
@@ -97,7 +98,7 @@ class ModuleConfigTest extends TestCase
      */
     public function testGetErrors($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', null, $options);
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
 
         // Before parsing
         $result = $mc->getErrors();
@@ -120,7 +121,7 @@ class ModuleConfigTest extends TestCase
      */
     public function testGetWarnings($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', null, $options);
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
 
         // Before parsing
         $result = $mc->getWarnings();

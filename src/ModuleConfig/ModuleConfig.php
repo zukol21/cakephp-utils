@@ -29,41 +29,6 @@ class ModuleConfig
     use ErrorTrait;
 
     /**
-     * Type for migration configuration (migration.csv)
-     */
-    const CONFIG_TYPE_MIGRATION = 'migration';
-
-    /**
-     * Type for module configuration (config.ini)
-     */
-    const CONFIG_TYPE_MODULE = 'module';
-
-    /**
-     * Type for menus configuration (menus.json)
-     */
-    const CONFIG_TYPE_MENUS = 'menus';
-
-    /**
-     * Type for fields configuration (fields.ini)
-     */
-    const CONFIG_TYPE_FIELDS = 'fields';
-
-    /**
-     * Type for reports configuration (reports.ini)
-     */
-    const CONFIG_TYPE_REPORTS = 'reports';
-
-    /**
-     * Type for list configuration (list.csv)
-     */
-    const CONFIG_TYPE_LIST = 'list';
-
-    /**
-     * Type for view configuration (index.csv)
-     */
-    const CONFIG_TYPE_VIEW = 'view';
-
-    /**
      * Configuration type, e.g.: migration, list, view, etc.
      *
      * @var string
@@ -94,12 +59,12 @@ class ModuleConfig
     /**
      * Constructor
      *
-     * @param string $configType Type of configuration
+     * @param string \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
      * @param string $module     Module name
      * @param string $configFile (Optional) name of the config file
      * @param array  $options    (Optional) Finding, parsing, etc. options
      */
-    public function __construct($configType, $module, $configFile = '', array $options = [])
+    public function __construct(ConfigType $configType, $module, $configFile = '', array $options = [])
     {
         $this->configType = (string)$configType;
         $this->module = (string)$module;
