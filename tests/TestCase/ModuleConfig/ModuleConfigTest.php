@@ -10,7 +10,6 @@ use Qobo\Utils\ModuleConfig\PathFinder\ConfigPathFinder;
 
 class ModuleConfigTest extends TestCase
 {
-    protected $pf;
     protected $dataDir;
 
     public function setUp()
