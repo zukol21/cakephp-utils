@@ -1,6 +1,9 @@
 <?php
 namespace Qobo\Utils\ModuleConfig\Cache;
 
+use Exception;
+use Qobo\Utils\Utility;
+
 /**
  * PathCache Class
  *
@@ -16,6 +19,22 @@ namespace Qobo\Utils\ModuleConfig\Cache;
 class PathCache extends Cache
 {
     /**
+     * Required keys for the cached value
+     *
+     * Configuration for validating cached values.  An
+     * associative array of keys to check for presence,
+     * and the boolean for whether or not empty values
+     * are allowed.
+     *
+     * @param array $requiredKeys Cached value validation
+     */
+    protected $requiredKeys = [
+            'path' => true,
+            'md5' => true,
+            'data' => false,
+        ];
+
+    /**
      * Validate the value
      *
      * @param mixed $value Value to check
@@ -30,7 +49,17 @@ class PathCache extends Cache
             return $result;
         }
 
-        if (md5($value['path']) <> $value['md5']) {
+        $path = array_key_exists('path', $value) ? $value['path'] : '';
+        try {
+            Utility::validatePath($path);
+        } catch (Exception $e) {
+            $this->errors[] = "Path does not exist or is not readable: $path";
+
+            return $result;
+        }
+
+        $md5 = array_key_exists('md5', $value) ? $value['md5'] : '';
+        if (md5(file_get_contents($value['path'])) <> $md5) {
             $this->warnings[] = 'Stale cache found. Cleaning up and ignoring';
 
             return $result;
@@ -60,9 +89,17 @@ class PathCache extends Cache
         }
         $path = $params['path'];
 
+        try {
+            Utility::validatePath($path);
+        } catch (Exception $e) {
+            $this->errors[] = "Path does not exist or is not readable: $path";
+
+            return $result;
+        }
+
         $cachedData = [
             'path' => $path,
-            'md5' => md5($path),
+            'md5' => md5(file_get_contents($path)),
             'data' => $data,
         ];
 
