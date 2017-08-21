@@ -122,10 +122,8 @@ class Utility
         }
 
         foreach ($tables as $table) {
-            if ($excludePhinxlog) {
-                if (preg_match('/phinxlog/', $table)) {
-                    continue;
-                }
+            if ($excludePhinxlog && preg_match('/phinxlog/', $table)) {
+                continue;
             }
 
             $result[$table] = Inflector::humanize($table);
@@ -217,7 +215,6 @@ class Utility
         $result = [];
 
         if (empty($config)) {
-            Configure::load('Qobo/Utils.colors');
             $config = Configure::read('Colors');
         }
 
@@ -251,7 +248,6 @@ class Utility
 
         // passing default icons if no external config present.
         if (empty($config)) {
-            Configure::load('Qobo/Utils.icons');
             $config = Configure::read('Icons');
         }
 

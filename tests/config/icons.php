@@ -1,5 +1,6 @@
 <?php
-// Menu plugin configuration
+// Icons configuration
+
 return [
     'Icons' => [
         'url' => 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css',
