@@ -152,12 +152,14 @@ class ModuleConfig
         $finder = null;
         $exception = null;
         try {
+            // Cached response
             $cache = new Cache(__FUNCTION__, $this->options);
             $cacheKey = $cache->getKey([$this->module, $this->configType, $this->configFile, $validate]);
             $result = $cache->readFrom($cacheKey);
             if ($result !== false) {
                 return $result;
             }
+            // Real response
             $finder = $this->getFinder();
             $result = $finder->find($this->module, $this->configFile, $validate);
         } catch (Exception $exception) {
@@ -189,12 +191,14 @@ class ModuleConfig
         $exception = null;
         try {
             $path = $this->find(false);
+            // Cached response
             $cache = new PathCache(__FUNCTION__, $this->options);
             $cacheKey = $cache->getKey([$path]);
             $result = $cache->readFrom($cacheKey);
             if ($result !== false) {
                 return $result;
             }
+            // Real response
             $parser = $this->getParser();
             $result = $parser->parse($path, $this->options);
         } catch (Exception $exception) {
