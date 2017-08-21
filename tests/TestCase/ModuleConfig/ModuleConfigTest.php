@@ -18,9 +18,20 @@ class ModuleConfigTest extends TestCase
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
     }
 
-    public function testFind()
+    public function optionsProvider()
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
+        return [
+            ['skip cache', [ 'cacheSkip' => true ]],
+            ['with cache', [' cacheSkip' => false]],
+        ];
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     */
+    public function testFind($description, $options)
+    {
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', null, $options);
         $path = $mc->find();
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
@@ -29,9 +40,12 @@ class ModuleConfigTest extends TestCase
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
     }
 
-    public function testFindOther()
+    /**
+     * @dataProvider optionsProvider
+     */
+    public function testFindOther($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', 'other_config.ini');
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', 'other_config.ini', $options);
         $path = $mc->find();
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
@@ -42,16 +56,20 @@ class ModuleConfigTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     * @dataProvider optionsProvider
      */
-    public function testFindNotFoundException()
+    public function testFindNotFoundException($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', 'this_file_is_not.there');
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', 'this_file_is_not.there', $options);
         $path = $mc->find();
     }
 
-    public function testParse()
+    /**
+     * @dataProvider optionsProvider
+     */
+    public function testParse($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', null, $options);
         $result = null;
         try {
             $result = $mc->parse();
@@ -66,16 +84,20 @@ class ModuleConfigTest extends TestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     * @dataProvider optionsProvider
      */
-    public function testParseInvalidException()
+    public function testParseInvalidException($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_LIST, 'Foo', 'invalid_list.csv');
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_LIST, 'Foo', 'invalid_list.csv', $options);
         $parser = $mc->parse();
     }
 
-    public function testGetErrors()
+    /**
+     * @dataProvider optionsProvider
+     */
+    public function testGetErrors($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', null, $options);
 
         // Before parsing
         $result = $mc->getErrors();
@@ -93,9 +115,12 @@ class ModuleConfigTest extends TestCase
         $this->assertTrue(is_array($result), "Errors is not an array after parsing");
     }
 
-    public function testGetWarnings()
+    /**
+     * @dataProvider optionsProvider
+     */
+    public function testGetWarnings($description, $options)
     {
-        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo');
+        $mc = new ModuleConfig(ModuleConfig::CONFIG_TYPE_MODULE, 'Foo', null, $options);
 
         // Before parsing
         $result = $mc->getWarnings();
