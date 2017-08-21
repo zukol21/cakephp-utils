@@ -18,11 +18,11 @@ class ClassFactory
      *
      * @throws \RuntimeException when cannot create instance
      * @param string $configType Configuration type
-     * @param string $classType Class type
+     * @param \Qobo\Utils\ModuleConfig\ClassType $classType Class type
      * @param array $options Options
      * @return object
      */
-    public static function create($configType, $classType, array $options = [])
+    public static function create($configType, ClassType $classType, array $options = [])
     {
         $configType = (string)$configType;
         $classType = (string)$classType;

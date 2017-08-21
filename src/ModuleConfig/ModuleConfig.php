@@ -63,16 +63,6 @@ class ModuleConfig
     const CONFIG_TYPE_VIEW = 'view';
 
     /**
-     * Class type for path finders
-     */
-    const CLASS_TYPE_FINDER = 'finder';
-
-    /**
-     * Class type for parsers
-     */
-    const CLASS_TYPE_PARSER = 'parser';
-
-    /**
      * Configuration type, e.g.: migration, list, view, etc.
      *
      * @var string
@@ -123,7 +113,7 @@ class ModuleConfig
      */
     protected function getFinder()
     {
-        $result = ClassFactory::create($this->configType, self::CLASS_TYPE_FINDER, $this->options);
+        $result = ClassFactory::create($this->configType, ClassType::FINDER(), $this->options);
 
         return $result;
     }
@@ -135,7 +125,7 @@ class ModuleConfig
      */
     protected function getParser()
     {
-        $result = ClassFactory::create($this->configType, self::CLASS_TYPE_PARSER, $this->options);
+        $result = ClassFactory::create($this->configType, ClassType::PARSER(), $this->options);
 
         return $result;
     }
