@@ -4,7 +4,7 @@
     "type": "cakephp-plugin",
     "license": "GPL-2.0",
     "require": {
-        "cakephp/cakephp": "^3.4",
+        "cakephp/cakephp": "^3.4.0 <3.5.0",
         "cakephp/migrations": "~1.0",
         "maiconpinto/cakephp-adminlte-theme": "^1.0",
         "burzum/cakephp-file-storage": "^1.2",
