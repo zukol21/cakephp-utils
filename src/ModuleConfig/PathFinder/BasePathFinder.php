@@ -141,8 +141,6 @@ abstract class BasePathFinder implements PathFinderInterface
      */
     protected function addFileExtension($path)
     {
-        $result = $path;
-
         $extension = pathinfo($path, PATHINFO_EXTENSION);
         if (empty($extension)) {
             $path .= $this->extension;
