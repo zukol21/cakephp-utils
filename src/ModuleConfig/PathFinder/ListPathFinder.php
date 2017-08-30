@@ -56,14 +56,7 @@ class ListPathFinder extends BasePathFinder
             $module = self::DEFAULT_MODULE;
         }
 
-        if (empty($path)) {
-            $this->fail(new InvalidArgumentException("Path is not specified"));
-        }
-
-        if (!is_string($path)) {
-            $this->fail(new InvalidArgumentException("Path is not a string"));
-        }
-
+        $this->validatePath($path);
         $path = $this->addDefaultExtension($path);
 
         $result = null;
