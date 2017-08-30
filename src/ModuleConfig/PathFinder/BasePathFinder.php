@@ -28,6 +28,11 @@ abstract class BasePathFinder implements PathFinderInterface
     protected $fileName;
 
     /**
+     * @var string $extension Default file extension
+     */
+    protected $extension = '';
+
+    /**
      * Find path
      *
      * @param string $module Module to look for files in
@@ -70,5 +75,27 @@ abstract class BasePathFinder implements PathFinderInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Add default extension if path doesn't have one
+     *
+     * Check if the given path has a file exntesion.
+     * If not, add the default one and return the
+     * modified path.
+     *
+     * @param string $path Path
+     * @return string
+     */
+    protected function addDefaultExtension($path)
+    {
+        $result = $path;
+
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        if (empty($extension)) {
+            $path .= $this->extension;
+        }
+
+        return $path;
     }
 }

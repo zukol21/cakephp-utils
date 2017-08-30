@@ -48,10 +48,7 @@ class ViewPathFinder extends BasePathFinder
             $this->fail(new InvalidArgumentException("Path is not a string"));
         }
 
-        $extension = pathinfo($path, PATHINFO_EXTENSION);
-        if (empty($extension)) {
-            $path .= $this->extension;
-        }
+        $path = $this->addDefaultExtension($path);
 
         return parent::find($module, $path, $validate);
     }
