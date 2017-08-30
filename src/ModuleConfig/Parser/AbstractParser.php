@@ -57,23 +57,7 @@ abstract class AbstractParser implements ParserInterface
 
         try {
             $result = $this->getDataFromPath($path);
-
-            // No need to validate empty data (empty() does not work on objects)
-            if (empty((array)$result)) {
-                $this->warnings[] = "Skipping validation of empty result";
-
-                return $result;
-            }
-
             $schema = $this->getSchema();
-            // No need to validate with empty schema (empty() does not work on objects)
-            if (empty((array)$schema)) {
-                $this->warnings[] = "Skipping validation with empty schema";
-
-                return $result;
-            }
-
-            // Validate result
             $this->validateData($result, $schema);
         } catch (Exception $e) {
             $this->fail(new InvalidArgumentException("[" . basename($path) . "] : " . $e->getMessage()));
@@ -91,6 +75,20 @@ abstract class AbstractParser implements ParserInterface
      */
     protected function validateData($data, $schema)
     {
+        // No need to validate empty data (empty() does not work on objects)
+        if (empty((array)$data)) {
+            $this->warnings[] = "Skipping validation of empty data";
+
+            return;
+        }
+
+        // No need to validate with empty schema (empty() does not work on objects)
+        if (empty((array)$schema)) {
+            $this->warnings[] = "Skipping validation with empty schema";
+
+            return;
+        }
+
         $validator = new Validator($data, $schema);
         if ($validator->fails()) {
             foreach ($validator->errors() as $error) {

@@ -28,6 +28,11 @@ abstract class BasePathFinder implements PathFinderInterface
     protected $fileName;
 
     /**
+     * @var string $extension Default file extension
+     */
+    protected $extension = '';
+
+    /**
      * Find path
      *
      * @param string $module Module to look for files in
@@ -37,21 +42,10 @@ abstract class BasePathFinder implements PathFinderInterface
      */
     public function find($module, $path = null, $validate = true)
     {
-        if (empty($module)) {
-            $this->fail(new InvalidArgumentException("Module is not specified"));
-        }
+        $this->validateModule($module);
 
-        if (!is_string($module)) {
-            $this->fail(new InvalidArgumentException("Module name is not a string"));
-        }
-
-        if (empty($path)) {
-            $path = $this->fileName;
-        }
-
-        if (!is_string($path)) {
-            $this->fail(new InvalidArgumentException("Path is not a string"));
-        }
+        $path = $this->getFilePath($path);
+        $this->validatePath($path);
 
         $result = '';
         if (!empty($this->pathConfigKey)) {
@@ -70,5 +64,88 @@ abstract class BasePathFinder implements PathFinderInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Validate module string
+     *
+     * Check that the given module is a non-empty
+     * string.
+     *
+     * @param string $module Module string to check
+     * @return void
+     */
+    protected function validateModule($module)
+    {
+        if (empty($module)) {
+            $this->fail(new InvalidArgumentException("Module is not specified"));
+        }
+
+        if (!is_string($module)) {
+            $this->fail(new InvalidArgumentException("Module name is not a string"));
+        }
+    }
+
+    /**
+     * Get file path string
+     *
+     * If file path is given, return as is. Otherwise
+     * fallback on the default file name.
+     *
+     * @param string $path File path
+     * @return string
+     */
+    protected function getFilePath($path)
+    {
+        if (empty($path)) {
+            $path = $this->fileName;
+        }
+
+        return $path;
+    }
+
+    /**
+     * Validate path string
+     *
+     * Check that the given path is a non-empty
+     * string.
+     *
+     * NOTE: This method is very different from
+     *       the Utility::validatePath(), which
+     *       checks the filesystem path for
+     *       existence.
+     *
+     * @param string $path Path string to check
+     * @return void
+     */
+    protected function validatePath($path)
+    {
+        if (empty($path)) {
+            $this->fail(new InvalidArgumentException("Path is not specified"));
+        }
+
+        if (!is_string($path)) {
+            $this->fail(new InvalidArgumentException("Path is not a string"));
+        }
+    }
+
+    /**
+     * Add default extension if path doesn't have one
+     *
+     * Check if the given path has a file exntesion.
+     * If not, add the default one and return the
+     * modified path.
+     *
+     * @param string $path Path
+     * @return string
+     */
+    protected function addFileExtension($path)
+    {
+        $extension = pathinfo($path, PATHINFO_EXTENSION);
+        if (empty($extension)) {
+            $path .= $this->extension;
+        }
+
+        return $path;
     }
 }

@@ -40,18 +40,8 @@ class ViewPathFinder extends BasePathFinder
      */
     public function find($module, $path = null, $validate = true)
     {
-        if (empty($path)) {
-            $this->fail(new InvalidArgumentException("Path is not specified"));
-        }
-
-        if (!is_string($path)) {
-            $this->fail(new InvalidArgumentException("Path is not a string"));
-        }
-
-        $extension = pathinfo($path, PATHINFO_EXTENSION);
-        if (empty($extension)) {
-            $path .= $this->extension;
-        }
+        $this->validatePath($path);
+        $path = $this->addFileExtension($path);
 
         return parent::find($module, $path, $validate);
     }
