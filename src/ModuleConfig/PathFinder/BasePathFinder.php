@@ -44,9 +44,7 @@ abstract class BasePathFinder implements PathFinderInterface
     {
         $this->validateModule($module);
 
-        if (empty($path)) {
-            $path = $this->fileName;
-        }
+        $path = $this->getFilePath($path);
         $this->validatePath($path);
 
         $result = '';
@@ -86,6 +84,24 @@ abstract class BasePathFinder implements PathFinderInterface
         if (!is_string($module)) {
             $this->fail(new InvalidArgumentException("Module name is not a string"));
         }
+    }
+
+    /**
+     * Get file path string
+     *
+     * If file path is given, return as is. Otherwise
+     * fallback on the default file name.
+     *
+     * @param string $path File path
+     * @return string
+     */
+    protected function getFilePath($path)
+    {
+        if (empty($path)) {
+            $path = $this->fileName;
+        }
+
+        return $path;
     }
 
     /**
