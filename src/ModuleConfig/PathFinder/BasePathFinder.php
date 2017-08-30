@@ -42,13 +42,7 @@ abstract class BasePathFinder implements PathFinderInterface
      */
     public function find($module, $path = null, $validate = true)
     {
-        if (empty($module)) {
-            $this->fail(new InvalidArgumentException("Module is not specified"));
-        }
-
-        if (!is_string($module)) {
-            $this->fail(new InvalidArgumentException("Module name is not a string"));
-        }
+        $this->validateModule($module);
 
         if (empty($path)) {
             $path = $this->fileName;
@@ -72,6 +66,26 @@ abstract class BasePathFinder implements PathFinderInterface
         }
 
         return $result;
+    }
+
+    /**
+     * Validate module string
+     *
+     * Check that the given module is a non-empty
+     * string.
+     *
+     * @param string $module Module string to check
+     * @return void
+     */
+    protected function validateModule($module)
+    {
+        if (empty($module)) {
+            $this->fail(new InvalidArgumentException("Module is not specified"));
+        }
+
+        if (!is_string($module)) {
+            $this->fail(new InvalidArgumentException("Module name is not a string"));
+        }
     }
 
     /**
