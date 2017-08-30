@@ -16,6 +16,27 @@ class UtilityTest extends TestCase
         Utility::validatePath('/some/non/existing/path');
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testValidatePathExceptionNotReadable()
+    {
+        Utility::validatePath('/etc/shadow');
+    }
+
+    public function testGetControllers()
+    {
+        $result = Utility::getControllers();
+        $this->assertTrue(is_array($result), "Result is not an array");
+        // Should return at least the Users controller
+        $this->assertFalse(empty($result), "Result is empty");
+
+        $result = Utility::getControllers(false);
+        $this->assertTrue(is_array($result), "Result is not an array");
+        // Should return at least the Users controller
+        $this->assertFalse(empty($result), "Result is empty");
+    }
+
     public function testGetDirControllers()
     {
         $result = Utility::getDirControllers('/some/non/existing/path');
