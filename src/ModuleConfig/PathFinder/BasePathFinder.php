@@ -139,7 +139,7 @@ abstract class BasePathFinder implements PathFinderInterface
      * @param string $path Path
      * @return string
      */
-    protected function addDefaultExtension($path)
+    protected function addFileExtension($path)
     {
         $result = $path;
 

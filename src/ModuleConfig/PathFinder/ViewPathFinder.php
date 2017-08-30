@@ -41,7 +41,7 @@ class ViewPathFinder extends BasePathFinder
     public function find($module, $path = null, $validate = true)
     {
         $this->validatePath($path);
-        $path = $this->addDefaultExtension($path);
+        $path = $this->addFileExtension($path);
 
         return parent::find($module, $path, $validate);
     }

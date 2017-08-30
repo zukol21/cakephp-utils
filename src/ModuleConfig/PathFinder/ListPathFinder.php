@@ -57,7 +57,7 @@ class ListPathFinder extends BasePathFinder
         }
 
         $this->validatePath($path);
-        $path = $this->addDefaultExtension($path);
+        $path = $this->addFileExtension($path);
 
         $result = null;
         try {
