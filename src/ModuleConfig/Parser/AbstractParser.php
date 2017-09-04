@@ -30,6 +30,11 @@ abstract class AbstractParser implements ParserInterface
     protected $options = [];
 
     /**
+     * @var bool $isPathRequired Is path required?
+     */
+    protected $isPathRequired = false;
+
+    /**
      * Read and parse a given real path
      *
      * @param string $path Path to file
@@ -46,13 +51,15 @@ abstract class AbstractParser implements ParserInterface
     protected function getDataFromPath($path)
     {
         $result = $this->getEmptyResult();
+        $result = $this->mergeWithDefaults($result);
 
         try {
             Utility::validatePath($path);
         } catch (Exception $e) {
-            // If path is required, child class should check for it.
+            if ($this->isPathRequired) {
+                throw $e;
+            }
             $this->warnings[] = $e->getMessage();
-            $result = $this->mergeWithDefaults($result);
 
             return $result;
         }
