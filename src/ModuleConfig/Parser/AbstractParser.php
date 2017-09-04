@@ -30,12 +30,48 @@ abstract class AbstractParser implements ParserInterface
     protected $options = [];
 
     /**
+     * Read and parse a given real path
+     *
+     * @param string $path Path to file
+     * @return object
+     */
+    abstract protected function getDataFromRealPath($path);
+
+    /**
      * Read and parse a given path
      *
      * @param string $path Path to file
      * @return object
      */
-    abstract protected function getDataFromPath($path);
+    protected function getDataFromPath($path)
+    {
+        $result = $this->getEmptyResult();
+
+        try {
+            Utility::validatePath($path);
+        } catch (Exception $e) {
+            // If path is required, child class should check for it.
+            $this->warnings[] = $e->getMessage();
+            $result = $this->mergeWithDefaults($result);
+
+            return $result;
+        }
+
+        $result = $this->getDataFromRealPath($path);
+        $result = $this->mergeWithDefaults($result);
+
+        return $result;
+    }
+
+    /**
+     * Get empty result
+     *
+     * @return \StdClass
+     */
+    protected function getEmptyResult()
+    {
+        return new StdClass();
+    }
 
     /**
      * Parse
@@ -48,7 +84,7 @@ abstract class AbstractParser implements ParserInterface
      */
     public function parse($path, array $options = [])
     {
-        $result = new StdClass();
+        $result = $this->getEmptyResult();
 
         // Overwrite default options
         if (!empty($options)) {

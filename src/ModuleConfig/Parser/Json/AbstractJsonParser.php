@@ -10,26 +10,14 @@ use StdClass;
 abstract class AbstractJsonParser extends AbstractParser
 {
     /**
-     * Read and parse a given path
+     * Read and parse a given real path
      *
      * @throws \InvalidArgumentException when cannot read or decode path
      * @param string $path Path to read and parse
      * @return object
      */
-    protected function getDataFromPath($path)
+    protected function getDataFromRealPath($path)
     {
-        $result = new StdClass();
-
-        try {
-            Utility::validatePath($path);
-        } catch (Exception $e) {
-            // If path is required, child class should check for it.
-            $this->warnings[] = $e->getMessage();
-            $result = $this->mergeWithDefaults($result);
-
-            return $result;
-        }
-
         $data = file_get_contents($path);
         if ($data === false) {
             throw new InvalidArgumentException("Failed to read path: $path");
@@ -41,7 +29,6 @@ abstract class AbstractJsonParser extends AbstractParser
         }
 
         $result = (object)$data;
-        $result = $this->mergeWithDefaults($result);
 
         return $result;
     }

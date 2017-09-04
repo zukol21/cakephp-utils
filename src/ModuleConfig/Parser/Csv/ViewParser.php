@@ -38,26 +38,15 @@ class ViewParser extends AbstractCsvParser
     protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'view.json';
 
     /**
-     * Read and parse a given path
+     * Read and parse a given real path
      *
      * @throws \InvalidArgumentException when cannot read or decode path
      * @param string $path Path to file
      * @return object
      */
-    protected function getDataFromPath($path)
+    protected function getDataFromRealPath($path)
     {
-        $result = new StdClass();
-        $result->items = [];
-
-        try {
-            Utility::validatePath($path);
-        } catch (Exception $e) {
-            // View files are not required
-            $this->warnings[] = $e->getMessage();
-            $result = $this->mergeWithDefaults($result);
-
-            return $result;
-        }
+        $result = $this->getEmptyResult();
 
         $reader = Reader::createFromPath($path, $this->mode);
         $rows = $reader->setOffset(1)->fetchAll();

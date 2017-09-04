@@ -26,26 +26,28 @@ abstract class AbstractCsvParser extends AbstractParser
     protected $structure = [];
 
     /**
-     * Read and parse a given path
+     * Get empty result
+     *
+     * @return \StdClass
+     */
+    protected function getEmptyResult()
+    {
+        $result = parent::getEmptyResult();
+        $result->items = [];
+
+        return $result;
+    }
+
+    /**
+     * Read and parse a given real path
      *
      * @throws \InvalidArgumentException when cannot read or decode path
      * @param string $path Path to file
      * @return object
      */
-    protected function getDataFromPath($path)
+    protected function getDataFromRealPath($path)
     {
-        $result = new StdClass();
-        $result->items = [];
-
-        try {
-            Utility::validatePath($path);
-        } catch (Exception $e) {
-            // If path is required, child class should check for it.
-            $this->warnings[] = $e->getMessage();
-            $result = $this->mergeWithDefaults($result);
-
-            return $result;
-        }
+        $result = $this->getEmptyResult();
 
         // Fail with empty structure
         if (empty($this->structure)) {
@@ -65,7 +67,6 @@ abstract class AbstractCsvParser extends AbstractParser
             }
             $result->items[] = (object)$row;
         }
-        $result = $this->mergeWithDefaults($result);
 
         return $result;
     }
