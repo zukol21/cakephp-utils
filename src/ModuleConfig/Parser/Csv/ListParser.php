@@ -36,16 +36,7 @@ class ListParser extends AbstractCsvParser
     protected $structure = ['value', 'label', 'inactive'];
 
     /**
-     * Read and parse a given path
-     *
-     * @param string $path Path to file
-     * @return object
+     * @var bool $isPathRequired Is path required?
      */
-    protected function getDataFromPath($path)
-    {
-        // List files are required
-        Utility::validatePath($path);
-
-        return parent::getDataFromPath($path);
-    }
+    protected $isPathRequired = true;
 }
