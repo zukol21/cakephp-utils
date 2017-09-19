@@ -3,7 +3,7 @@
     "definitions": {
         "listItem": {
             "title": "List item",
-            "description": "A single list item definition",
+            "description": "Single list item definition (hierarchical)",
             "type": "object",
             "properties": {
                 "value": {
@@ -31,10 +31,20 @@
                             "type": "null"
                         }
                     ]
+                },
+                "children": {
+                    "title": "List item children",
+                    "description": "Direct children items of the current list item",
+                    "type": "array",
+                    "items": {
+                        "allOf": [
+                            { "$ref": "#/definitions/listItem" }
+                        ]
+                    }
                 }
             },
             "additionalProperties": false,
-            "required": ["value", "label", "inactive"]
+            "required": ["value", "label", "inactive", "children"]
         }
     },
     "title": "CSV List Configuration",

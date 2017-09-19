@@ -39,4 +39,23 @@ class ListParser extends AbstractCsvParser
      * @var bool $isPathRequired Is path required?
      */
     protected $isPathRequired = true;
+
+    /**
+     * Merge with default values
+     *
+     * @param object $data Data to merge with defaults
+     * @return object
+     */
+    protected function mergeWithDefaults($data)
+    {
+        if (empty($data->items)) {
+            return $data;
+        }
+
+        foreach ($data->items as $item) {
+            $item->{'children'} = [];
+        }
+
+        return $data;
+    }
 }
