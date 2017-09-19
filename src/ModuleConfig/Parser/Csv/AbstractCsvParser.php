@@ -1,11 +1,9 @@
 <?php
 namespace Qobo\Utils\ModuleConfig\Parser\Csv;
 
-use Exception;
 use InvalidArgumentException;
 use League\Csv\Reader;
 use Qobo\Utils\ModuleConfig\Parser\AbstractParser;
-use Qobo\Utils\Utility;
 use StdClass;
 
 abstract class AbstractCsvParser extends AbstractParser
@@ -57,17 +55,30 @@ abstract class AbstractCsvParser extends AbstractParser
         $reader = Reader::createFromPath($path, $this->mode);
         $rows = $reader->setOffset(1)->fetchAssoc($this->structure);
         foreach ($rows as $row) {
-            $row = json_encode($row);
-            if ($row === false) {
-                throw new InvalidArgumentException("Failed to encode row from path: $path");
-            }
-            $row = json_decode($row, true);
-            if ($row === null) {
-                throw new InvalidArgumentException("Failed to decode row from path: $path");
-            }
-            $result->items[] = (object)$row;
+            $result->items[] = (object)$this->processRow($row, $path);
         }
 
         return $result;
+    }
+
+    /**
+     * Process each row of data
+     *
+     * @param array $row Row data
+     * @param string $path Path of the source
+     * @return mixed
+     */
+    protected function processRow(array $row, $path)
+    {
+        $row = json_encode($row);
+        if ($row === false) {
+            throw new InvalidArgumentException("Failed to encode row from path: $path");
+        }
+        $row = json_decode($row, true);
+        if ($row === null) {
+            throw new InvalidArgumentException("Failed to decode row from path: $path");
+        }
+
+        return $row;
     }
 }

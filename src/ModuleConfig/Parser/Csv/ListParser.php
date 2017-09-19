@@ -1,8 +1,8 @@
 <?php
 namespace Qobo\Utils\ModuleConfig\Parser\Csv;
 
+use Exception;
 use Qobo\Utils\Utility;
-use StdClass;
 
 /**
  * List CSV Parser
@@ -53,9 +53,58 @@ class ListParser extends AbstractCsvParser
         }
 
         foreach ($data->items as $item) {
-            $item->{'children'} = [];
+            if (!property_exists($item, 'children')) {
+                $item->{'children'} = [];
+            }
         }
 
         return $data;
+    }
+
+    /**
+     * Process each row of data
+     *
+     * @param array $row Row data
+     * @param string $path Path of the source
+     * @return mixed
+     */
+    protected function processRow(array $row, $path)
+    {
+        $row = parent::processRow($row, $path);
+        $row['children'] = $this->getChildren($row, $path);
+
+        return $row;
+    }
+
+    /**
+     * Get children for a given item
+     *
+     * @param array $row Item row
+     * @param string $path Path of the source
+     * @return array
+     */
+    protected function getChildren($row, $path)
+    {
+        $result = [];
+
+        if (empty($row) || empty($row['value']) || empty($path)) {
+            return $result;
+        }
+
+        // Remove .csv extension (ugly, but works)
+        $childListPath = substr($path, 0, -4);
+        $childListPath .= DIRECTORY_SEPARATOR . $row['value'] . '.csv';
+        try {
+            Utility::validatePath($childListPath);
+        } catch (Exception $e) {
+            // Child list does not exist, skip the rest
+            return $result;
+        }
+
+        $parser = new ListParser();
+        $children = $parser->parse($childListPath);
+        $result = $children->items;
+
+        return $result;
     }
 }
