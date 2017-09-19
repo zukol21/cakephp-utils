@@ -83,17 +83,11 @@ class ListParser extends AbstractCsvParser
      * @param string $path Path of the source
      * @return array
      */
-    protected function getChildren($row, $path)
+    protected function getChildren(array $row, $path)
     {
         $result = [];
 
-        if (empty($row) || empty($row['value']) || empty($path)) {
-            return $result;
-        }
-
-        // Remove .csv extension (ugly, but works)
-        $childListPath = substr($path, 0, -4);
-        $childListPath .= DIRECTORY_SEPARATOR . $row['value'] . '.csv';
+        $childListPath = $this->getChildrenPath($row, $path);
         try {
             Utility::validatePath($childListPath);
         } catch (Exception $e) {
@@ -104,6 +98,29 @@ class ListParser extends AbstractCsvParser
         $parser = new ListParser();
         $children = $parser->parse($childListPath);
         $result = $children->items;
+
+        return $result;
+    }
+
+    /**
+     * Figure out the path to the children items list
+     *
+     * @todo Find a more elegant way to chop the extension off
+     * @param array $row Item row
+     * @param string $path Path of the current list
+     * @return string
+     */
+    protected function getChildrenPath(array $row, $path)
+    {
+        $result = '';
+
+        if (empty($row['value']) || empty($path)) {
+            return $result;
+        }
+
+        // Remove .csv extension (ugly, but works for now)
+        $result = substr($path, 0, -4);
+        $result .= DIRECTORY_SEPARATOR . $row['value'] . '.csv';
 
         return $result;
     }
