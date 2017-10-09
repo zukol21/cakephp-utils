@@ -2,7 +2,15 @@
     "name": "qobo/cakephp-utils",
     "description": "CakePHP utilities",
     "type": "cakephp-plugin",
-    "license": "GPL-2.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Qobo Ltd",
+            "email": "info@qobo.biz",
+            "homepage": "https://www.qobo.biz",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "admad/cakephp-jwt-auth": "^2.0",
         "alt3/cakephp-swagger": "^1.0",
