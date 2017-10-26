@@ -37,15 +37,14 @@ var datatables_init = datatables_init || {};
             var settings = {
                 searching: false,
                 language: {
-                    "processing": '<i class="fa fa-refresh fa-spin fa-fw"></i> Processing...'
+                    processing: '<i class="fa fa-refresh fa-spin fa-fw"></i> Processing...'
                 },
-                order: [
-                    [1, "asc"]
-                ],
                 columnDefs: [
                     {targets: [-1], orderable: false}
                 ],
             };
+
+            settings.order = [ this.options.order ? this.options.order : [1, 'asc'] ];
 
             // ajax specific options
             if (this.options.ajax) {
