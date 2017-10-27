@@ -1,35 +1,22 @@
-var datatables_init = datatables_init || {};
+/**
+ * DataTables initialiser Logic.
+ */
+    function DataTablesInit(options)
+    {
+        this.options = options;
 
-(function ($) {
-    'use strict';
-    /**
-     * DataTables initialiser Logic.
-     */
-    function DataTablesInit()
-    {}
+        var table = this.dataTable();
+
+        if (this.options.batch) {
+            this.batchToggle(table);
+            this.batchSelect(table);
+            this.batchClick(table);
+        }
+
+        return table;
+    }
 
     DataTablesInit.prototype = {
-
-        /**
-         * Initialize method.
-         *
-         * @param {object} options
-         * @return {object}
-         */
-        init: function (options) {
-            this.options = options;
-
-            var table = this.dataTable();
-
-            if (this.options.batch) {
-                this.batchToggle(table);
-                this.batchSelect(table);
-                this.batchClick(table);
-            }
-
-
-            return table;
-        },
 
         dataTable: function () {
             var that = this;
@@ -173,7 +160,3 @@ var datatables_init = datatables_init || {};
             });
         }
     };
-
-    datatables_init = new DataTablesInit();
-
-})(jQuery);
