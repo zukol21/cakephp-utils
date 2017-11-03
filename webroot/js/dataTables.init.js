@@ -31,7 +31,7 @@ DataTablesInit.prototype = {
             ],
         };
 
-        settings.order = [ this.options.order ? this.options.order : [1, 'asc'] ];
+        settings.order = [ this.options.order ? this.options.order : [0, 'asc'] ];
 
         // ajax specific options
         if (this.options.ajax) {
