@@ -15,7 +15,7 @@ use Exception;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
-use StdClass;
+use stdClass;
 
 /**
  * ModuleConfig Class
@@ -224,7 +224,7 @@ class ModuleConfig
      */
     protected function mergeMessages($source, $caller = 'ModuleConfig')
     {
-        $source = is_object($source) ? $source : new StdClass();
+        $source = is_object($source) ? $source : new stdClass();
 
         if (is_a($source, '\Exception')) {
             $this->errors = array_merge($this->errors, $this->formatMessages($source->getMessage(), $caller));
