@@ -91,7 +91,7 @@ DataTablesInit.prototype = {
         }
 
         // Fetching alerted errors into callback
-        $.fn.dataTable.ext.errMode = function(settings, techNote, message) {
+        $.fn.dataTable.ext.errMode = function (settings, techNote, message) {
             console.log(message);
         };
 
