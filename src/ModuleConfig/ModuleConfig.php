@@ -12,6 +12,7 @@
 namespace Qobo\Utils\ModuleConfig;
 
 use Exception;
+use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
@@ -34,7 +35,7 @@ use stdClass;
  *
  * @author Leonid Mamchenkov <l.mamchenkov@qobo.biz>
  */
-class ModuleConfig
+class ModuleConfig implements ErrorAwareInterface
 {
     use ErrorTrait;
 
@@ -236,18 +237,19 @@ class ModuleConfig
     {
         $source = is_object($source) ? $source : new stdClass();
 
-        if (is_a($source, '\Exception')) {
+        if ($source instanceof Exception) {
             $this->errors = array_merge($this->errors, $this->formatMessages($source->getMessage(), $caller));
 
             return;
         }
 
-        if (method_exists($source, 'getErrors') && is_callable([$source, 'getErrors'])) {
+        if ($source instanceof ErrorAwareInterface) {
             $this->errors = array_merge($this->errors, $this->formatMessages($source->getErrors(), $caller));
+            $this->warnings = array_merge($this->warnings, $this->formatMessages($source->getWarnings(), $caller));
+
+            return;
         }
 
-        if (method_exists($source, 'getWarnings') && is_callable([$source, 'getWarnings'])) {
-            $this->warnings = array_merge($this->warnings, $this->formatMessages($source->getWarnings(), $caller));
-        }
+        $this->errors[] = "Cannot merge messages from [" . get_class($source) . "]";
     }
 }
