@@ -115,11 +115,7 @@ class ModuleConfig implements ErrorAwareInterface
      */
     public function find($validate = true)
     {
-        $cache = null;
-        $finder = null;
-        $exception = null;
-        $cacheKey = null;
-        $result = null;
+        $cache = $finder = $exception = $cacheKey = $result = null;
         try {
             // Cached response
             $cache = new Cache(__FUNCTION__, $this->options);
@@ -158,11 +154,7 @@ class ModuleConfig implements ErrorAwareInterface
      */
     public function parse()
     {
-        $cache = null;
-        $parser = null;
-        $exception = null;
-        $cacheKey = null;
-        $result = null;
+        $cache = $parser = $exception = $cacheKey = $result = null;
         try {
             $path = $this->find(false);
             // Cached response
