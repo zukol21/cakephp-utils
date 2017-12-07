@@ -11,7 +11,9 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser;
 
-interface ParserInterface
+use Qobo\Utils\ErrorAwareInterface;
+
+interface ParserInterface extends ErrorAwareInterface
 {
     /**
      * Parse
@@ -23,18 +25,4 @@ interface ParserInterface
      * @return object
      */
     public function parse($path, array $options = []);
-
-    /**
-     * Get parser errors
-     *
-     * @return array List of errors from last parsing
-     */
-    public function getErrors();
-
-    /**
-     * Get parser warnings
-     *
-     * @return array List of warnings from last parsing
-     */
-    public function getWarnings();
 }

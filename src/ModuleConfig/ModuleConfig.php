@@ -12,6 +12,7 @@
 namespace Qobo\Utils\ModuleConfig;
 
 use Exception;
+use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
@@ -34,7 +35,7 @@ use stdClass;
  *
  * @author Leonid Mamchenkov <l.mamchenkov@qobo.biz>
  */
-class ModuleConfig
+class ModuleConfig implements ErrorAwareInterface
 {
     use ErrorTrait;
 
@@ -69,7 +70,7 @@ class ModuleConfig
     /**
      * Constructor
      *
-     * @param string \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
+     * @param \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
      * @param string $module     Module name
      * @param string $configFile (Optional) name of the config file
      * @param array  $options    (Optional) Finding, parsing, etc. options
@@ -114,9 +115,7 @@ class ModuleConfig
      */
     public function find($validate = true)
     {
-        $cache = null;
-        $finder = null;
-        $exception = null;
+        $cache = $finder = $exception = $cacheKey = $result = null;
         try {
             // Cached response
             $cache = new Cache(__FUNCTION__, $this->options);
@@ -140,7 +139,10 @@ class ModuleConfig
         if ($exception) {
             throw $exception;
         }
-        $cache->writeTo($cacheKey, $result);
+
+        if ($cache && $cacheKey) {
+            $cache->writeTo($cacheKey, $result);
+        }
 
         return $result;
     }
@@ -152,9 +154,7 @@ class ModuleConfig
      */
     public function parse()
     {
-        $cache = null;
-        $parser = null;
-        $exception = null;
+        $cache = $parser = $exception = $cacheKey = $result = null;
         try {
             $path = $this->find(false);
             // Cached response
@@ -179,7 +179,10 @@ class ModuleConfig
         if ($exception) {
             throw $exception;
         }
-        $cache->writeTo($cacheKey, $result, ['path' => $path]);
+
+        if ($cache && $cacheKey) {
+            $cache->writeTo($cacheKey, $result, ['path' => $path]);
+        }
 
         return $result;
     }
@@ -226,18 +229,19 @@ class ModuleConfig
     {
         $source = is_object($source) ? $source : new stdClass();
 
-        if (is_a($source, '\Exception')) {
+        if ($source instanceof Exception) {
             $this->errors = array_merge($this->errors, $this->formatMessages($source->getMessage(), $caller));
 
             return;
         }
 
-        if (method_exists($source, 'getErrors') && is_callable([$source, 'getErrors'])) {
+        if ($source instanceof ErrorAwareInterface) {
             $this->errors = array_merge($this->errors, $this->formatMessages($source->getErrors(), $caller));
+            $this->warnings = array_merge($this->warnings, $this->formatMessages($source->getWarnings(), $caller));
+
+            return;
         }
 
-        if (method_exists($source, 'getWarnings') && is_callable([$source, 'getWarnings'])) {
-            $this->warnings = array_merge($this->warnings, $this->formatMessages($source->getWarnings(), $caller));
-        }
+        $this->errors[] = "Cannot merge messages from [" . get_class($source) . "]";
     }
 }
