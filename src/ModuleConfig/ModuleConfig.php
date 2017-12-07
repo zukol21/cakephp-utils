@@ -69,7 +69,7 @@ class ModuleConfig
     /**
      * Constructor
      *
-     * @param string \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
+     * @param \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
      * @param string $module     Module name
      * @param string $configFile (Optional) name of the config file
      * @param array  $options    (Optional) Finding, parsing, etc. options
@@ -117,6 +117,8 @@ class ModuleConfig
         $cache = null;
         $finder = null;
         $exception = null;
+        $cacheKey = null;
+        $result = null;
         try {
             // Cached response
             $cache = new Cache(__FUNCTION__, $this->options);
@@ -140,7 +142,10 @@ class ModuleConfig
         if ($exception) {
             throw $exception;
         }
-        $cache->writeTo($cacheKey, $result);
+
+        if ($cache && $cacheKey) {
+            $cache->writeTo($cacheKey, $result);
+        }
 
         return $result;
     }
@@ -155,6 +160,8 @@ class ModuleConfig
         $cache = null;
         $parser = null;
         $exception = null;
+        $cacheKey = null;
+        $result = null;
         try {
             $path = $this->find(false);
             // Cached response
@@ -179,7 +186,10 @@ class ModuleConfig
         if ($exception) {
             throw $exception;
         }
-        $cache->writeTo($cacheKey, $result, ['path' => $path]);
+
+        if ($cache && $cacheKey) {
+            $cache->writeTo($cacheKey, $result, ['path' => $path]);
+        }
 
         return $result;
     }
