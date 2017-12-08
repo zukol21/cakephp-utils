@@ -101,6 +101,11 @@ DataTablesInit.prototype = {
             settings.stateDuration = this.options.state.duration;
         }
 
+        // Fetching alerted errors into callback
+        $.fn.dataTable.ext.errMode = function (settings, techNote, message) {
+            console.log(message);
+        };
+
         var table = $(this.options.table_id).DataTable(settings);
 
         return table;

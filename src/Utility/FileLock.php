@@ -59,8 +59,6 @@ final class FileLock
         }
 
         $this->handler = $result;
-
-        return $this;
     }
 
     /**

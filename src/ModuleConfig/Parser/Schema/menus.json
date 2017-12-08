@@ -27,6 +27,11 @@
                     "description": "Human-friendly description",
                     "type": "string"
                 },
+                "target": {
+                    "title": "Menu item open target",
+                    "description": "Open link in the same window or new one",
+                    "type": "string"
+                },
                 "order": {
                     "title": "Menu item order",
                     "description": "Used to determine the position of the item in the menu",
