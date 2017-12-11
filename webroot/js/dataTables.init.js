@@ -54,12 +54,12 @@ DataTablesInit.prototype = {
                     var sort = that.options.ajax.columns[d.order[0].column];
 
                     // sort by virtual field
-                    if (that.options.ajax.virtualColumns[sort]) {
+                    if (that.options.ajax.hasOwnProperty('virtualColumns') && that.options.ajax.virtualColumns[sort]) {
                         sort = that.options.ajax.virtualColumns[sort].join();
                     }
 
                     // sort by combined field
-                    if (that.options.ajax.combinedColumns[sort]) {
+                    if (that.options.ajax.hasOwnProperty('combinedColumns') && that.options.ajax.combinedColumns[sort]) {
                         sort = that.options.ajax.combinedColumns[sort].join();
                     }
 
@@ -115,7 +115,9 @@ DataTablesInit.prototype = {
         var result = [];
 
         var columns = this.options.ajax.columns;
-        var combinedColumns = this.options.ajax.combinedColumns;
+        var combinedColumns = this.options.ajax.hasOwnProperty('combinedColumns') ?
+            this.options.ajax.combinedColumns :
+            [];
 
         var length = columns.length;
         for (var key in data) {
