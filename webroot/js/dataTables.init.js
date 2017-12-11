@@ -121,27 +121,29 @@ DataTablesInit.prototype = {
 
         var length = columns.length;
         for (var key in data) {
-            if (data.hasOwnProperty(key)) {
-                result[key] = [];
-                for (i = 0; i < length; i++) {
-                    var column = columns[i];
-                    var value = [];
+            if (!data.hasOwnProperty(key)) {
+                continue;
+            }
 
-                    // normal field
-                    if (data[key][column]) {
-                        value.push(data[key][column]);
-                    }
+            result[key] = [];
+            for (i = 0; i < length; i++) {
+                var column = columns[i];
+                var value = [];
 
-                    // combined field
-                    if (combinedColumns[column]) {
-                        var len = combinedColumns[column].length;
-                        for (x = 0; x < len; x++) {
-                            value.push(data[key][combinedColumns[column][x]]);
-                        }
-                    }
-
-                    result[key].push(value.join(' '));
+                // normal field
+                if (data[key][column]) {
+                    value.push(data[key][column]);
                 }
+
+                // combined field
+                if (combinedColumns[column]) {
+                    var len = combinedColumns[column].length;
+                    for (x = 0; x < len; x++) {
+                        value.push(data[key][combinedColumns[column][x]]);
+                    }
+                }
+
+                result[key].push(value.join(' '));
             }
         }
 
