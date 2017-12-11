@@ -143,10 +143,6 @@ DataTablesInit.prototype = {
                     result[key].push(value.join(' '));
                 }
             }
-
-            if (this.options.ajax.extras.menus) {
-                result[key].push(data[key]._Menus);
-            }
         }
 
         return result;
