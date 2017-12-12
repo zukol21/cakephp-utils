@@ -11,7 +11,7 @@ class FileLocker extends BaseLocker
     /**
      * @var $lockDir
      */
-    private $lockDir = '/tmp';
+    private $lockDir = null;
 
     /**
      * __construct method
@@ -29,6 +29,10 @@ class FileLocker extends BaseLocker
 
         if (!empty($dir)) {
             $this->lockDir = $dir;
+        }
+
+        if (empty($this->lockDir)) {
+            $this->lockDir = sys_get_temp_dir();
         }
 
         $lock = new FlockLock($this->lockDir);
