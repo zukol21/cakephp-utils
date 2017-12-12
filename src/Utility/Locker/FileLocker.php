@@ -11,7 +11,7 @@ class FileLocker extends BaseLocker
      * @var $lockDir
      */
     private $lockDir = '/tmp';
-    
+
     /**
      * __construct method
      *
@@ -19,7 +19,7 @@ class FileLocker extends BaseLocker
      * @param string $dir to store lock files
      * @return void
      */
-    public function __construct($key, $dir=null)
+    public function __construct($key, $dir = null)
     {
         if (!empty($dir)) {
             $this->lockDir = $dir;

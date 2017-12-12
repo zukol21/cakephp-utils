@@ -10,7 +10,7 @@ interface LockerInterface
      * @return bool
      */
     public function lock();
-    
+
     /**
      * unlock method
      *
