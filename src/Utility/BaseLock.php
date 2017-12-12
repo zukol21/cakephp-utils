@@ -1,13 +1,22 @@
 <?php
-
-namespace Qobo\Utils\Utility\Locker;
+/**
+ * Copyright (c) Qobo Ltd. (https://www.qobo.biz)
+ *
+ * Licensed under The MIT License
+ * For full copyright and license information, please see the LICENSE
+ * Redistributions of files must retain the above copyright notice.
+ *
+ * @copyright     Copyright (c) Qobo Ltd. (https://www.qobo.biz)
+ * @license       https://opensource.org/licenses/mit-license.php MIT License
+ */
+namespace Qobo\Utils\Utility;
 
 use Cake\Core\Configure;
-use NinjaMutex\Lock\LockInterface;
+use NinjaMutex\Lock\LockInterface as MutexLockInterface;
 use NinjaMutex\Mutex;
-use Qobo\Utils\Utility\Locker\LockerInterface;
+use Qobo\Utils\Utility\LockInterface;
 
-class BaseLocker implements LockerInterface
+class BaseLock implements LockInterface
 {
     /**
      * @var $locker
@@ -27,9 +36,9 @@ class BaseLocker implements LockerInterface
      * __construct method
      *
      * @param string $key to use for lock operation
-     * @param LockInterface $lock for lock operation
+     * @param MutexLockInterface $lock for lock operation
      */
-    public function __construct($key, LockInterface $lock)
+    public function __construct($key, MutexLockInterface $lock)
     {
         $config = Configure::read('Locker');
         if (!empty($config['timeout'])) {
