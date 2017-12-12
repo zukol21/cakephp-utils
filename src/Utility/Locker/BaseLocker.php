@@ -2,6 +2,7 @@
 
 namespace Qobo\Utils\Utility\Locker;
 
+use Cake\Core\Configure;
 use NinjaMutex\Lock\LockInterface;
 use NinjaMutex\Mutex;
 use Qobo\Utils\Utility\Locker\LockerInterface;
@@ -30,6 +31,10 @@ class BaseLocker implements LockerInterface
      */
     public function __construct($key, LockInterface $lock)
     {
+        $config = Configure::read('Locker');
+        if (!empty($config['timeout'])) {
+            $this->timeout = $config['timeout'];
+        }
         $this->locker = new Mutex($key, $lock);
     }
 

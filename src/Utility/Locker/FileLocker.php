@@ -2,6 +2,7 @@
 
 namespace Qobo\Utils\Utility\Locker;
 
+use Cake\Core\Configure;
 use NinjaMutex\Lock\FlockLock;
 use Qobo\Utils\Utility\Locker\BaseLocker;
 
@@ -21,6 +22,11 @@ class FileLocker extends BaseLocker
      */
     public function __construct($key, $dir = null)
     {
+        $config = Configure::read('Locker.FileLocker');
+        if (!empty($config['dir'])) {
+            $this->lockDir = $config['dir'];
+        }
+
         if (!empty($dir)) {
             $this->lockDir = $dir;
         }
