@@ -14,6 +14,7 @@
     "require": {
         "admad/cakephp-jwt-auth": "^2.0",
         "alt3/cakephp-swagger": "^1.0",
+        "arvenil/ninja-mutex": "*",
         "burzum/cakephp-file-storage": "^1.2",
         "burzum/cakephp-imagine-plugin": "^2.1",
         "cakedc/users": "^4.0",
