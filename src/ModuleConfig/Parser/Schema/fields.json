@@ -15,7 +15,12 @@
                 "default": {
                     "title": "Default value",
                     "description": "Default value for the field",
-                    "type": "string"
+                    "anyOf": [
+                        { "type": "boolean" },
+                        { "type": "integer" },
+                        { "type": "number" },
+                        { "type": "string" }
+                    ]
                 },
                 "renderAs": {
                     "title": "Render value",
