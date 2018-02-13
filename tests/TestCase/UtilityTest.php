@@ -143,4 +143,14 @@ class UtilityTest extends TestCase
         $this->assertTrue(is_array($result));
         $this->assertNotEmpty($result);
     }
+
+    public function testGetApiVersions()
+    {
+        $testDataPath = dirname(dirname(__FILE__)) . DS . 'data';
+
+        $versions = Utility::getApiVersions($testDataPath);
+
+        $this->assertTrue(is_array($versions));
+        $this->assertNotEmpty($versions);
+    }
 }
