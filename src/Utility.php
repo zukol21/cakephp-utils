@@ -98,12 +98,12 @@ class Utility
 
             $apis[] = [
                 'number' => $number,
-                'prefix' => self::_getApiRoutePrefix($matches),
-                'path' => self::_getApiRoutePath($number),
+                'prefix' => self::getApiRoutePrefix($matches),
+                'path' => self::getApiRoutePath($number),
             ];
         }
 
-        $apis = self::_sortApiVersions($apis);
+        $apis = self::sortApiVersions($apis);
 
         return $apis;
     }
@@ -337,7 +337,7 @@ class Utility
      * @param string $version of the path
      * @return string with prefixes api path version.
      */
-    protected static function _getApiRoutePath($version)
+    protected static function getApiRoutePath($version)
     {
         return '/api/v' . $version;
     }
@@ -348,7 +348,7 @@ class Utility
      * @param array $versions that contain subdirs of prefix
      * @return string with combined API routing.
      */
-    protected static function _getApiRoutePrefix($versions)
+    protected static function getApiRoutePrefix($versions)
     {
         return 'api/v' . implode('/v', $versions);
     }
@@ -360,21 +360,21 @@ class Utility
      *
      * @return array $versions sorted in ascending order.
      */
-    protected static function _sortApiVersions(array $versions = [])
+    protected static function sortApiVersions(array $versions = [])
     {
         if (empty($versions)) {
             return $versions;
         }
 
-        usort($versions, function ($a, $b) {
-            $a_version = (float)$a['number'];
-            $b_version = (float)$b['number'];
+        usort($versions, function ($first, $second) {
+            $firstVersion = (float)$first['number'];
+            $secondVersion = (float)$second['number'];
 
-            if ($a_version == $b_version) {
+            if ($firstVersion == $secondVersion) {
                 return 0;
             }
 
-            return ($a_version > $b_version) ? 1 : -1;
+            return ($firstVersion > $secondVersion) ? 1 : -1;
         });
 
         return $versions;
