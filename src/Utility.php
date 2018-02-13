@@ -15,6 +15,7 @@ use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Datasource\ConnectionManager;
+use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 use DirectoryIterator;
 use Exception;
@@ -62,6 +63,49 @@ class Utility
         }
 
         return $result;
+    }
+
+    /**
+     * Get Api Directory Tree with prefixes
+     *
+     * @param string $path for setting origin directory
+     *
+     * @return array $apis with all versioned api directories
+     */
+    public static function getApiVersions($path = null)
+    {
+        $apis = [];
+        $apiPath = (!empty($path)) ? $path : App::path('Controller/Api')[0];
+
+        $dir = new Folder();
+        // get folders in Controller/Api directory
+        $tree = $dir->tree($apiPath, false, 'dir');
+
+        foreach ($tree as $treePath) {
+            if ($treePath === $apiPath) {
+                continue;
+            }
+
+            $path = str_replace($apiPath, '', $treePath);
+
+            preg_match('/V(\d+)\/V(\d+)/', $path, $matches);
+            if (empty($matches)) {
+                continue;
+            }
+
+            unset($matches[0]);
+            $number = implode('.', $matches);
+
+            $apis[] = [
+                'number' => $number,
+                'prefix' => self::_getApiRoutePrefix($matches),
+                'path' => self::_getApiRoutePath($number),
+            ];
+        }
+
+        $apis = self::_sortApiVersions($apis);
+
+        return $apis;
     }
 
     /**
@@ -285,5 +329,54 @@ class Utility
         sort($result);
 
         return $result;
+    }
+
+    /**
+     * Get API Route path
+     *
+     * @param string $version of the path
+     * @return string with prefixes api path version.
+     */
+    protected static function _getApiRoutePath($version)
+    {
+        return '/api/v' . $version;
+    }
+
+    /**
+     * Get API Route prefix
+     *
+     * @param array $versions that contain subdirs of prefix
+     * @return string with combined API routing.
+     */
+    protected static function _getApiRoutePrefix($versions)
+    {
+        return 'api/v' . implode('/v', $versions);
+    }
+
+    /**
+     * Sorting API Versions ascendingly
+     *
+     * @param array $versions of found API sub-directories
+     *
+     * @return array $versions sorted in ascending order.
+     */
+    protected static function _sortApiVersions(array $versions = [])
+    {
+        if (empty($versions)) {
+            return $versions;
+        }
+
+        usort($versions, function ($a, $b) {
+            $a_version = (float)$a['number'];
+            $b_version = (float)$b['number'];
+
+            if ($a_version == $b_version) {
+                return 0;
+            }
+
+            return ($a_version > $b_version) ? 1 : -1;
+        });
+
+        return $versions;
     }
 }
