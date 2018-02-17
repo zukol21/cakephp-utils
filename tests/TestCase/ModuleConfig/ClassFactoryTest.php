@@ -28,12 +28,17 @@ class ClassFactoryTest extends TestCase
      */
     public function testCreateNotStringException()
     {
-        $classMap = [
-            'Foo' => [
-                (string)ClassType::PARSER() => ['this is' => 'not a string'],
+        $options = [
+            'classMapVersion' => 'V1',
+            'classMap' => [
+                'V1' => [
+                    'Foo' => [
+                        (string)ClassType::PARSER() => ['this is' => 'not a string'],
+                    ],
+                ],
             ],
         ];
-        $result = ClassFactory::create('Foo', ClassType::PARSER(), ['classMap' => $classMap]);
+        $result = ClassFactory::create('Foo', ClassType::PARSER(), $options);
     }
 
     /**
@@ -41,11 +46,17 @@ class ClassFactoryTest extends TestCase
      */
     public function testCreateNoClassException()
     {
-        $classMap = [
-            'Foo' => [
-                (string)ClassType::PARSER() => '\\This\\Class\\Does\\Not\\Exist',
+        $options = [
+            'classMapVersion' => 'V1',
+            'classMap' => [
+                'V1' => [
+                    'Foo' => [
+                        (string)ClassType::PARSER() => '\\This\\Class\\Does\\Not\\Exist',
+                    ],
+                ],
             ],
         ];
-        $result = ClassFactory::create('Foo', ClassType::PARSER(), ['classMap' => $classMap]);
+
+        $result = ClassFactory::create('Foo', ClassType::PARSER(), $options);
     }
 }
