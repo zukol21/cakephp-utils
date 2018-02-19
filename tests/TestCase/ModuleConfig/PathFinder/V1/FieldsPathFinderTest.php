@@ -15,6 +15,7 @@ class FieldsPathFinderTest extends PHPUnit_Framework_TestCase
         $this->pf = new FieldsPathFinder();
         $this->dataDir = dirname(dirname(dirname(dirname(__DIR__)))) . DS . 'data' . DS . 'Modules' . DS;
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
+        Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
     public function testInterface()

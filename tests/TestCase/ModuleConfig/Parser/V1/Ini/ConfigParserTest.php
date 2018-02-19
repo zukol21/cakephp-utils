@@ -15,6 +15,7 @@ class ConfigParserTest extends PHPUnit_Framework_TestCase
         $this->parser = new ConfigParser();
         $this->dataDir = dirname(dirname(dirname(dirname(dirname(__DIR__))))) . DS . 'data' . DS . 'Modules' . DS;
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
+        Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
     public function testParse()
