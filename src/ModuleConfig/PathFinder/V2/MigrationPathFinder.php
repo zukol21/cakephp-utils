@@ -30,10 +30,10 @@ class MigrationPathFinder extends BasePathFinder
     /**
      * @var string $prefix Path prefix
      */
-    protected $prefix = 'config';
+    protected $prefix = 'db';
 
     /**
      * @var string $fileName File name
      */
-    protected $fileName = 'fields.json';
+    protected $fileName = 'migration.json';
 }
