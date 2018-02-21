@@ -37,9 +37,10 @@ class ClassFactory
         $configType = (string)$configType;
         $classType = (string)$classType;
 
-        $classMap = empty($options['classMap']) ? Configure::read('ModuleConfig.classMap') : (array)$options['classMap'];
+        $classMapVersion = empty($options['classMapVersion']) ? Configure::read('ModuleConfig.classMapVersion') : (string)$options['classMapVersion'];
+        $classMap = empty($options['classMap'][$classMapVersion]) ? Configure::read('ModuleConfig.classMap.' . $classMapVersion) : (array)$options['classMap'][$classMapVersion];
         if (empty($classMap[$configType][$classType])) {
-            throw new RuntimeException("No [$classType] found for configurationi type [$configType]");
+            throw new RuntimeException("No [$classType] found for configuration type [$configType] in class map version [$classMapVersion]");
         }
 
         $className = $classMap[$configType][$classType];

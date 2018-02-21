@@ -65,7 +65,7 @@
                             "type": "array",
                             "items": {
                                 "allOf": [
-                                    { "$ref": "#/definitions/fieldName" }
+                                    { "$ref": "#/definitions/moduleName" }
                                 ]
                             }
                         }
@@ -122,6 +122,7 @@
                     "type": "boolean"
                 }
             },
+            "required": ["display_field"],
             "additionalProperties": false
         },
         "virtualFields": {
