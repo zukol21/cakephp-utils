@@ -40,6 +40,7 @@ class ConfigParser extends AbstractIniParser
      */
     protected $defaults = [
         'table' => [
+            'display_field' => 'id',
             'icon' => 'cube',
             'searchable' => true,
             'lookup_fields' => [],
@@ -94,11 +95,6 @@ class ConfigParser extends AbstractIniParser
         $data->associations->hide_associations = $this->csv2array($data->associations->hide_associations);
         $data->notifications->ignored_fields = $this->csv2array($data->notifications->ignored_fields);
         $data->manyToMany->modules = $this->csv2array($data->manyToMany->modules);
-
-        // [table]display_field
-        if (!property_exists($data->table, 'display_field')) {
-            $this->warnings = array_merge($this->warnings, ["'display_field' is not set in 'table' section"]);
-        }
 
         $virtualFields = json_decode(json_encode($data->virtualFields), true);
         foreach ($virtualFields as $virtualField => $realFields) {

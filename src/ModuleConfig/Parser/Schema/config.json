@@ -122,6 +122,7 @@
                     "type": "boolean"
                 }
             },
+            "required": ["display_field"],
             "additionalProperties": false
         },
         "virtualFields": {
