@@ -65,7 +65,7 @@
                             "type": "array",
                             "items": {
                                 "allOf": [
-                                    { "$ref": "#/definitions/fieldName" }
+                                    { "$ref": "#/definitions/moduleName" }
                                 ]
                             }
                         }
