@@ -316,9 +316,7 @@ class Utility
     {
         $result = [];
 
-        if (empty($config)) {
-            $config = Configure::read('Colors');
-        }
+        $config = empty($config) ? Configure::read('Colors') : $config;
 
         if (!$pretty) {
             return $config;
@@ -349,9 +347,7 @@ class Utility
         ];
 
         // passing default icons if no external config present.
-        if (empty($config)) {
-            $config = Configure::read('Icons');
-        }
+        $config = empty($config) ? Configure::read('Icons') : $config;
 
         if (empty($config)) {
             return $result;
