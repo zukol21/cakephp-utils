@@ -149,7 +149,9 @@ class Utility
             ];
         }
 
-        $apis = self::sortApiVersions($apis);
+        if (!empty($apis)) {
+            $apis = self::sortApiVersions($apis);
+        }
 
         return $apis;
     }
@@ -408,10 +410,6 @@ class Utility
      */
     protected static function sortApiVersions(array $versions = [])
     {
-        if (empty($versions)) {
-            return $versions;
-        }
-
         usort($versions, function ($first, $second) {
             $firstVersion = (float)$first['number'];
             $secondVersion = (float)$second['number'];
