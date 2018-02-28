@@ -24,6 +24,52 @@ use InvalidArgumentException;
 class Utility
 {
     /**
+     * Convert value to bytes
+     *
+     * Convert sizes from PHP settings like post_max_size
+     * for example 8M to integer number of bytes.
+     *
+     * If number is integer return as is.
+     *
+     * NOTE: This is a modified copy from qobo/cakephp-utils/config/bootstrap.php
+     *
+     * @throws \InvalidArgumentException when cannot convert
+     * @param string|int $value Value to convert
+     * @return int
+     */
+    public static function valueToBytes($value)
+    {
+        if (is_int($value)) {
+            return $value;
+        }
+
+        $value = (string)$value;
+        $value = trim($value);
+
+        // Bytes
+        if (preg_match('/^(\d+)$/', $value, $matches)) {
+            return (int)$matches[1];
+        }
+
+        // Kilobytes
+        if (preg_match('/(\d+)K$/i', $value, $matches)) {
+            return (int)($matches[1] * 1024);
+        }
+
+        // Megabytes
+        if (preg_match('/(\d+)M$/i', $value, $matches)) {
+            return (int)($matches[1] * 1024 * 1024);
+        }
+
+        // Gigabytes
+        if (preg_match('/(\d+)G$/i', $value, $matches)) {
+            return (int)($matches[1] * 1024 * 1024 * 1024);
+        }
+
+        throw new InvalidArgumentException("Failed to find K, M, or G in a non-integer value [$value]");
+    }
+
+    /**
      * Check validity of the given path
      *
      * @throws \InvalidArgumentException when path does not exist or is not readable
@@ -103,7 +149,9 @@ class Utility
             ];
         }
 
-        $apis = self::sortApiVersions($apis);
+        if (!empty($apis)) {
+            $apis = self::sortApiVersions($apis);
+        }
 
         return $apis;
     }
@@ -268,9 +316,7 @@ class Utility
     {
         $result = [];
 
-        if (empty($config)) {
-            $config = Configure::read('Colors');
-        }
+        $config = empty($config) ? Configure::read('Colors') : $config;
 
         if (!$pretty) {
             return $config;
@@ -301,9 +347,7 @@ class Utility
         ];
 
         // passing default icons if no external config present.
-        if (empty($config)) {
-            $config = Configure::read('Icons');
-        }
+        $config = empty($config) ? Configure::read('Icons') : $config;
 
         if (empty($config)) {
             return $result;
@@ -362,10 +406,6 @@ class Utility
      */
     protected static function sortApiVersions(array $versions = [])
     {
-        if (empty($versions)) {
-            return $versions;
-        }
-
         usort($versions, function ($first, $second) {
             $firstVersion = (float)$first['number'];
             $secondVersion = (float)$second['number'];
