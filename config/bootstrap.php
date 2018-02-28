@@ -4,7 +4,6 @@ use Burzum\FileStorage\Storage\StorageManager;
 use Burzum\FileStorage\Storage\StorageUtils;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
-use Exception;
 use Qobo\Utils\Utility;
 
 /**
