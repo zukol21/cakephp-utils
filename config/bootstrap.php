@@ -4,6 +4,8 @@ use Burzum\FileStorage\Storage\StorageManager;
 use Burzum\FileStorage\Storage\StorageUtils;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
+use Exception;
+use Qobo\Utils\Utility;
 
 /**
  * Burzum File-Storage configuration
@@ -81,30 +83,24 @@ StorageManager::config('Local', [
 EventManager::instance()->on(new BaseListener(Configure::read('FileStorage')));
 
 /**
- * Convert size to bytes.
+ * Convert size value to bytes
  *
- * Convert sizes from php settings like post_max_size
- * for example 8M to integer number of bytes.
+ * NOTE: This is left here purely for backward-compatibility reasons.
  *
- * If number is integer return as is.
- *
+ * @obsolete
  * @param string|int $size Size to convert
  * @return int
  */
 function sizeToBytes($size)
 {
-    if (is_int($size)) {
-        return $size;
+    try {
+        $result = Utility::valueToBytes($size);
+    } catch (Exception $e) {
+        // Mimic initial behavior, before exception was introduced
+        $result = (string)$size;
+        $result = (int)$result;
+        return $result;;
     }
 
-    $result = (string)$size;
-    if (preg_match('/(\d+)K/i', $result, $matches)) {
-        $result = $matches[1] * 1024;
-    } elseif (preg_match('/(\d+)M/i', $result, $matches)) {
-        $result = $matches[1] * 1024 * 1024;
-    } elseif (preg_match('/(\d+)G/i', $result, $matches)) {
-        $result = $matches[1] * 1024 * 1024 * 1024;
-    }
-
-    return (int)$result;
+    return $result;
 }

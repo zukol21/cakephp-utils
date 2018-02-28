@@ -8,6 +8,37 @@ use Qobo\Utils\Utility;
 
 class UtilityTest extends TestCase
 {
+    public function valueBytesProvider()
+    {
+        return [
+            [42, 42, 'Integer value'],
+            ['42', 42, 'Integer as string'],
+            ['42k', 43008, 'Lowercase kilobytes'],
+            ['42K', 43008, 'Uppercase kilobytes'],
+            ['42m', 44040192, 'Lowercase megabytes'],
+            ['42M', 44040192, 'Uppercase megabytes'],
+            ['42g', 45097156608, 'Lowercase gigabytes'],
+            ['42G', 45097156608, 'Uppercase gigabytes'],
+        ];
+    }
+
+    /**
+     * @dataProvider valueBytesProvider
+     */
+    public function testValueToBytes($value, $expected, $description)
+    {
+        $result = Utility::valueToBytes($value);
+        $this->assertEquals($expected, $result, "valueToBytes() failed for: $description");
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testValueToBytesException()
+    {
+        $result = Utility::valueToBytes('this is not a byte size value');
+    }
+
     /**
      * @expectedException InvalidArgumentException
      */
