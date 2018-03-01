@@ -11,14 +11,29 @@ class UtilityTest extends TestCase
     public function valueBytesProvider()
     {
         return [
-            [42, 42, 'Integer value'],
-            ['42', 42, 'Integer as string'],
-            ['42k', 43008, 'Lowercase kilobytes'],
-            ['42K', 43008, 'Uppercase kilobytes'],
-            ['42m', 44040192, 'Lowercase megabytes'],
-            ['42M', 44040192, 'Uppercase megabytes'],
-            ['42g', 45097156608, 'Lowercase gigabytes'],
-            ['42G', 45097156608, 'Uppercase gigabytes'],
+            [-42, -42, 'Negative integer value'],
+            [42, 42, 'Positive integer value'],
+
+            ['-42', -42, 'Negative integer as string'],
+            ['42', 42, 'Positive integer as string'],
+
+            ['-42k', -43008, 'Negative lowercase kilobytes'],
+            ['42k', 43008, 'Positive lowercase kilobytes'],
+
+            ['-42K', -43008, 'Negative uppercase kilobytes'],
+            ['42K', 43008, 'Positive uppercase kilobytes'],
+
+            ['-42m', -44040192, 'Negative lowercase megabytes'],
+            ['42m', 44040192, 'Positive lowercase megabytes'],
+
+            ['-42M', -44040192, 'Negative uppercase megabytes'],
+            ['42M', 44040192, 'Positive uppercase megabytes'],
+
+            ['-42g', -45097156608, 'Negative lowercase gigabytes'],
+            ['42g', 45097156608, 'Positive lowercase gigabytes'],
+
+            ['-42G', -45097156608, 'Negative uppercase gigabytes'],
+            ['42G', 45097156608, 'Positive uppercase gigabytes'],
         ];
     }
 
