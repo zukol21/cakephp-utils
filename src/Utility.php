@@ -47,7 +47,7 @@ class Utility
         $value = trim($value);
 
         // Native PHP check for digits in string
-        if(ctype_digit(ltrim((string)$value, '-'))){
+        if (ctype_digit(ltrim((string)$value, '-'))) {
             return (int)$value;
         }
 
