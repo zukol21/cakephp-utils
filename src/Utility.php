@@ -46,24 +46,31 @@ class Utility
         $value = (string)$value;
         $value = trim($value);
 
+        // Native PHP check for digits in string
+        if (ctype_digit(ltrim((string)$value, '-'))) {
+            return (int)$value;
+        }
+
+        $signed = (substr($value, 0, 1) === '-') ? -1 : 1;
+
         // Bytes
         if (preg_match('/^(\d+)$/', $value, $matches)) {
-            return (int)$matches[1];
+            return (int)$matches[1] * $signed;
         }
 
         // Kilobytes
         if (preg_match('/(\d+)K$/i', $value, $matches)) {
-            return (int)($matches[1] * 1024);
+            return (int)($matches[1] * $signed * 1024);
         }
 
         // Megabytes
         if (preg_match('/(\d+)M$/i', $value, $matches)) {
-            return (int)($matches[1] * 1024 * 1024);
+            return (int)($matches[1] * $signed * 1024 * 1024);
         }
 
         // Gigabytes
         if (preg_match('/(\d+)G$/i', $value, $matches)) {
-            return (int)($matches[1] * 1024 * 1024 * 1024);
+            return (int)($matches[1] * $signed * 1024 * 1024 * 1024);
         }
 
         throw new InvalidArgumentException("Failed to find K, M, or G in a non-integer value [$value]");
