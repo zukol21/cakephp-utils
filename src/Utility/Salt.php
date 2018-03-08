@@ -40,7 +40,7 @@ class Salt
     /**
      * @var string $saltFile Path to file to use for salt storage
      */
-    public static $saltFile = TMP . 'salt';
+    public static $saltFile = TMP . 'security.salt';
 
     /**
      * @var int $saltMinLength Minimum length of the salt string
