@@ -130,7 +130,7 @@ class Salt
 
         $saltLength = strlen($salt);
         if ($saltLength < static::$saltMinLength) {
-            throw new InvalidArgumentException("Salt length of $saltMinLength characters is less than expected " . static::$saltMinLength);
+            throw new InvalidArgumentException("Salt length of $saltLength characters is less than expected " . static::$saltMinLength);
         }
     }
 
@@ -165,6 +165,7 @@ class Salt
         for ($i = 0; $i < static::$saltMinLength; $i++) {
             $result .= $pool[rand(0, $poolSize - 1)];
         }
+
         return $result;
     }
 }
