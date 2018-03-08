@@ -40,6 +40,7 @@ class ConfigParser extends AbstractIniParser
      */
     protected $defaults = [
         'table' => [
+            'type' => 'module',
             'display_field' => 'id',
             'icon' => 'cube',
             'searchable' => true,

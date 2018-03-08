@@ -21,6 +21,12 @@
             "description": "Basic module configuration parameters and flags",
             "type": "object",
             "properties": {
+                "type": {
+                    "title": "Module type",
+                    "description": "Type of module",
+                    "type": "string",
+                    "enum": ["module", "relation"]
+                },
                 "icon": {
                     "title": "Module icon",
                     "description": "Icon to use for the current module",
