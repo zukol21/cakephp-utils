@@ -85,6 +85,12 @@ class Utility
      */
     public static function validatePath($path)
     {
+        $path = (string)$path;
+
+        if (empty($path)) {
+            throw new InvalidArgumentException("Cannot validate empty path");
+        }
+
         if (!file_exists($path)) {
             throw new InvalidArgumentException("Path does not exist [$path]");
         }

@@ -57,6 +57,14 @@ class UtilityTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
+    public function testValidatePathExceptionEmpty()
+    {
+        Utility::validatePath('');
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
     public function testValidatePathExceptionNotExist()
     {
         Utility::validatePath('/some/non/existing/path');
