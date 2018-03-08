@@ -53,11 +53,6 @@ class Utility
 
         $signed = (substr($value, 0, 1) === '-') ? -1 : 1;
 
-        // Bytes
-        if (preg_match('/^(\d+)$/', $value, $matches)) {
-            return (int)$matches[1] * $signed;
-        }
-
         // Kilobytes
         if (preg_match('/(\d+)K$/i', $value, $matches)) {
             return (int)($matches[1] * $signed * 1024);
@@ -85,6 +80,12 @@ class Utility
      */
     public static function validatePath($path)
     {
+        $path = (string)$path;
+
+        if (empty($path)) {
+            throw new InvalidArgumentException("Cannot validate empty path");
+        }
+
         if (!file_exists($path)) {
             throw new InvalidArgumentException("Path does not exist [$path]");
         }
