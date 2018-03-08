@@ -2,7 +2,7 @@
 namespace Qobo\Utils\Test\TestCase\Utility;
 
 use Cake\TestSuite\TestCase;
-use Qobo\Utils\Utility\FileLock;
+use Qobo\Utils\Utility\Lock\FileLock;
 
 class FileLockTest extends TestCase
 {

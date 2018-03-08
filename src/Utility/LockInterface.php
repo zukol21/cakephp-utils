@@ -11,19 +11,12 @@
  */
 namespace Qobo\Utils\Utility;
 
-interface LockInterface
-{
-    /**
-     * lock method
-     *
-     * @return bool
-     */
-    public function lock();
+/**
+ * @deprecated 7.1.3 Added BC alias.
+ */
+class_alias('Qobo\Utils\Utility\Lock\LockInterface', 'Qobo\Utils\Utility\LockInterface');
 
-    /**
-     * unlock method
-     *
-     * @return bool
-     */
-    public function unlock();
-}
+trigger_error(
+    'Use Qobo\Utils\Utility\Lock\LockInterface instead of Qobo\Utils\Utility\LockInterface.',
+    E_USER_DEPRECATED
+);
