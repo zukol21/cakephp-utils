@@ -53,11 +53,6 @@ class Utility
 
         $signed = (substr($value, 0, 1) === '-') ? -1 : 1;
 
-        // Bytes
-        if (preg_match('/^(\d+)$/', $value, $matches)) {
-            return (int)$matches[1] * $signed;
-        }
-
         // Kilobytes
         if (preg_match('/(\d+)K$/i', $value, $matches)) {
             return (int)($matches[1] * $signed * 1024);
