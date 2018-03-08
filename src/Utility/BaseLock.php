@@ -11,71 +11,12 @@
  */
 namespace Qobo\Utils\Utility;
 
-use Cake\Core\Configure;
-use NinjaMutex\Lock\LockInterface as MutexLockInterface;
-use NinjaMutex\Mutex;
-use Qobo\Utils\Utility\LockInterface;
+/**
+ * @deprecated 7.1.3 Added BC alias.
+ */
+class_alias('Qobo\Utils\Utility\Lock\BaseLock', 'Qobo\Utils\Utility\BaseLock');
 
-class BaseLock implements LockInterface
-{
-    /**
-     * @var $locker
-     */
-    private $locker = null;
-
-    /**
-     * @var $timeout
-     *
-     * 1. null if you want blocking lock
-     * 2. 0 if you want just lock and go
-     * 3. $timeout > 0 if you want to wait for lock some time (in milliseconds)
-     */
-    protected $timeout = 1000;
-
-    /**
-     * __construct method
-     *
-     * @param string $key to use for lock operation
-     * @param MutexLockInterface $lock for lock operation
-     */
-    public function __construct($key, MutexLockInterface $lock)
-    {
-        $config = Configure::read('Locker');
-        if (!empty($config['timeout'])) {
-            $this->timeout = $config['timeout'];
-        }
-        $this->locker = new Mutex($key, $lock);
-    }
-
-    /**
-     * lock method
-     *
-     * @return bool
-     */
-    public function lock()
-    {
-        $result = false;
-
-        if ($this->locker->acquireLock($this->timeout)) {
-            $result = true;
-        }
-
-        return $result;
-    }
-
-    /**
-     * unlock method
-     *
-     * @return bool
-     */
-    public function unlock()
-    {
-        $result = false;
-
-        if ($this->locker->releaseLock()) {
-            $result = true;
-        }
-
-        return $result;
-    }
-}
+trigger_error(
+    'Use Qobo\Utils\Utility\Lock\BaseLock instead of Qobo\Utils\Utility\BaseLock.',
+    E_USER_DEPRECATED
+);
