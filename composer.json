@@ -36,6 +36,7 @@
         "myclabs/php-enum": "^1.5",
         "piwik/ini": "^1.0",
         "pyrech/composer-changelogs": "^1.4",
+        "riesenia/cakephp-duplicatable": "^3.0",
         "rlanvin/php-rrule": "^1.6"
     },
     "require-dev": {
