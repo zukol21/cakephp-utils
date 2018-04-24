@@ -330,6 +330,10 @@ class Utility
             return $config;
         }
 
+        if (!$config) {
+            return $result;
+        }
+
         foreach ($config as $k => $v) {
             $result[$k] = '<div><div style="width:20px;height:20px;margin:0;border:1px solid #eee;float:left;background:' . $k . ';"></div>&nbsp;&nbsp;' . $v . '</div><div style="clear:all"></div>';
         }
