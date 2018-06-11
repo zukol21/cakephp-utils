@@ -27,6 +27,17 @@
                     "description": "Non-default rendering of the field value",
                     "type": "string"
                 },
+                "orderBy": {
+                    "title": "Order by field",
+                    "description": "Field name to use for ordering",
+                    "type": "string"
+                },
+                "orderDir": {
+                    "title": "Order by direction",
+                    "description": "Direction to use for ordering",
+                    "type": "string",
+                    "enum": ["desc", "asc"]
+                },
                 "format": {
                     "title": "Date/time format",
                     "description": "Date time format for time stamp fields",
