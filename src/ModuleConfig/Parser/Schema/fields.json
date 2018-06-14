@@ -72,6 +72,11 @@
                     "title": "Minimal value",
                     "description": "Define a minimal value for field",
                     "type": "integer"
+                },
+                "placeholder": {
+                    "title": "Placeholder attribute used in HTML tags",
+                    "description": "Define placeholder attr for input/textarea tags",
+                    "type": "string"
                 }
             },
             "additionalProperties": false
