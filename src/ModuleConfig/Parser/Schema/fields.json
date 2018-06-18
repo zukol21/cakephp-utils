@@ -77,6 +77,21 @@
                     "title": "Placeholder attribute used in HTML tags",
                     "description": "Define placeholder attr for input/textarea tags",
                     "type": "string"
+                },
+                "dataTimePickerIncrement": {
+                    "title": "Datetime Picker Minutes increment",
+                    "description": "Define time increment for minutes dropdown",
+                    "type": "integer"
+                },
+                "dataShowDropdowns": {
+                    "title": "Show year month dropdowns",
+                    "description": "Show year and month select boxes above calendars to jump to a specific month and year",
+                    "type": "string"
+                },
+                "dataTimePicker": {
+                    "title": "Adding time handlers into popup",
+                    "description": "Adds select boxes to choose times in addition to dates",
+                    "type": "string"
                 }
             },
             "additionalProperties": false
