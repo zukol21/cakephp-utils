@@ -78,20 +78,20 @@
                     "description": "Define placeholder attr for input/textarea tags",
                     "type": "string"
                 },
-                "dataTimePickerIncrement": {
+                "timeIncrement": {
                     "title": "Datetime Picker Minutes increment",
                     "description": "Define time increment for minutes dropdown",
                     "type": "integer"
                 },
-                "dataShowDropdowns": {
+                "showMonthYearSelect": {
                     "title": "Show year month dropdowns",
                     "description": "Show year and month select boxes above calendars to jump to a specific month and year",
-                    "type": "string"
+                    "type": "boolean"
                 },
-                "dataTimePicker": {
+                "timePicker": {
                     "title": "Adding time handlers into popup",
                     "description": "Adds select boxes to choose times in addition to dates",
-                    "type": "string"
+                    "type": "boolean"
                 }
             },
             "additionalProperties": false
