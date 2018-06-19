@@ -207,4 +207,40 @@ class UtilityTest extends TestCase
         $this->assertTrue(is_array($versions));
         $this->assertNotEmpty($versions);
     }
+
+    public function testGetFileTypeIcon()
+    {
+        // Default icon
+        $expected = 'Qobo/Utils.icons/files/48px/_blank.png';
+
+        $result = Utility::getFileTypeIcon('');
+        $this->assertEquals($expected, $result, "Invalid icon returned for empty type, default size");
+
+        $result = Utility::getFileTypeIcon('', '');
+        $this->assertEquals($expected, $result, "Invalid icon returned for empty type, empty size");
+
+        $result = Utility::getFileTypeIcon('zzzzz');
+        $this->assertEquals($expected, $result, "Invalid icon returned for unsupported type, default size");
+
+        $result = Utility::getFileTypeIcon('zzzzz', '123');
+        $this->assertEquals($expected, $result, "Invalid icon returned for unsupported type, unsupported size");
+
+        // Known icon
+        $expected = 'Qobo/Utils.icons/files/48px/png.png';
+
+        $result = Utility::getFileTypeIcon('png');
+        $this->assertEquals($expected, $result, "Invalid icon returned for supported type, default size");
+
+        $result = Utility::getFileTypeIcon('png', '');
+        $this->assertEquals($expected, $result, "Invalid icon returned for supported type, empty size");
+
+        $result = Utility::getFileTypeIcon('png', '123');
+        $this->assertEquals($expected, $result, "Invalid icon returned for supported type, unsupported size");
+
+        // Mapped icon
+        $expected = 'Qobo/Utils.icons/files/48px/jpg.png';
+
+        $result = Utility::getFileTypeIcon('jpeg');
+        $this->assertEquals($expected, $result, "Invalid icon returned for mapped type, default size");
+    }
 }
