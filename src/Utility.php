@@ -388,6 +388,81 @@ class Utility
     }
 
     /**
+     * Get icon URL for a given file type (png, jpg, etc)
+     *
+     * Returns the path to the icon file, ready to be used with
+     * HtmlHelper::image().  If the icon for the given type or
+     * size does not exists, the fallback blank icon is returned.
+     *
+     * @throws \InvalidArgumentException when the icon does not exist
+     * @param string $type File extension for which to get the icon
+     * @param string $size Size of the icon (example: '48px')
+     *
+     * @return string URL for the icon file
+     */
+    public static function getFileTypeIcon($type, $size = '48px')
+    {
+        $defaultIcon = '_blank';
+        $defaultSize = '48px';
+
+        // Map some file types to existing icons
+        $iconMap = [
+            'docx' => 'doc',
+            'pptx' => 'ppt',
+            'pptm' => 'ppt',
+            'jpeg' => 'jpg',
+        ];
+
+        $type = trim(strtolower($type));
+        if (empty($type)) {
+            $type = $defaultIcon;
+        }
+
+        if (!empty($iconMap[$type])) {
+            $type = $iconMap[$type];
+        }
+
+        if (empty($size)) {
+            $size = $defaultSize;
+        }
+
+        $path = implode(DS, [
+            Plugin::path('Qobo/Utils'),
+            'webroot',
+            'img',
+            'icons',
+            'files',
+            '%s',
+            '%s.png'
+        ]);
+        $url = 'Qobo/Utils.icons/files/%s/%s.png';
+
+        $iconPath = sprintf($path, $size, $type);
+        $iconUrl = sprintf($url, $size, $type);
+        // Fallback on same icon in default size
+        if (!file_exists($iconPath)) {
+            $iconPath = sprintf($path, $defaultSize, $type);
+            $iconUrl = sprintf($url, $defaultSize, $type);
+        }
+        // Fallback on default icon in same size
+        if (!file_exists($iconPath)) {
+            $iconPath = sprintf($path, $size, $defaultIcon);
+            $iconUrl = sprintf($url, $size, $defaultIcon);
+        }
+        // Fallback on default icon in default size
+        if (!file_exists($iconPath)) {
+            $iconPath = sprintf($path, $defaultSize, $defaultIcon);
+            $iconUrl = sprintf($url, $defaultSize, $defaultIcon);
+        }
+        // Something is really wrong (icon files moved to a different location?)
+        if (!file_exists($iconPath)) {
+            throw new InvalidArgumentException("File type icon does not exist for type [$type] at size [$size]");
+        }
+
+        return $iconUrl;
+    }
+
+    /**
      * Get API Route path
      *
      * @param string $version of the path
