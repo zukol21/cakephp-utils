@@ -13,7 +13,6 @@ namespace Qobo\Utils\ModuleConfig\Parser\V1\Ini;
 
 use Exception;
 use InvalidArgumentException;
-use Piwik\Ini\IniReader;
 use Qobo\Utils\ModuleConfig\Parser\AbstractParser;
 use Qobo\Utils\Utility;
 
@@ -29,8 +28,8 @@ abstract class AbstractIniParser extends AbstractParser
     protected function getDataFromRealPath($path)
     {
         try {
-            $reader = new IniReader();
-            $data = $reader->readFile($path);
+            $data = parse_ini_file($path, true, INI_SCANNER_TYPED);
+            $data = json_decode(json_encode($data), false);
         } catch (Exception $e) {
             throw new InvalidArgumentException("Failed to read path: $path");
         }
