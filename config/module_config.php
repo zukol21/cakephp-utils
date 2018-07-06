@@ -40,6 +40,10 @@ return [
                     $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V2\\ViewPathFinder',
                     $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V2\\Json\\ViewParser',
                 ],
+                (string)ConfigType::DUPLICATES() => [
+                    $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V2\\DuplicatesPathFinder',
+                    $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V2\\Json\\DuplicatesParser',
+                ],
             ],
             'V1' => [
                 (string)ConfigType::MIGRATION() => [

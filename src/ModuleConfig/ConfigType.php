@@ -54,4 +54,9 @@ class ConfigType extends Enum
      * View configuration (index.csv)
      */
     const VIEW = 'view';
+
+    /**
+     * Duplicates configuration
+     */
+    const DUPLICATES = 'duplicates';
 }
