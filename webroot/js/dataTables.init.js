@@ -23,6 +23,8 @@ DataTablesInit.prototype = {
 
         var settings = {
             searching: false,
+            lengthMenu: [5, 10, 25, 50, 100],
+            pageLength: 10,
             language: {
                 processing: '<i class="fa fa-refresh fa-spin fa-fw"></i> Processing...'
             },
