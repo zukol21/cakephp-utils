@@ -19,7 +19,7 @@
     },
     "require": {
         "admad/cakephp-jwt-auth": "^2.0",
-        "alt3/cakephp-swagger": "^1.0",
+        "alt3/cakephp-swagger": "^2.0",
         "arvenil/ninja-mutex": "^0.6",
         "burzum/cakephp-file-storage": "^1.2",
         "burzum/cakephp-imagine-plugin": "^2.1",
