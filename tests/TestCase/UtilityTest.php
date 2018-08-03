@@ -246,9 +246,6 @@ class UtilityTest extends TestCase
 
     public function testGetCountryByIp()
     {
-        $clientIp = '213.30.114.42'; // PT
-        $this->assertEquals(Utility::getCountryByIp($clientIp), 'PT', 'Failed to get Portugal country code by Portuguese IP');
-
         $clientIp = '192.168.57.103'; // non-public
         $this->assertEmpty(Utility::getCountryByIp($clientIp), 'Failed to receive empty country code by non-public IP');
 
