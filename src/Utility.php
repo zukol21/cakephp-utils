@@ -506,4 +506,20 @@ class Utility
 
         return $versions;
     }
+
+    /**
+     * getCountryByIp
+     *
+     * @param string $clientIp to detect country
+     * @return string
+     */
+    public static function getCountryByIp($clientIp)
+    {
+        $clientCountryCode = '';
+        if (function_exists('geoip_country_code_by_name')) {
+            $clientCountryCode = geoip_country_code_by_name($clientIp);
+        }
+
+        return $clientCountryCode;
+    }
 }
