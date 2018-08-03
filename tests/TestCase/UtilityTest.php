@@ -246,6 +246,10 @@ class UtilityTest extends TestCase
 
     public function testGetCountryByIp()
     {
+        if (!function_exists('geoip_country_code_by_name')) {
+            $this->markTestskipped('The GeoIP extension is not available.');
+        }
+
         $clientIp = '192.168.57.103'; // non-public
         $this->assertEmpty(Utility::getCountryByIp($clientIp), 'Failed to receive empty country code by non-public IP');
 
