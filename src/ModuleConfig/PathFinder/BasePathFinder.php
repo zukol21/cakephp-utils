@@ -69,6 +69,10 @@ abstract class BasePathFinder implements PathFinderInterface
 
         $result .= $path;
 
+        if (!file_exists($result)) {
+            $result = $result . '.dist';
+        }
+
         if ($validate) {
             Utility::validatePath($result);
         }
