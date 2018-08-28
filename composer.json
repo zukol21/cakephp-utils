@@ -24,7 +24,7 @@
         "arvenil/ninja-mutex": "^0.6",
         "burzum/cakephp-file-storage": "^1.2",
         "burzum/cakephp-imagine-plugin": "^2.1",
-        "cakedc/users": "^6.0",
+        "cakedc/users": "^4.0",
         "cakephp/cakephp": "~3.5.0",
         "cakephp/migrations": "~1.0",
         "friendsofcake/crud": "^5.4",
