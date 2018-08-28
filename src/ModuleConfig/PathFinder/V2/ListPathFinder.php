@@ -72,7 +72,7 @@ class ListPathFinder extends BasePathFinder
 
         $result = null;
         try {
-            $result = parent::find($module, $path, $validate);
+            $result = parent::find($module, $path, true);
         } catch (\Exception $e) {
             if ($module == self::DEFAULT_MODULE) {
                 $this->fail($e);
@@ -81,7 +81,7 @@ class ListPathFinder extends BasePathFinder
 
         if (($result === null) && ($module <> self::DEFAULT_MODULE)) {
             $this->warnings[] = "Module list not found.  Falling back on module " . self::DEFAULT_MODULE;
-            $result = parent::find(self::DEFAULT_MODULE, $path, $validate);
+            $result = parent::find(self::DEFAULT_MODULE, $path, true);
         }
 
         return $result;

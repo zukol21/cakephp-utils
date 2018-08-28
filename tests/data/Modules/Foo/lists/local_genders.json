@@ -1,0 +1,41 @@
+{
+    "items": [
+        {
+            "value": "m",
+            "label": "M - Male",
+            "inactive": "",
+            "children": []
+        },
+        {
+            "value": "f",
+            "label": "F - Female",
+            "inactive": "",
+            "children": []
+        },
+        {
+            "value": "foo",
+            "label": "Foo - inactive",
+            "inactive": "1",
+            "children": []
+        },
+        {
+            "value": "bar",
+            "label": "Bar - with children",
+            "inactive": "",
+            "children": [
+                {
+                    "value": "bar_one",
+                    "label": "bar One",
+                    "inactive": "",
+                    "children": []
+                },
+                {
+                    "value": "bar_two",
+                    "label": "bar Two",
+                    "inactive": "",
+                    "children": []
+                }
+            ]
+        }
+    ]
+}
