@@ -27,7 +27,7 @@ class ListParserTest extends PHPUnit_Framework_TestCase
 
     public function testParse()
     {
-        $file = $this->dataDir . DS . 'Foo'. DS . 'lists' . DS . 'local_genders.json';
+        $file = $this->dataDir . DS . 'Foo' . DS . 'lists' . DS . 'local_genders.json';
         $result = $this->parser->parse($file);
 
         $resultArray = json_decode(json_encode($result), true);
@@ -39,17 +39,16 @@ class ListParserTest extends PHPUnit_Framework_TestCase
 
     public function testFilter()
     {
-        $file = $this->dataDir . DS . 'Foo'. DS . 'lists' . DS . 'local_genders.json';
+        $file = $this->dataDir . DS . 'Foo' . DS . 'lists' . DS . 'local_genders.json';
         $result = $this->parser->parse($file, ['filter' => true]);
 
         $resultArray = json_decode(json_encode($result), true);
         $this->assertTrue(!in_array('foo', array_keys($resultArray['items'])));
     }
 
-
     public function testFlatten()
     {
-        $file = $this->dataDir . DS . 'Foo'. DS . 'lists' . DS . 'local_genders.json';
+        $file = $this->dataDir . DS . 'Foo' . DS . 'lists' . DS . 'local_genders.json';
         $result = $this->parser->parse($file, ['filter' => true, 'flatten' => true]);
 
         $resultArray = json_decode(json_encode($result), true);
