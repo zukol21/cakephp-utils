@@ -266,7 +266,7 @@ class Utility
                         ->schemaCollection()
                         ->describe($model)
                         ->columns();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             //exception caught & silenced.
         }
 
