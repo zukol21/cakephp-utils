@@ -54,7 +54,7 @@ class ModuleConfigTest extends TestCase
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
         $this->assertTrue(is_readable($path), "Path is not readable [$path]");
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
-        $this->assertEquals('default_config.ini.dist', basename($path));
+        $this->assertEquals('default_config.dist.ini', basename($path));
     }
 
     /**
