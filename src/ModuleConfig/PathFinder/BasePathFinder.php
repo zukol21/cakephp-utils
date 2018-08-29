@@ -12,6 +12,7 @@
 namespace Qobo\Utils\ModuleConfig\PathFinder;
 
 use Cake\Core\Configure;
+use Exception;
 use InvalidArgumentException;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\Utility;
@@ -19,6 +20,9 @@ use Qobo\Utils\Utility;
 abstract class BasePathFinder implements PathFinderInterface
 {
     use ErrorTrait;
+
+    /** @var string The filename postfix for distribution files */
+    const DIST_FILENAME_POSTFIX = '.dist';
 
     /**
      * CakePHP configuration key with base path
@@ -46,9 +50,10 @@ abstract class BasePathFinder implements PathFinderInterface
      * Find path
      *
      * @param string $module Module to look for files in
-     * @param string $path     Path to look for
-     * @param bool   $validate Validate existence of the result
+     * @param string $path Path to look for
+     * @param bool $validate Validate existence of the result
      * @return null|string|array Null for not found, string for single path, array for multiple paths
+     * @throws Exception
      */
     public function find($module, $path = null, $validate = true)
     {
@@ -64,13 +69,22 @@ abstract class BasePathFinder implements PathFinderInterface
         $result .= $module . DIRECTORY_SEPARATOR;
 
         if (!empty($this->prefix)) {
-            $path = $this->prefix . DIRECTORY_SEPARATOR . $path;
+            $result .= $this->prefix . DIRECTORY_SEPARATOR;
         }
 
         $result .= $path;
 
-        if ($validate) {
+        try {
             Utility::validatePath($result);
+        } catch (Exception $e) {
+            // Validation failed which means we can not read the provided file
+            // Hence, we are trying to load the fallback file
+            $distributionPath = $this->getDistributionFilePath($path);
+            if ($distributionPath === $path) {
+                throw $e;
+            }
+
+            $result = $this->find($module, $distributionPath, $validate);
         }
 
         return $result;
@@ -109,6 +123,34 @@ abstract class BasePathFinder implements PathFinderInterface
     {
         if (empty($path)) {
             $path = $this->fileName;
+        }
+
+        return $path;
+    }
+
+    /**
+     * Get file path string for the corresponding distribution file
+     *
+     * If distribution file path is given, return as is. Otherwise
+     * adjust the provided one.
+     *
+     * @param string $path File path
+     * @return string
+     */
+    protected function getDistributionFilePath($path)
+    {
+        $postfix = self::DIST_FILENAME_POSTFIX;
+
+        if (empty($path)) {
+            $path = $this->fileName;
+        }
+
+        // Check if this is the distribution file path
+        $pathinfo = pathinfo($path);
+        $postfixIndex = strlen($pathinfo['filename']) - strlen($postfix);
+        $isDistributionFile = substr($pathinfo['filename'], $postfixIndex) === $postfix;
+        if (!$isDistributionFile) {
+            $path = $pathinfo['filename'] . $postfix . '.' . $pathinfo['extension'];
         }
 
         return $path;
