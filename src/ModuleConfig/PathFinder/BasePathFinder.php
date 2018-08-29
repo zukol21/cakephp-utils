@@ -147,7 +147,8 @@ abstract class BasePathFinder implements PathFinderInterface
 
         // Check if this is the distribution file path
         $pathinfo = pathinfo($path);
-        $isDistributionFile = substr($pathinfo['filename'], -strlen($postfix)) === $postfix;
+        $postfixIndex = strlen($pathinfo['filename']) - strlen($postfix);
+        $isDistributionFile = substr($pathinfo['filename'], $postfixIndex) === $postfix;
         if (!$isDistributionFile) {
             $path = $pathinfo['filename'] . $postfix . '.' . $pathinfo['extension'];
         }
