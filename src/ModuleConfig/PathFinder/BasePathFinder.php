@@ -12,6 +12,7 @@
 namespace Qobo\Utils\ModuleConfig\PathFinder;
 
 use Cake\Core\Configure;
+use Exception;
 use InvalidArgumentException;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\Utility;
@@ -46,8 +47,8 @@ abstract class BasePathFinder implements PathFinderInterface
      * Find path
      *
      * @param string $module Module to look for files in
-     * @param string $path     Path to look for
-     * @param bool   $validate Validate existence of the result
+     * @param string $path Path to look for
+     * @param bool $validate Validate existence of the result
      * @return null|string|array Null for not found, string for single path, array for multiple paths
      */
     public function find($module, $path = null, $validate = true)
@@ -69,12 +70,19 @@ abstract class BasePathFinder implements PathFinderInterface
 
         $result .= $path;
 
-        if (!file_exists($result)) {
-            $result = $result . '.dist';
-        }
-
-        if ($validate) {
+        try {
             Utility::validatePath($result);
+        } catch (Exception $exception) {
+            // Validation failed which means we can not read the provided file
+            // Hence, we are trying to load the fallback file
+            $fallbackResult = $result . '.dist';
+            try {
+                Utility::validatePath($fallbackResult);
+                $result = $fallbackResult;
+            } catch (Exception $fallbackException) {
+                // Nested try catch is necessary to throw the original exception
+                throw $exception;
+            }
         }
 
         return $result;
