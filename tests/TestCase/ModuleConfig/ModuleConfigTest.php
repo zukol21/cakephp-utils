@@ -45,21 +45,6 @@ class ModuleConfigTest extends TestCase
     /**
      * @dataProvider optionsProvider
      */
-    public function testFindDistribution($description, $options)
-    {
-        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'default_config.ini', $options);
-        $path = $mc->find();
-        $this->assertFalse(empty($path), "Path is empty [$path]");
-        $this->assertTrue(is_string($path), "Path is not a string [$path]");
-        $this->assertTrue(file_exists($path), "Path does not exist [$path]");
-        $this->assertTrue(is_readable($path), "Path is not readable [$path]");
-        $this->assertTrue(is_file($path), "Path is not a file [$path]");
-        $this->assertEquals('default_config.dist.ini', basename($path));
-    }
-
-    /**
-     * @dataProvider optionsProvider
-     */
     public function testFindOther($description, $options)
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'other_config.ini', $options);
@@ -79,6 +64,20 @@ class ModuleConfigTest extends TestCase
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'this_file_is_not.there', $options);
         $path = $mc->find();
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     */
+    public function testFindNoValidation($description, $options)
+    {
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'this_file_is_not.there', $options);
+        $path = $mc->find(false);
+        $this->assertFalse(empty($path), "Path is empty [$path]");
+        $this->assertTrue(is_string($path), "Path is not a string [$path]");
+        $this->assertFalse(file_exists($path), "Path does not exist [$path]");
+        $this->assertFalse(is_readable($path), "Path is not readable [$path]");
+        $this->assertFalse(is_file($path), "Path is not a file [$path]");
     }
 
     /**

@@ -80,11 +80,16 @@ abstract class BasePathFinder implements PathFinderInterface
             // Validation failed which means we can not read the provided file
             // Hence, we are trying to load the fallback file
             $distributionPath = $this->getDistributionFilePath($path);
-            if ($distributionPath === $path) {
+
+            // We rethrow the exception, only if the validate flag is enabled
+            if ($validate && $distributionPath === $path) {
                 throw $e;
             }
 
-            $result = $this->find($module, $distributionPath, $validate);
+            // Try to find the distribution file
+            if ($distributionPath !== $path) {
+                $result = $this->find($module, $distributionPath, $validate);
+            }
         }
 
         return $result;
