@@ -39,22 +39,14 @@ class FootprintBehavior extends Behavior
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (! method_exists($this->getTable(), 'getCurrentUser')) {
+        if (empty($options['footprint']['user']['id'])) {
             return;
         }
 
-        if (! is_callable([$this->getTable(), 'getCurrentUser'])) {
-            return;
-        }
-
-        $user = $this->getTable()->getCurrentUser();
-        if (empty($user['id'])) {
-            return;
-        }
-
-        $entity->set($this->getConfig('modified_by'), $user['id']);
         if ($entity->isNew()) {
-            $entity->set($this->getConfig('created_by'), $user['id']);
+            $entity->set($this->getConfig('created_by'), $options['footprint']['user']['id']);
         }
+
+        $entity->set($this->getConfig('modified_by'), $options['footprint']['user']['id']);
     }
 }
