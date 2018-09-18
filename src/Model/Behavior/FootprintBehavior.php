@@ -2,9 +2,12 @@
 namespace Qobo\Utils\Model\Behavior;
 
 use ArrayObject;
+use Cake\Controller\Component\AuthComponent;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
+use Cake\Routing\Router;
+use Qobo\Utils\Utility\User;
 
 class FootprintBehavior extends Behavior
 {
@@ -15,7 +18,8 @@ class FootprintBehavior extends Behavior
      */
     protected $_defaultConfig = [
         'created_by' => 'created_by',
-        'modified_by' => 'modified_by'
+        'modified_by' => 'modified_by',
+        'callback' => [User::class, 'getCurrentUser']
     ];
 
     /**
@@ -39,14 +43,19 @@ class FootprintBehavior extends Behavior
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
     {
-        if (empty($options['footprint']['user']['id'])) {
+        if (! is_callable($this->getConfig('callback'))) {
+            return;
+        }
+
+        $user = call_user_func($this->getConfig('callback'));
+        if (empty($user['id'])) {
             return;
         }
 
         if ($entity->isNew()) {
-            $entity->set($this->getConfig('created_by'), $options['footprint']['user']['id']);
+            $entity->set($this->getConfig('created_by'), $user['id']);
         }
 
-        $entity->set($this->getConfig('modified_by'), $options['footprint']['user']['id']);
+        $entity->set($this->getConfig('modified_by'), $user['id']);
     }
 }
