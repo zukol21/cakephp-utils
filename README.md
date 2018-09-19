@@ -1,16 +1,17 @@
 CakePHP3.x Qobo Utils Plugin
 =======================
 
-[![codecov](https://codecov.io/gh/QoboLtd/cakephp-utils/branch/master/graph/badge.svg)](https://codecov.io/gh/QoboLtd/cakephp-utils)
 [![Build Status](https://travis-ci.org/QoboLtd/cakephp-utils.svg?branch=master)](https://travis-ci.org/QoboLtd/cakephp-utils)
 [![Latest Stable Version](https://poser.pugx.org/qobo/cakephp-utils/v/stable)](https://packagist.org/packages/qobo/cakephp-utils)
 [![Total Downloads](https://poser.pugx.org/qobo/cakephp-utils/downloads)](https://packagist.org/packages/qobo/cakephp-utils)
 [![Latest Unstable Version](https://poser.pugx.org/qobo/cakephp-utils/v/unstable)](https://packagist.org/packages/qobo/cakephp-utils)
 [![License](https://poser.pugx.org/qobo/cakephp-utils/license)](https://packagist.org/packages/qobo/cakephp-utils)
+[![codecov](https://codecov.io/gh/QoboLtd/cakephp-utils/branch/master/graph/badge.svg)](https://codecov.io/gh/QoboLtd/cakephp-utils)
+[![BCH compliance](https://bettercodehub.com/edge/badge/QoboLtd/cakephp-utils?branch=master)](https://bettercodehub.com/)
 
 A variety of utilities that are common and useful for several of our plugins and application.
 
-Developed by [Qobo](https://www.qobo.biz), used in [Qobrix](https://qobrix.com).
+This plugin is developed by [Qobo](https://www.qobo.biz) for [Qobrix](https://qobrix.com).  It can be used as standalone CakePHP plugin, or as part of the [project-template-cakephp](https://github.com/QoboLtd/project-template-cakephp) installation.
 
 Usage
 -----
