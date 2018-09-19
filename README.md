@@ -10,7 +10,7 @@ CakePHP3.x Qobo Utils Plugin
 
 A variety of utilities that are common and useful for several of our plugins and application.
 
-Developed by [Qobo](https://www.qobo.biz), used in [Qobrix](https://qobrix.com).
+This plugin is developed by [Qobo](https://www.qobo.biz) for [Qobrix](https://qobrix.com).  It can be used as standalone CakePHP plugin, or as part of the [project-template-cakephp](https://github.com/QoboLtd/project-template-cakephp) installation.
 
 Usage
 -----
