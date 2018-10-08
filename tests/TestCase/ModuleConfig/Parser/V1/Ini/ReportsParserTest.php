@@ -3,10 +3,10 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Ini;
 
 use Cake\Core\Configure;
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Ini\ReportsParser;
 
-class ReportsParserTest extends PHPUnit_Framework_TestCase
+class ReportsParserTest extends TestCase
 {
     protected $parser;
     protected $dataDir;

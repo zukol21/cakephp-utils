@@ -2,10 +2,10 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Ini;
 
 use Cake\Core\Configure;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Ini\ConfigParser;
 
-class ConfigParserTest extends PHPUnit_Framework_TestCase
+class ConfigParserTest extends TestCase
 {
     protected $parser;
     protected $dataDir;

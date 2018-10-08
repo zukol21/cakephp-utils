@@ -2,10 +2,10 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\PathFinder\V1;
 
 use Cake\Core\Configure;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\PathFinder\V1\MigrationPathFinder;
 
-class MigrationPathFinderTest extends PHPUnit_Framework_TestCase
+class MigrationPathFinderTest extends TestCase
 {
     protected $pf;
     protected $dataDir;
