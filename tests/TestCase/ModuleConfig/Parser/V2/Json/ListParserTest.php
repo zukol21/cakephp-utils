@@ -2,10 +2,10 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V2\Json;
 
 use Cake\Core\Configure;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V2\Json\ListParser;
 
-class ListParserTest extends PHPUnit_Framework_TestCase
+class ListParserTest extends TestCase
 {
     protected $parser;
     protected $dataDir;

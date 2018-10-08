@@ -3,7 +3,6 @@ namespace Qobo\Utils\Test\TestCase;
 
 use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
 use Qobo\Utils\Utility;
 
 class UtilityTest extends TestCase

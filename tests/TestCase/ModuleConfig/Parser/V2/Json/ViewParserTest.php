@@ -3,10 +3,10 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V2\Json;
 
 use Cake\Core\Configure;
 use InvalidArgumentException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V2\Json\ViewParser;
 
-class ViewParserTest extends PHPUnit_Framework_TestCase
+class ViewParserTest extends TestCase
 {
     protected $parser;
     protected $dataDir;

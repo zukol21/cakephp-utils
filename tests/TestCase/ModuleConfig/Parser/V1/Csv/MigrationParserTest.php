@@ -2,10 +2,10 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Csv;
 
 use Cake\Core\Configure;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Csv\MigrationParser;
 
-class MigrationParserTest extends PHPUnit_Framework_TestCase
+class MigrationParserTest extends TestCase
 {
     protected $parser;
     protected $dataDir;

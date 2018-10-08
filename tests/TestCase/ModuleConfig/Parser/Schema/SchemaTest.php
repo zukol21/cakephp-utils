@@ -3,9 +3,9 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\Schema;
 
 use Cake\Core\Configure;
 use DirectoryIterator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SchemaTest extends PHPUnit_Framework_TestCase
+class SchemaTest extends TestCase
 {
     /**
      * Lint JSON files

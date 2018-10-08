@@ -3,10 +3,10 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Csv;
 
 use Cake\Core\Configure;
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Csv\ViewParser;
 
-class ViewParserTest extends PHPUnit_Framework_TestCase
+class ViewParserTest extends TestCase
 {
     protected $parser;
     protected $dataDir;
