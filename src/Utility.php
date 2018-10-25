@@ -225,7 +225,7 @@ class Utility
     public static function getModels($connectionManager = 'default', $excludePhinxlog = true)
     {
         $result = [];
-        $tables = ConnectionManager::get($connectionManager)->schemaCollection()->listTables();
+        $tables = ConnectionManager::get($connectionManager)->getSchemaCollection()->listTables();
 
         if (empty($tables)) {
             return $result;
