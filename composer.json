@@ -35,7 +35,7 @@
         "lorenzo/audit-stash": "^1.0",
         "maiconpinto/cakephp-adminlte-theme": "^1.0",
         "mobiledetect/mobiledetectlib": "2.*",
-        "muffin/trash": "^1.1",
+        "muffin/trash": "^2.1",
         "myclabs/php-enum": "^1.5",
         "pyrech/composer-changelogs": "^1.4",
         "riesenia/cakephp-duplicatable": "^3.0",
