@@ -19,7 +19,7 @@ class FieldsParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
         $result = null;

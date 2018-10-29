@@ -18,7 +18,7 @@ class ViewPathFinderTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testInterface()
+    public function testInterface(): void
     {
         $implementedInterfaces = array_keys(class_implements($this->pf));
         $this->assertTrue(in_array('Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface', $implementedInterfaces), "PathFinderInterface is not implemented");
@@ -27,12 +27,12 @@ class ViewPathFinderTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testFind()
+    public function testFind(): void
     {
         $path = $this->pf->find('Foo');
     }
 
-    public function testFindAdd()
+    public function testFindAdd(): void
     {
         $path = $this->pf->find('Foo', 'add');
         $this->assertFalse(empty($path), "Path is empty [$path]");
@@ -42,7 +42,7 @@ class ViewPathFinderTest extends TestCase
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
     }
 
-    public function testFindAddFull()
+    public function testFindAddFull(): void
     {
         $path = $this->pf->find('Foo', 'add.csv');
         $this->assertFalse(empty($path), "Path is empty [$path]");
@@ -55,7 +55,7 @@ class ViewPathFinderTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testFindExceptionModuleEmpty()
+    public function testFindExceptionModuleEmpty(): void
     {
         $path = $this->pf->find(null);
     }
@@ -63,7 +63,7 @@ class ViewPathFinderTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testFindExceptionModuleNotString()
+    public function testFindExceptionModuleNotString(): void
     {
         $path = $this->pf->find(['foo' => 'bar']);
     }
@@ -71,7 +71,7 @@ class ViewPathFinderTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testFindExceptionPathNotString()
+    public function testFindExceptionPathNotString(): void
     {
         $path = $this->pf->find('Foo', ['foo' => 'bar']);
     }
@@ -79,7 +79,7 @@ class ViewPathFinderTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testFindExceptionPathNotExist()
+    public function testFindExceptionPathNotExist(): void
     {
         $path = $this->pf->find('Foo', 'some_custom.csv');
     }

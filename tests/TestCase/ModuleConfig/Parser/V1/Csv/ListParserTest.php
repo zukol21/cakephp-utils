@@ -19,7 +19,7 @@ class ListParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . 'Common' . DS . 'lists' . DS . 'genders.csv';
         $result = null;
@@ -44,7 +44,7 @@ class ListParserTest extends TestCase
         $this->assertTrue(empty($result['items'][0]['children']), "Parser returned non-empty value for 'children' key in first element of gender list");
     }
 
-    public function testParseNested()
+    public function testParseNested(): void
     {
         $file = $this->dataDir . 'Common' . DS . 'lists' . DS . 'foo_types.csv';
         $result = null;
@@ -70,7 +70,7 @@ class ListParserTest extends TestCase
         $this->assertEquals('new', $result['items'][0]['children'][0]['value'], "Parser returned invalid value for first child of first element of foo_types list");
     }
 
-    public function testParseInvalid()
+    public function testParseInvalid(): void
     {
         $file = $this->dataDir . 'Common' . DS . 'lists' . DS . 'invalid_list.csv';
         $exception = null;

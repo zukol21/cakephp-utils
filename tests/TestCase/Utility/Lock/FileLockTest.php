@@ -6,7 +6,7 @@ use Qobo\Utils\Utility\Lock\FileLock;
 
 class FileLockTest extends TestCase
 {
-    public function testInit()
+    public function testInit(): void
     {
         $filename = 'some_random_filename';
 
@@ -14,7 +14,7 @@ class FileLockTest extends TestCase
         $this->assertInstanceOf(FileLock::class, $lock);
     }
 
-    public function testLockUnlock()
+    public function testLockUnlock(): void
     {
         $filename = 'some_random_filename';
 

@@ -20,7 +20,10 @@ class ModuleConfigTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function optionsProvider()
+    /**
+     * @return mixed[]
+     */
+    public function optionsProvider(): array
     {
         return [
             ['skip cache', [ 'cacheSkip' => true ]],
@@ -30,8 +33,10 @@ class ModuleConfigTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
      */
-    public function testFind($description, $options)
+    public function testFind(string $description, array $options): void
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
         $path = $mc->find();
@@ -44,8 +49,10 @@ class ModuleConfigTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
      */
-    public function testFindOther($description, $options)
+    public function testFindOther(string $description, array $options): void
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'other_config.ini', $options);
         $path = $mc->find();
@@ -59,8 +66,10 @@ class ModuleConfigTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
      */
-    public function testFindNotFoundException($description, $options)
+    public function testFindNotFoundException(string $description, array $options): void
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'this_file_is_not.there', $options);
         $path = $mc->find();
@@ -68,8 +77,10 @@ class ModuleConfigTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
      */
-    public function testFindNoValidation($description, $options)
+    public function testFindNoValidation(string $description, array $options): void
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', 'this_file_is_not.there', $options);
         $path = $mc->find(false);
@@ -82,8 +93,10 @@ class ModuleConfigTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
      */
-    public function testParse($description, $options)
+    public function testParse(string $description, array $options): void
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
         $result = null;
@@ -101,8 +114,10 @@ class ModuleConfigTest extends TestCase
     /**
      * @expectedException \InvalidArgumentException
      * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
      */
-    public function testParseInvalidException($description, $options)
+    public function testParseInvalidException(string $description, array $options): void
     {
         $mc = new ModuleConfig(ConfigType::LISTS(), 'Foo', 'invalid_list.csv', $options);
         $parser = $mc->parse();
@@ -110,8 +125,10 @@ class ModuleConfigTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
      */
-    public function testGetErrors($description, $options)
+    public function testGetErrors(string $description, array $options): void
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
 
@@ -133,8 +150,10 @@ class ModuleConfigTest extends TestCase
 
     /**
      * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
      */
-    public function testGetWarnings($description, $options)
+    public function testGetWarnings(string $description, array $options): void
     {
         $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
 

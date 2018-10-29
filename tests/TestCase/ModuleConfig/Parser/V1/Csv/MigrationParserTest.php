@@ -18,7 +18,7 @@ class MigrationParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
         $result = $this->parser->parse($file);
@@ -39,7 +39,7 @@ class MigrationParserTest extends TestCase
         $this->assertTrue(array_key_exists('unique', $result['id']), "Parser missed 'unique' key in 'id' field");
     }
 
-    public function testParseNonExisting()
+    public function testParseNonExisting(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'missing_migration.csv';
         $result = $this->parser->parse($file);
@@ -51,7 +51,7 @@ class MigrationParserTest extends TestCase
         $this->assertTrue(empty($result), "Parser returned empty result");
     }
 
-    public function testParseEmpty()
+    public function testParseEmpty(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'empty_migration.csv';
         $result = $this->parser->parse($file);
@@ -64,7 +64,7 @@ class MigrationParserTest extends TestCase
         $this->assertTrue(empty($result), "Parser returned non-empty result");
     }
 
-    public function testWrapFromPath()
+    public function testWrapFromPath(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'db' . DS . 'migration.csv';
         $result = $this->parser->parse($file);

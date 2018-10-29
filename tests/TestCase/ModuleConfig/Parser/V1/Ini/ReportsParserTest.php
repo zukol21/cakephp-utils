@@ -19,7 +19,7 @@ class ReportsParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'reports.ini';
         $result = null;

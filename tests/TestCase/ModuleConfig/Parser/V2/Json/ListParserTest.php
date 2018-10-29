@@ -25,7 +25,7 @@ class ListParserTest extends TestCase
         unset($this->dataDir);
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . DS . 'Foo' . DS . 'lists' . DS . 'local_genders.json';
         $result = $this->parser->parse($file);
@@ -37,7 +37,7 @@ class ListParserTest extends TestCase
         $this->assertEquals($resultArray['items']['m']['label'], 'M - Male');
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $file = $this->dataDir . DS . 'Foo' . DS . 'lists' . DS . 'local_genders.json';
         $result = $this->parser->parse($file, ['filter' => true]);
@@ -46,7 +46,7 @@ class ListParserTest extends TestCase
         $this->assertTrue(!in_array('foo', array_keys($resultArray['items'])));
     }
 
-    public function testFlatten()
+    public function testFlatten(): void
     {
         $file = $this->dataDir . DS . 'Foo' . DS . 'lists' . DS . 'local_genders.json';
         $result = $this->parser->parse($file, ['filter' => true, 'flatten' => true]);

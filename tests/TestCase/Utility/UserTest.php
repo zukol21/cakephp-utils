@@ -8,14 +8,18 @@ class UserTest extends TestCase
 {
     /**
      * @dataProvider userInfoProvider
+     * @param mixed[] $data User data
      */
-    public function testSetGetCurrentUser($data)
+    public function testSetGetCurrentUser(array $data): void
     {
         User::setCurrentUser($data);
         $this->assertEquals($data, User::getCurrentUser());
     }
 
-    public function userInfoProvider()
+    /**
+     * @return mixed[]
+     */
+    public function userInfoProvider(): array
     {
         return [
             [['id' => 123]],

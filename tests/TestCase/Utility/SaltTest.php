@@ -7,7 +7,7 @@ use Qobo\Utils\Utility\Salt;
 
 class SaltTest extends TestCase
 {
-    public function testGetSaltExisting()
+    public function testGetSaltExisting(): void
     {
         $tmpSaltFile = tempnam(sys_get_temp_dir(), 'salt_');
         $expected = 'this is a pre-generated salt string which is stored in the file';
@@ -20,7 +20,7 @@ class SaltTest extends TestCase
         $this->assertEquals($expected, $result, "getSalt() returned incorrect salt");
     }
 
-    public function testGetSaltNonExisting()
+    public function testGetSaltNonExisting(): void
     {
         $tmpSaltFile = tempnam(sys_get_temp_dir(), 'salt_');
 
@@ -36,13 +36,15 @@ class SaltTest extends TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testGetSaltExceptionBadMinLength()
+    public function testGetSaltExceptionBadMinLength(): void
     {
         $tmpSaltFile = tempnam(sys_get_temp_dir(), 'salt_');
 
         Salt::$saltFile = $tmpSaltFile;
         Salt::$saltMinLength = 0;
         $result = Salt::getSalt();
-        unlink($tmpSaltFile);
+        if ($tmpSaltFile) {
+            unlink($tmpSaltFile);
+        }
     }
 }

@@ -19,7 +19,7 @@ class ViewParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         // add, edit, view
         $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'view.csv';
@@ -70,7 +70,7 @@ class ViewParserTest extends TestCase
         $this->assertEquals('type', $result[1][0], "Parser missed first field in second element");
     }
 
-    public function testParseMissing()
+    public function testParseMissing(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'views' . DS . 'this_file_does_not_exist.csv';
         $result = $this->parser->parse($file);

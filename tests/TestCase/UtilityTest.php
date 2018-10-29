@@ -1,13 +1,17 @@
 <?php
 namespace Qobo\Utils\Test\TestCase;
 
+use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
 
 class UtilityTest extends TestCase
 {
-    public function valueBytesProvider()
+    /**
+     * @return mixed[]
+     */
+    public function valueBytesProvider(): array
     {
         return [
             [-42, -42, 'Negative integer value'],
@@ -37,9 +41,10 @@ class UtilityTest extends TestCase
     }
 
     /**
+     * @param mixed $value
      * @dataProvider valueBytesProvider
      */
-    public function testValueToBytes($value, $expected, $description)
+    public function testValueToBytes($value, int $expected, string $description): void
     {
         $result = Utility::valueToBytes($value);
         $this->assertEquals($expected, $result, "valueToBytes() failed for: $description");
@@ -48,7 +53,7 @@ class UtilityTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testValueToBytesException()
+    public function testValueToBytesException(): void
     {
         $result = Utility::valueToBytes('this is not a byte size value');
     }
@@ -56,7 +61,7 @@ class UtilityTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testValidatePathExceptionEmpty()
+    public function testValidatePathExceptionEmpty(): void
     {
         Utility::validatePath('');
     }
@@ -64,7 +69,7 @@ class UtilityTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testValidatePathExceptionNotExist()
+    public function testValidatePathExceptionNotExist(): void
     {
         Utility::validatePath('/some/non/existing/path');
     }
@@ -72,12 +77,12 @@ class UtilityTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testValidatePathExceptionNotReadable()
+    public function testValidatePathExceptionNotReadable(): void
     {
         Utility::validatePath('/etc/shadow');
     }
 
-    public function testGetControllers()
+    public function testGetControllers(): void
     {
         $result = Utility::getControllers();
         $this->assertTrue(is_array($result), "Result is not an array");
@@ -90,7 +95,7 @@ class UtilityTest extends TestCase
         $this->assertFalse(empty($result), "Result is empty");
     }
 
-    public function testGetDirControllers()
+    public function testGetDirControllers(): void
     {
         $result = Utility::getDirControllers('/some/non/existing/path');
         $this->assertTrue(is_array($result), "Result is not an array");
@@ -128,20 +133,20 @@ class UtilityTest extends TestCase
         $this->assertFalse(in_array('Blah.AppController', $result), "Test app AppController is in the list (plugin=Blah,fqcn=false)");
     }
 
-    public function testGetModels()
+    public function testGetModels(): void
     {
         $result = Utility::getModels('test');
         $this->assertTrue(is_array($result));
     }
 
-    public function testGetModelColumns()
+    public function testGetModelColumns(): void
     {
         $result = Utility::getModelColumns('Users', 'test');
 
         $this->assertTrue(is_array($result));
     }
 
-    public function testFindDirs()
+    public function testFindDirs(): void
     {
         // Proper path
         $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Modules';
@@ -168,25 +173,28 @@ class UtilityTest extends TestCase
     /**
      * @dataProvider getIconProvider
      */
-    public function testGetIcons($configFile, $isArray, $isEmpty)
+    public function testGetIcons(string $configFile, bool $isArray, bool $isEmpty): void
     {
-        $config = \Cake\Core\Configure::read($configFile);
+        $config = Configure::read($configFile);
         $result = Utility::getIcons($config);
 
         $this->assertEquals(is_array($result), $isArray);
         $this->assertEquals(empty($result), $isEmpty);
     }
 
-    public function getIconProvider()
+    /**
+     * @return mixed[]
+     */
+    public function getIconProvider(): array
     {
         return [
             ['Icons', true, false],
         ];
     }
 
-    public function testGetColors()
+    public function testGetColors(): void
     {
-        $config = \Cake\Core\Configure::read('Colors');
+        $config = Configure::read('Colors');
         $result = Utility::getColors($config);
 
         $this->assertTrue(is_array($result));
@@ -197,7 +205,7 @@ class UtilityTest extends TestCase
         $this->assertNotEmpty($result);
     }
 
-    public function testGetApiVersions()
+    public function testGetApiVersions(): void
     {
         $testDataPath = dirname(dirname(__FILE__)) . DS . 'data';
 
@@ -207,7 +215,7 @@ class UtilityTest extends TestCase
         $this->assertNotEmpty($versions);
     }
 
-    public function testGetFileTypeIcon()
+    public function testGetFileTypeIcon(): void
     {
         // Default icon
         $expected = 'Qobo/Utils.icons/files/48px/_blank.png';
@@ -243,7 +251,7 @@ class UtilityTest extends TestCase
         $this->assertEquals($expected, $result, "Invalid icon returned for mapped type, default size");
     }
 
-    public function testGetCountryByIp()
+    public function testGetCountryByIp(): void
     {
         if (!function_exists('geoip_country_code_by_name')) {
             $this->markTestskipped('The GeoIP extension is not available.');

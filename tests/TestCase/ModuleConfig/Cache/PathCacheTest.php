@@ -7,14 +7,14 @@ use Qobo\Utils\ModuleConfig\Cache\PathCache;
 
 class PathCacheTest extends TestCase
 {
-    public function testWriteTo()
+    public function testWriteTo(): void
     {
         $cache = new PathCache('foo');
         $result = $cache->writeTo('blah', 'something');
         $this->assertEquals(false, $result, "writeTo() did not fail without 'path' parameter");
     }
 
-    public function testReadFromWriteTo()
+    public function testReadFromWriteTo(): void
     {
         // Prepare test file
         $tmpFile = tempnam(sys_get_temp_dir(), 'pathcache_test.');
@@ -47,7 +47,7 @@ class PathCacheTest extends TestCase
         unlink($tmpFile);
     }
 
-    public function testReadFromWriteToBadFile()
+    public function testReadFromWriteToBadFile(): void
     {
         // Prepare test file
         $tmpFile = '/this/file/does/not/exist';
@@ -66,7 +66,7 @@ class PathCacheTest extends TestCase
         $this->assertFalse($result, "readFrom() successfully read non-existing file cache");
     }
 
-    public function testReadFromWriteToDeleted()
+    public function testReadFromWriteToDeleted(): void
     {
         // Prepare test file
         $tmpFile = tempnam(sys_get_temp_dir(), 'pathcache_test.');
@@ -95,7 +95,7 @@ class PathCacheTest extends TestCase
         $this->assertFalse($result, "readFrom() did not fail reading stale value");
     }
 
-    public function testReadFrom()
+    public function testReadFrom(): void
     {
         // Use generic Cache to write the data
         $cache = new Cache('foo');

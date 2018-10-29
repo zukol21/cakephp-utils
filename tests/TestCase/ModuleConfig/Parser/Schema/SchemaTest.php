@@ -14,7 +14,7 @@ class SchemaTest extends TestCase
      * JSON linting tool.  At a very minimum we need to make
      * sure that the schema files are parseable.
      */
-    public function testJsonLint()
+    public function testJsonLint(): void
     {
         // All your dir are belong to us!
         $schemaPath = dirname(dirname(dirname(dirname(dirname(__DIR__)))));

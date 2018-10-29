@@ -9,7 +9,7 @@ use Qobo\Utils\ModuleConfig\ModuleConfig;
 
 class ClassFactoryTest extends TestCase
 {
-    public function testCreate()
+    public function testCreate(): void
     {
         $result = ClassFactory::create(ConfigType::MIGRATION(), ClassType::PARSER());
         $this->assertTrue(is_object($result), "create() returned a non-object result");
@@ -18,7 +18,7 @@ class ClassFactoryTest extends TestCase
     /**
      * @expectedException RuntimeException
      */
-    public function testCreateBadClassMapException()
+    public function testCreateBadClassMapException(): void
     {
         $result = ClassFactory::create('BadConfigType', ClassType::PARSER());
     }
@@ -26,7 +26,7 @@ class ClassFactoryTest extends TestCase
     /**
      * @expectedException RuntimeException
      */
-    public function testCreateNotStringException()
+    public function testCreateNotStringException(): void
     {
         $options = [
             'classMapVersion' => 'V1',
@@ -44,7 +44,7 @@ class ClassFactoryTest extends TestCase
     /**
      * @expectedException RuntimeException
      */
-    public function testCreateNoClassException()
+    public function testCreateNoClassException(): void
     {
         $options = [
             'classMapVersion' => 'V1',
