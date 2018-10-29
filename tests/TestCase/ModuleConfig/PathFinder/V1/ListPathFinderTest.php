@@ -26,7 +26,7 @@ class ListPathFinderTest extends TestCase
 
     public function testFindSimple(): void
     {
-        $path = $this->pf->find(null, 'foo_statuses');
+        $path = $this->pf->find('Common', 'foo_statuses');
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
@@ -36,7 +36,7 @@ class ListPathFinderTest extends TestCase
 
     public function testFindSimpleFull(): void
     {
-        $path = $this->pf->find(null, 'foo_statuses.csv');
+        $path = $this->pf->find('Common', 'foo_statuses.csv');
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
@@ -46,7 +46,7 @@ class ListPathFinderTest extends TestCase
 
     public function testFindRecursive(): void
     {
-        $path = $this->pf->find(null, 'foo_types');
+        $path = $this->pf->find('Common', 'foo_types');
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
@@ -56,7 +56,7 @@ class ListPathFinderTest extends TestCase
 
     public function testFindRecursiveFull(): void
     {
-        $path = $this->pf->find(null, 'foo_types.csv');
+        $path = $this->pf->find('Common', 'foo_types.csv');
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
