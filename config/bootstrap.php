@@ -98,7 +98,8 @@ function sizeToBytes($size)
         // Mimic initial behavior, before exception was introduced
         $result = (string)$size;
         $result = (int)$result;
-        return $result;;
+
+        return $result;
     }
 
     return $result;
