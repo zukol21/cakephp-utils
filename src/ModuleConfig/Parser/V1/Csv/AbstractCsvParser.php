@@ -52,7 +52,7 @@ abstract class AbstractCsvParser extends AbstractParser
      * @param string $path Path to file
      * @return object
      */
-    protected function getDataFromRealPath($path)
+    protected function getDataFromRealPath(string $path)
     {
         $result = $this->getEmptyResult();
 

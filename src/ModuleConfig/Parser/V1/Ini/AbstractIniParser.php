@@ -25,7 +25,7 @@ abstract class AbstractIniParser extends AbstractParser
      * @param string $path Path to read and parse
      * @return object
      */
-    protected function getDataFromRealPath($path)
+    protected function getDataFromRealPath(string $path)
     {
         try {
             $data = parse_ini_file($path, true, INI_SCANNER_TYPED);

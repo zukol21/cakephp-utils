@@ -26,7 +26,7 @@ abstract class AbstractJsonParser extends AbstractParser
      * @param string $path Path to read and parse
      * @return object
      */
-    protected function getDataFromRealPath($path)
+    protected function getDataFromRealPath(string $path)
     {
         $data = file_get_contents($path);
         if ($data === false) {
