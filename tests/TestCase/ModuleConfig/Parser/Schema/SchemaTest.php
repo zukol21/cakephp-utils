@@ -23,8 +23,6 @@ class SchemaTest extends TestCase
         $schemaPath .= DIRECTORY_SEPARATOR . 'Parser';
         $schemaPath .= DIRECTORY_SEPARATOR . 'Schema';
 
-        $schemaPath = realpath($schemaPath);
-
         $this->assertTrue(file_exists($schemaPath), "Path does not exist: $schemaPath");
         $this->assertTrue(is_dir($schemaPath), "Path is not a directory: $schemaPath");
         $this->assertTrue(is_readable($schemaPath), "Path is not readable: $schemaPath");
@@ -36,10 +34,15 @@ class SchemaTest extends TestCase
             if ($file->getExtension() !== 'json') {
                 continue;
             }
-            $content = file_get_contents($file->getRealPath());
-            $this->assertFalse(empty($content), "Empty file or failed to read: " . $file->getRealPath());
+            $realPath = $file->getRealPath();
+            if (empty($realPath)) {
+                continue;
+            }
+
+            $content = file_get_contents($realPath);
+            $this->assertFalse(empty($content), "Empty file or failed to read: " . $realPath);
             $data = json_decode($content);
-            $this->assertFalse(empty($data), "Empty structure or failed to parse: " . $file->getRealPath());
+            $this->assertFalse(empty($data), "Empty structure or failed to parse: " . $realPath);
         }
     }
 }

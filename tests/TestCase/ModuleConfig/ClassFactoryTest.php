@@ -26,24 +26,6 @@ class ClassFactoryTest extends TestCase
     /**
      * @expectedException RuntimeException
      */
-    public function testCreateNotStringException(): void
-    {
-        $options = [
-            'classMapVersion' => 'V1',
-            'classMap' => [
-                'V1' => [
-                    'Foo' => [
-                        (string)ClassType::PARSER() => ['this is' => 'not a string'],
-                    ],
-                ],
-            ],
-        ];
-        $result = ClassFactory::create('Foo', ClassType::PARSER(), $options);
-    }
-
-    /**
-     * @expectedException RuntimeException
-     */
     public function testCreateNoClassException(): void
     {
         $options = [

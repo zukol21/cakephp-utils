@@ -67,11 +67,11 @@ class ListParser extends AbstractJsonParser
     /**
      * Method that restructures list options csv data for better handling.
      *
-     * @param  array  $data     csv data
+     * @param  mixed[]  $data     csv data
      * @param  string $prefix   nested option prefix
-     * @return array
+     * @return mixed[]
      */
-    protected function normalize(array $data, $prefix = null)
+    protected function normalize(array $data, string $prefix = null): array
     {
         if ($prefix) {
             $prefix .= '.';
@@ -96,10 +96,10 @@ class ListParser extends AbstractJsonParser
     /**
      * Method that filters list options, excluding non-active ones
      *
-     * @param  array  $data list options
-     * @return array
+     * @param  mixed[]  $data list options
+     * @return mixed[]
      */
-    protected function filter(array $data)
+    protected function filter(array $data): array
     {
         $result = [];
         foreach ($data as $key => $value) {
@@ -119,10 +119,10 @@ class ListParser extends AbstractJsonParser
     /**
      * Flatten list options.
      *
-     * @param array $data List options
-     * @return array
+     * @param mixed[] $data List options
+     * @return mixed[]
      */
-    protected function flatten(array $data)
+    protected function flatten(array $data): array
     {
         $result = [];
         foreach ($data as $key => $value) {

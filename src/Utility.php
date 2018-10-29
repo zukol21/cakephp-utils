@@ -37,7 +37,7 @@ class Utility
      * @param string|int $value Value to convert
      * @return int
      */
-    public static function valueToBytes($value)
+    public static function valueToBytes($value): int
     {
         if (is_int($value)) {
             return $value;
@@ -98,18 +98,22 @@ class Utility
      * Method that returns all controller names.
      *
      * @param bool $includePlugins Flag for including plugin controllers
-     * @return array
+     * @return mixed[]
      */
-    public static function getControllers($includePlugins = true)
+    public static function getControllers(bool $includePlugins = true): array
     {
         // get application controllers
         $result = static::getDirControllers(APP . 'Controller' . DS);
 
-        if (!(bool)$includePlugins) {
+        if ($includePlugins === false) {
             return $result;
         }
 
         $plugins = Plugin::loaded();
+        if (empty($plugins)) {
+            return $result;
+        }
+
         // get plugins controllers
         foreach ($plugins as $plugin) {
             $path = Plugin::path($plugin) . 'src' . DS . 'Controller' . DS;
@@ -124,9 +128,9 @@ class Utility
      *
      * @param string $path for setting origin directory
      *
-     * @return array $apis with all versioned api directories
+     * @return mixed[] $apis with all versioned api directories
      */
-    public static function getApiVersions($path = null)
+    public static function getApiVersions(string $path = ''): array
     {
         $apis = [];
         $apiPath = (!empty($path)) ? $path : App::path('Controller/Api')[0];
@@ -170,9 +174,9 @@ class Utility
      * @param string $path Directory path
      * @param string $plugin Plugin name
      * @param bool $fqcn Flag for using fqcn
-     * @return array
+     * @return mixed[]
      */
-    public static function getDirControllers($path, $plugin = null, $fqcn = true)
+    public static function getDirControllers(string $path, string $plugin = null, bool $fqcn = true): array
     {
         $result = [];
 
@@ -200,7 +204,7 @@ class Utility
                 $className = $plugin . '.' . $className;
             }
 
-            if ((bool)$fqcn) {
+            if ($fqcn) {
                 $className = App::className($className, 'Controller');
             }
 
@@ -220,9 +224,9 @@ class Utility
      * @param string $connectionManager to know which schema to fetch
      * @param bool $excludePhinxlog flag to exclude phinxlog tables.
      *
-     * @return array $result containing the list of models from database
+     * @return mixed[] $result containing the list of models from database
      */
-    public static function getModels($connectionManager = 'default', $excludePhinxlog = true)
+    public static function getModels(string $connectionManager = 'default', bool $excludePhinxlog = true): array
     {
         $result = [];
         $tables = ConnectionManager::get($connectionManager)->getSchemaCollection()->listTables();
@@ -248,9 +252,9 @@ class Utility
      * @param string $model name of the table
      * @param string $connectionManager of the datasource
      *
-     * @return array $result containing key/value pairs of model columns.
+     * @return mixed[] $result containing key/value pairs of model columns.
      */
-    public static function getModelColumns($model = null, $connectionManager = 'default')
+    public static function getModelColumns(string $model = '', string $connectionManager = 'default'): array
     {
         $result = $columns = [];
 
@@ -285,9 +289,9 @@ class Utility
      * Get a list of directories from a given path (non-recursive)
      *
      * @param string $path Path to look in
-     * @return array List of directory names
+     * @return string[] List of directory names
      */
-    public static function findDirs($path)
+    public static function findDirs(string $path): array
     {
         $result = [];
 
@@ -315,12 +319,12 @@ class Utility
     /**
      * Get colors for Select2 dropdown
      *
-     * @param array $config containing colors array
+     * @param mixed[] $config containing colors array
      * @param bool $pretty to append color identifiers to values.
      *
-     * @return array $result containing colors list.
+     * @return mixed[] $result containing colors list.
      */
-    public static function getColors($config = [], $pretty = true)
+    public static function getColors(array $config = [], bool $pretty = true): array
     {
         $result = [];
 
@@ -344,11 +348,11 @@ class Utility
     /**
      * Get Fontawesome icons based on config/icons.php
      *
-     * @param array $config from Cake\Core\Configure containing icon resource
+     * @param mixed[] $config from Cake\Core\Configure containing icon resource
      *
-     * @return array $result with list of icons.
+     * @return mixed[] $result with list of icons.
      */
-    public static function getIcons($config = [])
+    public static function getIcons(array $config = []): array
     {
         $result = [];
 
@@ -400,7 +404,7 @@ class Utility
      *
      * @return string URL for the icon file
      */
-    public static function getFileTypeIcon($type, $size = '48px')
+    public static function getFileTypeIcon(string $type, string $size = '48px'): string
     {
         $defaultIcon = '_blank';
         $defaultSize = '48px';
@@ -468,7 +472,7 @@ class Utility
      * @param string $version of the path
      * @return string with prefixes api path version.
      */
-    protected static function getApiRoutePath($version)
+    protected static function getApiRoutePath(string $version): string
     {
         return '/api/v' . $version;
     }
@@ -476,10 +480,10 @@ class Utility
     /**
      * Get API Route prefix
      *
-     * @param array $versions that contain subdirs of prefix
+     * @param string[] $versions that contain subdirs of prefix
      * @return string with combined API routing.
      */
-    protected static function getApiRoutePrefix($versions)
+    protected static function getApiRoutePrefix(array $versions): string
     {
         return 'api/v' . implode('/v', $versions);
     }
@@ -487,11 +491,11 @@ class Utility
     /**
      * Sorting API Versions ascendingly
      *
-     * @param array $versions of found API sub-directories
+     * @param mixed[] $versions of found API sub-directories
      *
-     * @return array $versions sorted in ascending order.
+     * @return mixed[] $versions sorted in ascending order.
      */
-    protected static function sortApiVersions(array $versions = [])
+    protected static function sortApiVersions(array $versions = []): array
     {
         usort($versions, function ($first, $second) {
             $firstVersion = (float)$first['number'];
@@ -513,7 +517,7 @@ class Utility
      * @param string $clientIp to detect country
      * @return string
      */
-    public static function getCountryByIp($clientIp)
+    public static function getCountryByIp(string $clientIp): string
     {
         $clientCountryCode = '';
         if (function_exists('geoip_country_code_by_name')) {

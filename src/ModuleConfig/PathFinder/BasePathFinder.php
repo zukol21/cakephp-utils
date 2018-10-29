@@ -55,7 +55,7 @@ abstract class BasePathFinder implements PathFinderInterface
      * @return null|string|array Null for not found, string for single path, array for multiple paths
      * @throws Exception
      */
-    public function find($module, $path = null, $validate = true)
+    public function find(string $module, string $path = '', bool $validate = true)
     {
         $this->validateModule($module);
 
@@ -104,14 +104,10 @@ abstract class BasePathFinder implements PathFinderInterface
      * @param string $module Module string to check
      * @return void
      */
-    protected function validateModule($module)
+    protected function validateModule(string $module): void
     {
         if (empty($module)) {
             $this->fail(new InvalidArgumentException("Module is not specified"));
-        }
-
-        if (!is_string($module)) {
-            $this->fail(new InvalidArgumentException("Module name is not a string"));
         }
     }
 
@@ -124,7 +120,7 @@ abstract class BasePathFinder implements PathFinderInterface
      * @param string $path File path
      * @return string
      */
-    protected function getFilePath($path)
+    protected function getFilePath(string $path): string
     {
         if (empty($path)) {
             $path = $this->fileName;
@@ -142,7 +138,7 @@ abstract class BasePathFinder implements PathFinderInterface
      * @param string $path File path
      * @return string
      */
-    protected function getDistributionFilePath($path)
+    protected function getDistributionFilePath(string $path): string
     {
         $postfix = self::DIST_FILENAME_POSTFIX;
 
@@ -175,7 +171,7 @@ abstract class BasePathFinder implements PathFinderInterface
      * @param string $path Path string to check
      * @return void
      */
-    protected function validatePath($path)
+    protected function validatePath(string $path): void
     {
         if (empty($path)) {
             $this->fail(new InvalidArgumentException("Path is not specified"));
@@ -196,7 +192,7 @@ abstract class BasePathFinder implements PathFinderInterface
      * @param string $path Path
      * @return string
      */
-    protected function addFileExtension($path)
+    protected function addFileExtension(string $path): string
     {
         $extension = pathinfo($path, PATHINFO_EXTENSION);
         if (empty($extension)) {

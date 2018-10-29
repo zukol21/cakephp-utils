@@ -21,8 +21,8 @@ interface ParserInterface extends ErrorAwareInterface
      * Parses a given file according to the specified options
      *
      * @param string $path    Path to file
-     * @param array  $options Options for parsing
+     * @param mixed[] $options Options for parsing
      * @return object
      */
-    public function parse($path, array $options = []);
+    public function parse(string $path, array $options = []);
 }

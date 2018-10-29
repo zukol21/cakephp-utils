@@ -24,14 +24,6 @@ class ListPathFinderTest extends TestCase
         $this->assertTrue(in_array('Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface', $implementedInterfaces), "PathFinderInterface is not implemented");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFind(): void
-    {
-        $path = $this->pf->find('Foo');
-    }
-
     public function testFindSimple(): void
     {
         $path = $this->pf->find(null, 'foo_statuses');
@@ -70,22 +62,6 @@ class ListPathFinderTest extends TestCase
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
         $this->assertTrue(is_readable($path), "Path is not readable [$path]");
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFindExceptionModuleEmpty(): void
-    {
-        $path = $this->pf->find(null);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFindExceptionPathNotString(): void
-    {
-        $path = $this->pf->find('Foo', ['foo' => 'bar']);
     }
 
     /**

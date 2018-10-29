@@ -73,12 +73,12 @@ class ModuleConfig implements ErrorAwareInterface
      * @param \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
      * @param string $module     Module name
      * @param string $configFile (Optional) name of the config file
-     * @param array  $options    (Optional) Finding, parsing, etc. options
+     * @param mixed[] $options    (Optional) Finding, parsing, etc. options
      */
-    public function __construct(ConfigType $configType, $module, $configFile = '', array $options = [])
+    public function __construct(ConfigType $configType, string $module, string $configFile = null, array $options = [])
     {
         $this->configType = (string)$configType;
-        $this->module = (string)$module;
+        $this->module = $module;
         $this->configFile = (string)$configFile;
         $this->options = $options;
     }
@@ -88,8 +88,11 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * @return \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
      */
-    protected function getFinder()
+    protected function getFinder(): \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
     {
+        /**
+         * @var \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface $result
+         */
         $result = ClassFactory::create($this->configType, ClassType::FINDER(), $this->options);
 
         return $result;
@@ -100,8 +103,11 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * @return \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
-    protected function getParser()
+    protected function getParser(): \Qobo\Utils\ModuleConfig\Parser\ParserInterface
     {
+        /**
+         * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface $result
+         */
         $result = ClassFactory::create($this->configType, ClassType::PARSER(), $this->options);
 
         return $result;
@@ -113,7 +119,7 @@ class ModuleConfig implements ErrorAwareInterface
      * @param bool $validate Whether or not validate result
      * @return mixed Whatever the PathFinder returned
      */
-    public function find($validate = true)
+    public function find(bool $validate = true)
     {
         $cache = $finder = $exception = $cacheKey = $result = null;
         try {
@@ -154,7 +160,7 @@ class ModuleConfig implements ErrorAwareInterface
      */
     public function parse()
     {
-        $cache = $parser = $exception = $cacheKey = $result = null;
+        $cache = $parser = $exception = $cacheKey = $result = $path = null;
         try {
             $path = $this->find(false);
             // Cached response
@@ -194,13 +200,11 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * @param string|array $messages One or more messages to prefix
      * @param string $prefix Prefix to prepend to all messages
-     * @return array List of prefixed messages
+     * @return string[] List of prefixed messages
      */
-    protected function formatMessages($messages, $prefix)
+    protected function formatMessages($messages, string $prefix): array
     {
         $result = [];
-
-        $prefix = (string)$prefix;
 
         // Convert single messages to array
         if (is_string($messages)) {
@@ -212,7 +216,7 @@ class ModuleConfig implements ErrorAwareInterface
             $result[] = sprintf("[%s][%s] %s : %s", $this->module, $this->configType, $prefix, $message);
         }
 
-        return $messages;
+        return $result;
     }
 
     /**
@@ -225,7 +229,7 @@ class ModuleConfig implements ErrorAwareInterface
      * @param string $caller Caller that generated a message
      * @return void
      */
-    protected function mergeMessages($source, $caller = 'ModuleConfig')
+    protected function mergeMessages($source, string $caller = 'ModuleConfig'): void
     {
         $source = is_object($source) ? $source : new stdClass();
 

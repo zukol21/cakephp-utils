@@ -17,7 +17,7 @@ use NinjaMutex\Lock\FlockLock;
 class FileLock extends BaseLock
 {
     /**
-     * @var $lockDir
+     * @var string $lockDir
      */
     private $lockDir = null;
 

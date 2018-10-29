@@ -8,6 +8,10 @@ use Qobo\Utils\Utility;
 
 class UtilityTest extends TestCase
 {
+    public $fixtures = [
+        'plugin.CakeDC/Users.users'
+    ];
+
     /**
      * @return mixed[]
      */
@@ -251,16 +255,20 @@ class UtilityTest extends TestCase
         $this->assertEquals($expected, $result, "Invalid icon returned for mapped type, default size");
     }
 
-    public function testGetCountryByIp(): void
+    public function testGetCountryByIpPrivate(): void
     {
-        if (!function_exists('geoip_country_code_by_name')) {
-            $this->markTestskipped('The GeoIP extension is not available.');
-        }
-
         $clientIp = '192.168.57.103'; // non-public
         $this->assertEmpty(Utility::getCountryByIp($clientIp), 'Failed to receive empty country code by non-public IP');
+    }
+
+    public function testGetCountryByIpPublic(): void
+    {
+        $expected = 'CY';
+        if (!function_exists('geoip_country_code_by_name')) {
+            $expected = '';
+        }
 
         $clientIp = '82.102.92.178'; // CY
-        $this->assertEquals(Utility::getCountryByIp($clientIp), 'CY', 'Failed to get Cyprus country code by Cypriot IP');
+        $this->assertEquals(Utility::getCountryByIp($clientIp), $expected, 'Failed to receive correct code by public IP');
     }
 }

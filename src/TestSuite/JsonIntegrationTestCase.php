@@ -38,7 +38,7 @@ class JsonIntegrationTestCase extends IntegrationTestCase
      * @param string $user User ID
      * @return string
      */
-    public function getAuthToken($user)
+    public function getAuthToken(string $user): string
     {
         $result = JWT::encode(
             [
@@ -54,11 +54,11 @@ class JsonIntegrationTestCase extends IntegrationTestCase
     /**
      * Set JSON request headers
      *
-     * @param array $headers Headers to set.  If skipped, default headers are used.
+     * @param mixed[] $headers Headers to set.  If skipped, default headers are used.
      * @param string $user User ID.  If provided, Authorization header will be added with token
      * @return void
      */
-    public function setRequestHeaders(array $headers = [], $user = '')
+    public function setRequestHeaders(array $headers = [], string $user = ''): void
     {
         if (empty($headers)) {
             $headers = $this->defaultRequestHeaders;
@@ -99,7 +99,7 @@ class JsonIntegrationTestCase extends IntegrationTestCase
      *
      * @return void
      */
-    public function assertJsonResponseOk()
+    public function assertJsonResponseOk(): void
     {
         $this->assertResponseOk();
         $this->assertContentType('application/json');

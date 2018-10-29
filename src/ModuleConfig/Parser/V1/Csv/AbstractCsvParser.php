@@ -37,7 +37,7 @@ abstract class AbstractCsvParser extends AbstractParser
      *
      * @return \stdClass
      */
-    protected function getEmptyResult()
+    protected function getEmptyResult(): \stdClass
     {
         $result = parent::getEmptyResult();
         $result->items = [];
@@ -73,11 +73,11 @@ abstract class AbstractCsvParser extends AbstractParser
     /**
      * Process each row of data
      *
-     * @param array $row Row data
+     * @param mixed[] $row Row data
      * @param string $path Path of the source
      * @return mixed
      */
-    protected function processRow(array $row, $path)
+    protected function processRow(array $row, string $path)
     {
         $row = json_encode($row);
         if ($row === false) {

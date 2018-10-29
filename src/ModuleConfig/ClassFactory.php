@@ -29,12 +29,11 @@ class ClassFactory
      * @throws \RuntimeException when cannot create instance
      * @param string $configType Configuration type
      * @param \Qobo\Utils\ModuleConfig\ClassType $classType Class type
-     * @param array $options Options
+     * @param mixed[] $options Options
      * @return object
      */
-    public static function create($configType, ClassType $classType, array $options = [])
+    public static function create(string $configType, ClassType $classType, array $options = [])
     {
-        $configType = (string)$configType;
         $classType = (string)$classType;
 
         $classMapVersion = empty($options['classMapVersion']) ? Configure::read('ModuleConfig.classMapVersion') : (string)$options['classMapVersion'];
@@ -62,12 +61,8 @@ class ClassFactory
      * @param string $class Class name to instantiate
      * @return object
      */
-    public static function getInstance($class)
+    public static function getInstance(string $class)
     {
-        if (!is_string($class)) {
-            throw new RuntimeException("Class name name must be string. [" . gettype($class) . "] given");
-        }
-
         if (!class_exists($class)) {
             throw new RuntimeException("Class [$class] does not exist");
         }

@@ -47,30 +47,6 @@ class ConfigPathFinderTest extends TestCase
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testFindExceptionModuleEmpty(): void
-    {
-        $path = $this->pf->find(null);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFindExceptionModuleNotString(): void
-    {
-        $path = $this->pf->find(['foo' => 'bar']);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFindExceptionPathNotString(): void
-    {
-        $path = $this->pf->find('Foo', ['foo' => 'bar']);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testFindExceptionPathNotExist(): void
     {
         $path = $this->pf->find('Foo', 'some_non_existing_file.ini');

@@ -56,7 +56,7 @@ class Salt
      * @throws \RuntimeException when cannot read or regenerate salt
      * @return string Salt string
      */
-    public static function getSalt()
+    public static function getSalt(): string
     {
         $result = '';
 
@@ -87,10 +87,11 @@ class Salt
      *
      * @return string Valid salt string
      */
-    protected static function readSaltFromFile()
+    protected static function readSaltFromFile(): string
     {
         Utility::validatePath(static::$saltFile);
         $result = file_get_contents(static::$saltFile);
+        $result = $result ?: '';
         static::validateSalt($result);
 
         return $result;
@@ -103,7 +104,7 @@ class Salt
      * @param string $salt Valid salt string
      * @return void
      */
-    protected static function writeSaltToFile($salt)
+    protected static function writeSaltToFile(string $salt): void
     {
         static::validateSalt($salt);
         $result = @file_put_contents(static::$saltFile, $salt);
@@ -120,7 +121,7 @@ class Salt
      * @param string $salt Salt string to validate
      * @return void
      */
-    protected static function validateSalt($salt)
+    protected static function validateSalt(string $salt): void
     {
         if (!ctype_print($salt)) {
             throw new InvalidArgumentException("Salt is not a printable string");
@@ -140,7 +141,7 @@ class Salt
      * @throws \RuntimeException if saltMinLength is too short
      * @return void
      */
-    protected static function validateSaltMinLength()
+    protected static function validateSaltMinLength(): void
     {
         $length = (int)static::$saltMinLength;
         if ($length <= 0) {
@@ -154,7 +155,7 @@ class Salt
      * @throws \RuntimeException when salt minimum length is misconfigured
      * @return string Salt string
      */
-    protected static function generateSalt()
+    protected static function generateSalt(): string
     {
         $result = '';
 

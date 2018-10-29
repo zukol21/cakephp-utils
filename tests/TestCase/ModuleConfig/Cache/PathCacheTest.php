@@ -4,9 +4,30 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Cache;
 use Cake\TestSuite\TestCase;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
+use RuntimeException;
 
 class PathCacheTest extends TestCase
 {
+    /**
+     * @var string $cacheFile
+     */
+
+    public function setUp()
+    {
+        $cacheFile = tempnam(sys_get_temp_dir(), 'pathcache_test.');
+        if (empty($cacheFile)) {
+            throw new RuntimeException("Failed to create temporary file");
+        }
+        $this->cacheFile = $cacheFile;
+    }
+
+    public function tearDown()
+    {
+        if (file_exists($this->cacheFile)) {
+            unlink($this->cacheFile);
+        }
+    }
+
     public function testWriteTo(): void
     {
         $cache = new PathCache('foo');
@@ -17,8 +38,7 @@ class PathCacheTest extends TestCase
     public function testReadFromWriteTo(): void
     {
         // Prepare test file
-        $tmpFile = tempnam(sys_get_temp_dir(), 'pathcache_test.');
-        $this->assertTrue(file_exists($tmpFile), "Failed to create temporary file: $tmpFile");
+        $tmpFile = $this->cacheFile;
         $testValue = 'hello';
         $result = file_put_contents($tmpFile, $testValue);
         $this->assertEquals(strlen($testValue), $result, "Failed to save test value to file");
@@ -42,9 +62,6 @@ class PathCacheTest extends TestCase
         $result = $cache->readFrom('test_key');
         $this->assertTrue(is_bool($result), "readFrom() returnd a non-boolean result: $result");
         $this->assertFalse($result, "readFrom() did not fail reading stale value");
-
-        // Cleanup
-        unlink($tmpFile);
     }
 
     public function testReadFromWriteToBadFile(): void
@@ -69,8 +86,7 @@ class PathCacheTest extends TestCase
     public function testReadFromWriteToDeleted(): void
     {
         // Prepare test file
-        $tmpFile = tempnam(sys_get_temp_dir(), 'pathcache_test.');
-        $this->assertTrue(file_exists($tmpFile), "Failed to create temporary file: $tmpFile");
+        $tmpFile = $this->cacheFile;
         $testValue = 'hello';
         $result = file_put_contents($tmpFile, $testValue);
         $this->assertEquals(strlen($testValue), $result, "Failed to save test value to file");

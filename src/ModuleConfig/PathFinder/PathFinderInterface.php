@@ -33,5 +33,5 @@ interface PathFinderInterface extends ErrorAwareInterface
      * @param bool   $validate Validate existence of the result
      * @return null|string|array Null for not found, string for single path, array for multiple paths
      */
-    public function find($module, $path = null, $validate = true);
+    public function find(string $module, string $path = '', bool $validate = true);
 }
