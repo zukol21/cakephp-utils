@@ -1,18 +1,25 @@
 {
     "name": "qobo/cakephp-utils",
     "description": "CakePHP utilities",
+    "keywords": ["cakephp", "utils"],
     "type": "cakephp-plugin",
     "license": "MIT",
+    "homepage": "https://www.qobo.biz",
     "authors": [
         {
             "name": "Qobo Ltd",
-            "email": "info@qobo.biz",
+            "email": "support@qobo.biz",
             "homepage": "https://www.qobo.biz",
             "role": "Developer"
         }
     ],
+    "support": {
+        "issues": "https://github.com/QoboLtd/cakephp-utils/issues",
+        "source": "https://github.com/QoboLtd/cakephp-utils"
+    },
     "config": {
         "sort-packages": true,
+        "optimize-autoloader": true,
         "platform": {
             "php": "7.1"
         }
@@ -42,19 +49,33 @@
         "rlanvin/php-rrule": "^1.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.0",
-        "cakephp/cakephp-codesniffer": "^3.0"
+        "qobo/cakephp-composer-dev": "v1.0"
     },
     "autoload": {
         "psr-4": {
-            "Qobo\\Utils\\": "src",
-            "Qobo\\Utils\\Test\\Fixture\\": "tests\\Fixture"
+            "Qobo\\Utils\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Qobo\\Utils\\Test\\": "tests",
-            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+            "Qobo\\Utils\\Test\\": "tests/",
+            "Cake\\Test\\": "vendor/cakephp/cakephp/tests/"
         }
-    }
+    },
+    "scripts": {
+        "test": [
+            "phpcs",
+            "phpunit --no-coverage"
+        ],
+        "test-coverage": [
+            "phpcs",
+            "phpunit"
+        ],
+        "post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump"
+    },
+    "scripts-descriptions": {
+        "test": "Runs phpcs and phpunit without coverage",
+        "test-coverage": "Runs phpcs and phpunit with coverage enabled"
+    },
+    "prefer-stable": true
 }
