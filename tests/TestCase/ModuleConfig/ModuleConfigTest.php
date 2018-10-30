@@ -111,6 +111,29 @@ class ModuleConfigTest extends TestCase
     }
 
     /**
+     * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
+     */
+    public function testParseToArray(string $description, array $options): void
+    {
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
+        $resultObject = null;
+        $resultArray = null;
+        try {
+            $resultObject = $mc->parse();
+            $resultArray = $mc->parseToArray();
+        } catch (InvalidArgumentException $e) {
+            print_r($mc->getErrors());
+            $this->fail($e->getMessage());
+        }
+        $this->assertTrue(is_object($resultObject), "Result object is not an object");
+        $this->assertTrue(is_array($resultArray), "Result array is not an array");
+        $expected = Utility::objectToArray($resultObject);
+        $this->assertEquals($expected, $resultArray, "Result object is different from result array");
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      * @dataProvider optionsProvider
      * @param string $description Options description

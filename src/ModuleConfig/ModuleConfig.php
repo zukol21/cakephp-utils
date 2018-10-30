@@ -16,6 +16,7 @@ use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
+use Qobo\Utils\Utility;
 use stdClass;
 
 /**
@@ -189,6 +190,19 @@ class ModuleConfig implements ErrorAwareInterface
         if ($cache && $cacheKey) {
             $cache->writeTo($cacheKey, $result, ['path' => $path]);
         }
+
+        return $result;
+    }
+
+    /**
+     * Parse module configuration file to associative array
+     *
+     * @return mixed[] Whatever Parser returned, converted to array
+     */
+    public function parseToArray(): array
+    {
+        $result = $this->parse();
+        $result = Utility::objectToArray($result);
 
         return $result;
     }
