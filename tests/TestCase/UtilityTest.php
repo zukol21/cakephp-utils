@@ -330,4 +330,27 @@ class UtilityTest extends TestCase
         $this->assertArrayHasKey('foo', $result);
         $this->assertEquals('bar', $result['foo']);
     }
+
+    public function testArrayToObject(): void
+    {
+        // array with resource
+        $fh = fopen(__FILE__, "r");
+        if (!is_resource($fh)) {
+            throw new RuntimeException("Failed to open file for reading");
+        }
+        $source = [];
+        $source['foo'] = $fh;
+        $result = Utility::arrayToObject($source);
+        $this->assertTrue(is_object($result));
+        // close file handler, cause we are nice people
+        fclose($fh);
+
+        // array (good)
+        $source = [];
+        $source['foo'] = 'bar';
+        $result = Utility::arrayToObject($source);
+        $this->assertTrue(is_object($result));
+        $this->assertTrue(property_exists($result, 'foo'));
+        $this->assertEquals('bar', $result->foo);
+    }
 }

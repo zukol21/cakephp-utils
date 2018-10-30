@@ -21,6 +21,7 @@ use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 use DirectoryIterator;
 use InvalidArgumentException;
+use stdClass;
 use UnexpectedValueException;
 
 class Utility
@@ -45,7 +46,6 @@ class Utility
             return $value;
         }
 
-        $value = (string)$value;
         $value = trim($value);
 
         // Native PHP check for digits in string
@@ -110,7 +110,7 @@ class Utility
         }
 
         $plugins = Plugin::loaded();
-        if (empty($plugins)) {
+        if (!is_array($plugins)) {
             return $result;
         }
 
@@ -382,6 +382,7 @@ class Utility
         }
 
         $data = file_get_contents($config['url']);
+        $data = $data ?: '';
         preg_match_all($config['pattern'], $data, $matches);
 
         if (empty($matches[1])) {
@@ -566,6 +567,34 @@ class Utility
             return $result;
         }
         $result = $array;
+
+        return $result;
+    }
+
+    /**
+     * Convert an array to object
+     *
+     * NOTE: in case of any issues during the conversion, this
+     * method will return an empty \stdClass instance and NOT throw
+     * any exceptions.
+     *
+     * @param mixed[] $source Array to convert
+     * @return \stdClass
+     */
+    public static function arrayToObject(array $source): \stdClass
+    {
+        $result = new stdClass();
+
+        $json = json_encode($source);
+        if ($json === false) {
+            return $result;
+        }
+
+        $object = json_decode($json);
+        if ($object === null) {
+            return $result;
+        }
+        $result = $object;
 
         return $result;
     }
