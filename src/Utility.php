@@ -541,12 +541,16 @@ class Utility
      * method will return an empty array and NOT throw any
      * exceptions.
      *
-     * @param object $source Object to convert
+     * @param mixed $source Object to convert
      * @return mixed[]
      */
     public static function objectToArray($source): array
     {
         $result = [];
+
+        if (is_array($source)) {
+            return $source;
+        }
 
         if (!is_object($source)) {
             return $result;

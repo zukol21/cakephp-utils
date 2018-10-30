@@ -5,6 +5,7 @@ use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
+use RuntimeException;
 use stdClass;
 
 class UtilityTest extends TestCase
@@ -317,9 +318,8 @@ class UtilityTest extends TestCase
         $result = Utility::objectToArray($source);
         $this->assertTrue(is_array($result));
         $this->assertTrue(empty($result));
-        if ($fh) {
-            fclose($fh);
-        }
+        // close file handler, cause we are nice people
+        fclose($fh);
 
         // object (good)
         $source = new stdClass();
