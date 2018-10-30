@@ -125,7 +125,7 @@ abstract class AbstractParser implements ParserInterface
      * @param object $schema Schema to validate against
      * @return void
      */
-    protected function validateData($data = null, $schema = null)
+    protected function validateData($data = null, $schema = null): void
     {
         // No need to validate empty data (empty() does not work on objects)
         $dataArray = Utility::objectToArray($data);
