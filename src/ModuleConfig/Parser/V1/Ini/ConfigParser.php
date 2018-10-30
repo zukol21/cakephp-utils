@@ -110,10 +110,10 @@ class ConfigParser extends AbstractIniParser
      *
      * If provided $csv is not a string, return as is.
      *
-     * @param string $csv String to convert
-     * @return array
+     * @param string|mixed[] $csv String to convert
+     * @return mixed[]
      */
-    protected function csv2array($csv)
+    protected function csv2array($csv): array
     {
         if (!is_string($csv)) {
             return $csv;
