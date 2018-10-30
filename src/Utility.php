@@ -14,11 +14,12 @@ namespace Qobo\Utils;
 use Cake\Core\App;
 use Cake\Core\Configure;
 use Cake\Core\Plugin;
+use Cake\Database\Exception;
 use Cake\Datasource\ConnectionManager;
+use Cake\Datasource\Exception\MissingDatasourceConfigException;
 use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 use DirectoryIterator;
-use Exception;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
@@ -48,7 +49,7 @@ class Utility
         $value = trim($value);
 
         // Native PHP check for digits in string
-        if (ctype_digit(ltrim((string)$value, '-'))) {
+        if (ctype_digit(ltrim($value, '-'))) {
             return (int)$value;
         }
 
@@ -267,14 +268,17 @@ class Utility
         $model = Inflector::tableize($model);
 
         try {
-            $columns = ConnectionManager::get($connectionManager)
-                        ->schemaCollection()
-                        ->describe($model)
-                        ->columns();
+            $connection = ConnectionManager::get($connectionManager);
+            $schema = $connection->getSchemaCollection();
+            $table = $schema->describe($model);
+            $columns = $table->columns();
+        } catch (MissingDatasourceConfigException $e) {
+            return $result;
         } catch (Exception $e) {
-            //exception caught & silenced.
+            return $result;
         }
 
+        // A table with no columns?
         if (empty($columns)) {
             return $result;
         }

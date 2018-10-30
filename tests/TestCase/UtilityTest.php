@@ -145,9 +145,25 @@ class UtilityTest extends TestCase
 
     public function testGetModelColumns(): void
     {
-        $result = Utility::getModelColumns('Users', 'test');
-
+        // Missing model name
+        $result = Utility::getModelColumns('', 'test');
         $this->assertTrue(is_array($result));
+        $this->assertEmpty($result);
+
+        // Missing db configuration
+        $result = Utility::getModelColumns('Users', 'no such db config');
+        $this->assertTrue(is_array($result));
+        $this->assertEmpty($result);
+
+        // Missing db table
+        $result = Utility::getModelColumns('NoSuchTable', 'test');
+        $this->assertTrue(is_array($result));
+        $this->assertEmpty($result);
+
+        $result = Utility::getModelColumns('Users', 'test');
+        $this->assertTrue(is_array($result));
+        $this->assertFalse(empty($result['id']), "Missing 'id' column key in Users model");
+        $this->assertEquals('id', $result['id'], "Missing 'id' column value in Users model");
     }
 
     public function testFindDirs(): void
@@ -163,6 +179,12 @@ class UtilityTest extends TestCase
 
         // Path with no directories
         $path = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'Modules' . DIRECTORY_SEPARATOR . 'Foo' . DIRECTORY_SEPARATOR . 'db';
+        $result = Utility::findDirs($path);
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+
+        // Path to file, not a directory
+        $path = __FILE__;
         $result = Utility::findDirs($path);
         $this->assertTrue(is_array($result));
         $this->assertTrue(empty($result));
