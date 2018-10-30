@@ -18,23 +18,15 @@ class ListPathFinderTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testInterface()
+    public function testInterface(): void
     {
         $implementedInterfaces = array_keys(class_implements($this->pf));
         $this->assertTrue(in_array('Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface', $implementedInterfaces), "PathFinderInterface is not implemented");
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFind()
+    public function testFindSimple(): void
     {
-        $path = $this->pf->find('Foo');
-    }
-
-    public function testFindSimple()
-    {
-        $path = $this->pf->find(null, 'foo_statuses');
+        $path = $this->pf->find('Common', 'foo_statuses');
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
@@ -42,9 +34,9 @@ class ListPathFinderTest extends TestCase
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
     }
 
-    public function testFindSimpleFull()
+    public function testFindSimpleFull(): void
     {
-        $path = $this->pf->find(null, 'foo_statuses.csv');
+        $path = $this->pf->find('Common', 'foo_statuses.csv');
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
@@ -52,9 +44,9 @@ class ListPathFinderTest extends TestCase
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
     }
 
-    public function testFindRecursive()
+    public function testFindRecursive(): void
     {
-        $path = $this->pf->find(null, 'foo_types');
+        $path = $this->pf->find('Common', 'foo_types');
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
@@ -62,9 +54,9 @@ class ListPathFinderTest extends TestCase
         $this->assertTrue(is_file($path), "Path is not a file [$path]");
     }
 
-    public function testFindRecursiveFull()
+    public function testFindRecursiveFull(): void
     {
-        $path = $this->pf->find(null, 'foo_types.csv');
+        $path = $this->pf->find('Common', 'foo_types.csv');
         $this->assertFalse(empty($path), "Path is empty [$path]");
         $this->assertTrue(is_string($path), "Path is not a string [$path]");
         $this->assertTrue(file_exists($path), "Path does not exist [$path]");
@@ -73,30 +65,14 @@ class ListPathFinderTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
-    public function testFindExceptionModuleEmpty()
-    {
-        $path = $this->pf->find(null);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFindExceptionPathNotString()
-    {
-        $path = $this->pf->find('Foo', ['foo' => 'bar']);
-    }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testFindExceptionPathNotExist()
+    public function testFindExceptionPathNotExist(): void
     {
         $path = $this->pf->find('Common', 'no_such_list');
     }
 
-    public function testFindCommonFallback()
+    public function testFindCommonFallback(): void
     {
         $path = $this->pf->find('Foo', 'genders');
         $this->assertFalse(empty($path), "Path is empty [$path]");

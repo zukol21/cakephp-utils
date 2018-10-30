@@ -20,10 +20,10 @@ class User
     /**
      * Current user setter.
      *
-     * @param array $user Current user information
+     * @param mixed[] $user Current user information
      * @return void
      */
-    public static function setCurrentUser(array $user)
+    public static function setCurrentUser(array $user): void
     {
         Configure::write(static::CONFIG_KEY, $user);
     }
@@ -31,9 +31,9 @@ class User
     /**
      * Current user getter.
      *
-     * @return array
+     * @return mixed[]
      */
-    public static function getCurrentUser()
+    public static function getCurrentUser(): array
     {
         return (array)Configure::read(static::CONFIG_KEY);
     }

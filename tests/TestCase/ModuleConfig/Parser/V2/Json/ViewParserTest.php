@@ -26,7 +26,7 @@ class ViewParserTest extends TestCase
         unset($this->parser);
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . DS . 'Foo' . DS . 'views' . DS . 'add.json';
 
@@ -40,7 +40,7 @@ class ViewParserTest extends TestCase
         }
     }
 
-    public function testParseInvalid()
+    public function testParseInvalid(): void
     {
         $this->expectException(InvalidArgumentException::class);
 

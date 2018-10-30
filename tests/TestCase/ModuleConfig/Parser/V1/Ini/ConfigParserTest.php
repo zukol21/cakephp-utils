@@ -18,7 +18,7 @@ class ConfigParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'config.ini';
         $result = $this->parser->parse($file);
@@ -45,7 +45,7 @@ class ConfigParserTest extends TestCase
         $this->assertFalse(empty($result['table']['typeahead_fields']), "Parser missed 'typeahead_fields' value of [table] section");
     }
 
-    public function testParseWithDefaults()
+    public function testParseWithDefaults(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'config_no_table.ini';
         $result = $this->parser->parse($file);
@@ -62,7 +62,7 @@ class ConfigParserTest extends TestCase
         $this->assertInternalType('array', $result['table']['permissions_parent_modules']);
     }
 
-    public function testParseTestingArrays()
+    public function testParseTestingArrays(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'array_in_config.ini';
         $result = $this->parser->parse($file);
@@ -80,7 +80,7 @@ class ConfigParserTest extends TestCase
         $this->assertContains('Bar', $result['table']['permissions_parent_modules']);
     }
 
-    public function testParseMissing()
+    public function testParseMissing(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'this_file_does_not_exist.ini';
         $result = $this->parser->parse($file);
@@ -100,9 +100,9 @@ class ConfigParserTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
-    public function testParseBad()
+    public function testParseBad(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'config_bad.ini';
         $result = $this->parser->parse($file);

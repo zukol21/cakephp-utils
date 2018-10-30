@@ -18,7 +18,7 @@ class MenusParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'menus.json';
         $result = $this->parser->parse($file);
@@ -28,7 +28,7 @@ class MenusParserTest extends TestCase
         $this->assertTrue(is_array($result->main_menu), "Parser returned non-array for main menu items");
     }
 
-    public function testParseMissing()
+    public function testParseMissing(): void
     {
         $file = $this->dataDir . 'MissingModule' . DS . 'config' . DS . 'menus.json';
         $result = $this->parser->parse($file);
@@ -37,9 +37,9 @@ class MenusParserTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
-    public function testParseEmpty()
+    public function testParseEmpty(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'empty.json';
         $result = $this->parser->parse($file);

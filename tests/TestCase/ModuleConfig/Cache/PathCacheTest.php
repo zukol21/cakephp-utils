@@ -4,21 +4,42 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Cache;
 use Cake\TestSuite\TestCase;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
+use RuntimeException;
 
 class PathCacheTest extends TestCase
 {
-    public function testWriteTo()
+    /**
+     * @var string $cacheFile
+     */
+    protected $cacheFile;
+
+    public function setUp()
+    {
+        $cacheFile = tempnam(sys_get_temp_dir(), 'pathcache_test.');
+        if (empty($cacheFile)) {
+            throw new RuntimeException("Failed to create temporary file");
+        }
+        $this->cacheFile = $cacheFile;
+    }
+
+    public function tearDown()
+    {
+        if (file_exists($this->cacheFile)) {
+            unlink($this->cacheFile);
+        }
+    }
+
+    public function testWriteTo(): void
     {
         $cache = new PathCache('foo');
         $result = $cache->writeTo('blah', 'something');
         $this->assertEquals(false, $result, "writeTo() did not fail without 'path' parameter");
     }
 
-    public function testReadFromWriteTo()
+    public function testReadFromWriteTo(): void
     {
         // Prepare test file
-        $tmpFile = tempnam(sys_get_temp_dir(), 'pathcache_test.');
-        $this->assertTrue(file_exists($tmpFile), "Failed to create temporary file: $tmpFile");
+        $tmpFile = $this->cacheFile;
         $testValue = 'hello';
         $result = file_put_contents($tmpFile, $testValue);
         $this->assertEquals(strlen($testValue), $result, "Failed to save test value to file");
@@ -42,12 +63,9 @@ class PathCacheTest extends TestCase
         $result = $cache->readFrom('test_key');
         $this->assertTrue(is_bool($result), "readFrom() returnd a non-boolean result: $result");
         $this->assertFalse($result, "readFrom() did not fail reading stale value");
-
-        // Cleanup
-        unlink($tmpFile);
     }
 
-    public function testReadFromWriteToBadFile()
+    public function testReadFromWriteToBadFile(): void
     {
         // Prepare test file
         $tmpFile = '/this/file/does/not/exist';
@@ -66,11 +84,10 @@ class PathCacheTest extends TestCase
         $this->assertFalse($result, "readFrom() successfully read non-existing file cache");
     }
 
-    public function testReadFromWriteToDeleted()
+    public function testReadFromWriteToDeleted(): void
     {
         // Prepare test file
-        $tmpFile = tempnam(sys_get_temp_dir(), 'pathcache_test.');
-        $this->assertTrue(file_exists($tmpFile), "Failed to create temporary file: $tmpFile");
+        $tmpFile = $this->cacheFile;
         $testValue = 'hello';
         $result = file_put_contents($tmpFile, $testValue);
         $this->assertEquals(strlen($testValue), $result, "Failed to save test value to file");
@@ -95,7 +112,7 @@ class PathCacheTest extends TestCase
         $this->assertFalse($result, "readFrom() did not fail reading stale value");
     }
 
-    public function testReadFrom()
+    public function testReadFrom(): void
     {
         // Use generic Cache to write the data
         $cache = new Cache('foo');

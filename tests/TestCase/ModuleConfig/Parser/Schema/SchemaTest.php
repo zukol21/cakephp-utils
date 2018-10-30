@@ -1,7 +1,6 @@
 <?php
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\Schema;
 
-use Cake\Core\Configure;
 use DirectoryIterator;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +13,7 @@ class SchemaTest extends TestCase
      * JSON linting tool.  At a very minimum we need to make
      * sure that the schema files are parseable.
      */
-    public function testJsonLint()
+    public function testJsonLint(): void
     {
         // All your dir are belong to us!
         $schemaPath = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
@@ -22,8 +21,6 @@ class SchemaTest extends TestCase
         $schemaPath .= DIRECTORY_SEPARATOR . 'ModuleConfig';
         $schemaPath .= DIRECTORY_SEPARATOR . 'Parser';
         $schemaPath .= DIRECTORY_SEPARATOR . 'Schema';
-
-        $schemaPath = realpath($schemaPath);
 
         $this->assertTrue(file_exists($schemaPath), "Path does not exist: $schemaPath");
         $this->assertTrue(is_dir($schemaPath), "Path is not a directory: $schemaPath");
@@ -36,10 +33,15 @@ class SchemaTest extends TestCase
             if ($file->getExtension() !== 'json') {
                 continue;
             }
-            $content = file_get_contents($file->getRealPath());
-            $this->assertFalse(empty($content), "Empty file or failed to read: " . $file->getRealPath());
+            $realPath = $file->getRealPath();
+            if (empty($realPath)) {
+                continue;
+            }
+
+            $content = file_get_contents($realPath);
+            $this->assertFalse(empty($content), "Empty file or failed to read: " . $realPath);
             $data = json_decode($content);
-            $this->assertFalse(empty($data), "Empty structure or failed to parse: " . $file->getRealPath());
+            $this->assertFalse(empty($data), "Empty structure or failed to parse: " . $realPath);
         }
     }
 }

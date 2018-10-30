@@ -11,10 +11,7 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser\V1\Csv;
 
-use Exception;
-use InvalidArgumentException;
 use League\Csv\Reader;
-use Qobo\Utils\Utility;
 
 /**
  * View CSV Parser
@@ -49,11 +46,10 @@ class ViewParser extends AbstractCsvParser
     /**
      * Read and parse a given real path
      *
-     * @throws \InvalidArgumentException when cannot read or decode path
      * @param string $path Path to file
      * @return object
      */
-    protected function getDataFromRealPath($path)
+    protected function getDataFromRealPath(string $path)
     {
         $result = $this->getEmptyResult();
 

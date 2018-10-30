@@ -24,14 +24,14 @@ interface ErrorAwareInterface
     /**
      * Get errors
      *
-     * @return array List of errors
+     * @return string[] List of errors
      */
-    public function getErrors();
+    public function getErrors(): array;
 
     /**
      * Get warnings
      *
-     * @return array List of warnings
+     * @return string[] List of warnings
      */
-    public function getWarnings();
+    public function getWarnings(): array;
 }

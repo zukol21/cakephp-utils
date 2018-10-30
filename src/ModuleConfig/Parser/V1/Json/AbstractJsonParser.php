@@ -11,11 +11,8 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser\V1\Json;
 
-use Exception;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\Parser\AbstractParser;
-use Qobo\Utils\Utility;
-use stdClass;
 
 abstract class AbstractJsonParser extends AbstractParser
 {
@@ -26,7 +23,7 @@ abstract class AbstractJsonParser extends AbstractParser
      * @param string $path Path to read and parse
      * @return object
      */
-    protected function getDataFromRealPath($path)
+    protected function getDataFromRealPath(string $path)
     {
         $data = file_get_contents($path);
         if ($data === false) {

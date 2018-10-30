@@ -11,7 +11,6 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser;
 
-use Exception;
 use InvalidArgumentException;
 use League\JsonGuard\Dereferencer;
 use League\JsonGuard\Validator;
@@ -50,7 +49,7 @@ abstract class AbstractParser implements ParserInterface
      * @param string $path Path to file
      * @return object
      */
-    abstract protected function getDataFromRealPath($path);
+    abstract protected function getDataFromRealPath(string $path);
 
     /**
      * Read and parse a given path
@@ -58,14 +57,14 @@ abstract class AbstractParser implements ParserInterface
      * @param string $path Path to file
      * @return object
      */
-    protected function getDataFromPath($path)
+    protected function getDataFromPath(string $path)
     {
         $result = $this->getEmptyResult();
         $result = $this->mergeWithDefaults($result);
 
         try {
             Utility::validatePath($path);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             if ($this->isPathRequired) {
                 throw $e;
             }
@@ -85,7 +84,7 @@ abstract class AbstractParser implements ParserInterface
      *
      * @return \stdClass
      */
-    protected function getEmptyResult()
+    protected function getEmptyResult(): \stdClass
     {
         return new stdClass();
     }
@@ -96,10 +95,10 @@ abstract class AbstractParser implements ParserInterface
      * Parses a given file according to the specified options
      *
      * @param string $path    Path to file
-     * @param array  $options Options for parsing
+     * @param mixed[]  $options Options for parsing
      * @return object
      */
-    public function parse($path, array $options = [])
+    public function parse(string $path, array $options = [])
     {
         $result = $this->getEmptyResult();
 
@@ -112,7 +111,7 @@ abstract class AbstractParser implements ParserInterface
             $result = $this->getDataFromPath($path);
             $schema = $this->getSchema();
             $this->validateData($result, $schema);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             $this->fail(new InvalidArgumentException("[" . basename($path) . "] : " . $e->getMessage()));
         }
 

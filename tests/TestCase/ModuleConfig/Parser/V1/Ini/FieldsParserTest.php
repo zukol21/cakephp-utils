@@ -2,7 +2,7 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Ini;
 
 use Cake\Core\Configure;
-use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Ini\FieldsParser;
 
@@ -19,14 +19,15 @@ class FieldsParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . 'Foo' . DS . 'config' . DS . 'fields.ini';
         $result = null;
         try {
             $result = $this->parser->parse($file);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             print_r($this->parser->getErrors());
+            $this->fail($e->getMessage());
         }
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");

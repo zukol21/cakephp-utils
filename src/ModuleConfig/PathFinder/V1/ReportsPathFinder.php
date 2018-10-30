@@ -11,9 +11,6 @@
  */
 namespace Qobo\Utils\ModuleConfig\PathFinder\V1;
 
-use Cake\Core\Configure;
-use Qobo\Utils\ModuleConfig\PathFinder\BasePathFinder;
-
 /**
  * ReportsPathFinder Class
  *

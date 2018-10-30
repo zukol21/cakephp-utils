@@ -11,8 +11,6 @@
  */
 namespace Qobo\Utils\ModuleConfig\PathFinder\V1;
 
-use Cake\Core\Configure;
-use Exception;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\PathFinder\BasePathFinder;
 
@@ -61,7 +59,7 @@ class ListPathFinder extends BasePathFinder
      * @param bool   $validate Validate existence of the result
      * @return null|string|array Null for not found, string for single path, array for multiple paths
      */
-    public function find($module, $path = null, $validate = true)
+    public function find(string $module, string $path = '', bool $validate = true)
     {
         if (empty($module)) {
             $this->warnings[] = "Module not specified.  Assuming: " . self::DEFAULT_MODULE;
@@ -74,7 +72,7 @@ class ListPathFinder extends BasePathFinder
         $result = null;
         try {
             $result = parent::find($module, $path, $validate);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             if ($module == self::DEFAULT_MODULE) {
                 $this->fail($e);
             }

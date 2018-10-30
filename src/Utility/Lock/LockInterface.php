@@ -16,14 +16,14 @@ interface LockInterface
     /**
      * lock method
      *
-     * @return bool
+     * @return bool True on success, false otherwise
      */
-    public function lock();
+    public function lock(): bool;
 
     /**
      * unlock method
      *
-     * @return bool
+     * @return bool True on success, false otherwise
      */
-    public function unlock();
+    public function unlock(): bool;
 }

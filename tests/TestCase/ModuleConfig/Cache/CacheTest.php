@@ -7,20 +7,20 @@ use Qobo\Utils\ModuleConfig\Cache\Cache;
 class CacheTest extends TestCase
 {
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
-    public function testConstructException()
+    public function testConstructException(): void
     {
         $result = new Cache('');
     }
 
-    public function testConstruct()
+    public function testConstruct(): void
     {
         $result = new Cache('test_cache');
         $this->assertTrue(is_object($result), "__construct() returned a non-object result");
     }
 
-    public function testGetConfig()
+    public function testGetConfig(): void
     {
         $expected = Cache::DEFAULT_CONFIG;
         $cache = new Cache('test_cache');
@@ -33,7 +33,7 @@ class CacheTest extends TestCase
         $this->assertEquals($expected, $result, "getConfig() returned a wrong config name: $result");
     }
 
-    public function testSkipCache()
+    public function testSkipCache(): void
     {
         $expected = false;
         $cache = new Cache('test_cache');
@@ -48,7 +48,7 @@ class CacheTest extends TestCase
         $this->assertTrue(is_bool($result), "skipCache() returned a non-boolean result for non-default value");
     }
 
-    public function testGetKey()
+    public function testGetKey(): void
     {
         $options = [
             'cacheSkip' => true,
@@ -70,7 +70,7 @@ class CacheTest extends TestCase
         $this->assertEquals($expected, $result, "getKey() returned a wrong key value");
     }
 
-    public function testWriteToRaw()
+    public function testWriteToRaw(): void
     {
         $cache = new Cache('foo');
         $data = ['array' => 'with no data key'];

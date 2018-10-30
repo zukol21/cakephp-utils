@@ -24,12 +24,12 @@ use RuntimeException;
 trait ErrorTrait
 {
     /**
-     * @var array $errors List of errors
+     * @var string[] $errors List of errors
      */
     protected $errors = [];
 
     /**
-     * @var array $warnings List of warnings
+     * @var string[] $warnings List of warnings
      */
     protected $warnings = [];
 
@@ -44,7 +44,7 @@ trait ErrorTrait
      * @param string|\Exception $message Error message or exception
      * @return void
      */
-    protected function fail($message)
+    protected function fail($message): void
     {
         if (is_string($message)) {
             $message = new RuntimeException($message);
@@ -56,9 +56,9 @@ trait ErrorTrait
     /**
      * Get errors
      *
-     * @return array List of errors
+     * @return string[] List of errors
      */
-    public function getErrors()
+    public function getErrors(): array
     {
         return $this->errors;
     }
@@ -66,9 +66,9 @@ trait ErrorTrait
     /**
      * Get warnings
      *
-     * @return array List of warnings
+     * @return string[] List of warnings
      */
-    public function getWarnings()
+    public function getWarnings(): array
     {
         return $this->warnings;
     }

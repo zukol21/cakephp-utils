@@ -2,7 +2,7 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Csv;
 
 use Cake\Core\Configure;
-use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Csv\ListParser;
 
@@ -19,16 +19,15 @@ class ListParserTest extends TestCase
         Configure::write('ModuleConfig.classMapVersion', 'V1');
     }
 
-    public function testParse()
+    public function testParse(): void
     {
         $file = $this->dataDir . 'Common' . DS . 'lists' . DS . 'genders.csv';
         $result = null;
         try {
             $result = $this->parser->parse($file);
-        } catch (\Exception $e) {
-            print_r($e->getMessage());
+        } catch (InvalidArgumentException $e) {
             print_r($this->parser->getErrors());
-            print_r($this->parser->getWarnings());
+            $this->fail($e->getMessage());
         }
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
@@ -44,16 +43,15 @@ class ListParserTest extends TestCase
         $this->assertTrue(empty($result['items'][0]['children']), "Parser returned non-empty value for 'children' key in first element of gender list");
     }
 
-    public function testParseNested()
+    public function testParseNested(): void
     {
         $file = $this->dataDir . 'Common' . DS . 'lists' . DS . 'foo_types.csv';
         $result = null;
         try {
             $result = $this->parser->parse($file);
-        } catch (\Exception $e) {
-            print_r($e->getMessage());
+        } catch (InvalidArgumentException $e) {
             print_r($this->parser->getErrors());
-            print_r($this->parser->getWarnings());
+            $this->fail($e->getMessage());
         }
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
@@ -70,13 +68,13 @@ class ListParserTest extends TestCase
         $this->assertEquals('new', $result['items'][0]['children'][0]['value'], "Parser returned invalid value for first child of first element of foo_types list");
     }
 
-    public function testParseInvalid()
+    public function testParseInvalid(): void
     {
         $file = $this->dataDir . 'Common' . DS . 'lists' . DS . 'invalid_list.csv';
         $exception = null;
         try {
             $result = $this->parser->parse($file);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             $exception = $e;
         }
 

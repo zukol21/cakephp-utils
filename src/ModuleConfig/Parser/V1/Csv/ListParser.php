@@ -11,7 +11,7 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser\V1\Csv;
 
-use Exception;
+use InvalidArgumentException;
 use Qobo\Utils\Utility;
 
 /**
@@ -74,11 +74,11 @@ class ListParser extends AbstractCsvParser
     /**
      * Process each row of data
      *
-     * @param array $row Row data
+     * @param mixed[] $row Row data
      * @param string $path Path of the source
      * @return mixed
      */
-    protected function processRow(array $row, $path)
+    protected function processRow(array $row, string $path)
     {
         $row = parent::processRow($row, $path);
         $row['children'] = $this->getChildren($row, $path);
@@ -89,18 +89,18 @@ class ListParser extends AbstractCsvParser
     /**
      * Get children for a given item
      *
-     * @param array $row Item row
+     * @param mixed[] $row Item row
      * @param string $path Path of the source
-     * @return array
+     * @return mixed[]
      */
-    protected function getChildren(array $row, $path)
+    protected function getChildren(array $row, string $path): array
     {
         $result = [];
 
         $childListPath = $this->getChildrenPath($row, $path);
         try {
             Utility::validatePath($childListPath);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             // Child list does not exist, skip the rest
             return $result;
         }
@@ -116,11 +116,11 @@ class ListParser extends AbstractCsvParser
      * Figure out the path to the children items list
      *
      * @todo Find a more elegant way to chop the extension off
-     * @param array $row Item row
+     * @param mixed[] $row Item row
      * @param string $path Path of the current list
      * @return string
      */
-    protected function getChildrenPath(array $row, $path)
+    protected function getChildrenPath(array $row, string $path): string
     {
         $result = '';
 

@@ -53,7 +53,7 @@ class MigrationParser extends AbstractCsvParser
      * @param string $path Path to file
      * @return object
      */
-    protected function getDataFromPath($path)
+    protected function getDataFromPath(string $path)
     {
         $result = parent::getDataFromPath($path);
 

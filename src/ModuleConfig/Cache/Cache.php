@@ -46,7 +46,7 @@ class Cache implements ErrorAwareInterface
     /**
      * Associative array of options
      *
-     * @var array $options
+     * @var mixed[] $options
      */
     protected $options;
 
@@ -72,7 +72,7 @@ class Cache implements ErrorAwareInterface
      * and the boolean for whether or not empty values
      * are allowed.
      *
-     * @param array $requiredKeys Cached value validation
+     * @param mixed[] $requiredKeys Cached value validation
      */
     protected $requiredKeys = [
             'data' => false,
@@ -81,11 +81,10 @@ class Cache implements ErrorAwareInterface
     /**
      * Constructor
      *
-     * @throws \InvalidArgumentException when no name given
      * @param string $name Name of the current cache instance (think prefix)
-     * @param array $options Options
+     * @param mixed[] $options Options
      */
-    public function __construct($name, array $options = [])
+    public function __construct(string $name, array $options = [])
     {
         $this->setName($name);
         $this->setOptions($options);
@@ -98,9 +97,8 @@ class Cache implements ErrorAwareInterface
      * @param string $name Name of cache instance
      * @return void
      */
-    protected function setName($name)
+    protected function setName(string $name): void
     {
-        $name = (string)$name;
         if (empty($name)) {
             throw new InvalidArgumentException("Cache name is required and cannot be empty");
         }
@@ -111,10 +109,10 @@ class Cache implements ErrorAwareInterface
     /**
      * Set cache options
      *
-     * @param array $options Cache options
+     * @param mixed[] $options Cache options
      * @return void
      */
-    protected function setOptions(array $options = [])
+    protected function setOptions(array $options = []): void
     {
         $this->options = $options;
         $this->configName = empty($options['cacheConfig']) ? static::DEFAULT_CONFIG : (string)$options['cacheConfig'];
@@ -126,7 +124,7 @@ class Cache implements ErrorAwareInterface
      *
      * @return string
      */
-    public function getConfig()
+    public function getConfig(): string
     {
         return $this->configName;
     }
@@ -136,7 +134,7 @@ class Cache implements ErrorAwareInterface
      *
      * @return bool True if skipping, false otherwise
      */
-    public function skipCache()
+    public function skipCache(): bool
     {
         return $this->skipCache;
     }
@@ -158,10 +156,10 @@ class Cache implements ErrorAwareInterface
      * And just for convenience, the array of current instance
      * options is appended to key parameters.
      *
-     * @param array $params Parameters for key generation
+     * @param mixed[] $params Parameters for key generation
      * @return string
      */
-    public function getKey(array $params)
+    public function getKey(array $params): string
     {
         // Push current options to the list of
         // params to ensure unique cache key for
@@ -183,7 +181,7 @@ class Cache implements ErrorAwareInterface
      * @param string $key Cache key
      * @return mixed False on failure, cached value otherwise
      */
-    public function readFrom($key)
+    public function readFrom(string $key)
     {
         $result = false;
 
@@ -209,10 +207,10 @@ class Cache implements ErrorAwareInterface
      *
      * @param string $key Cache key
      * @param mixed $data Data to cache
-     * @param array $params Additional parameters
+     * @param mixed[] $params Additional parameters
      * @return bool False on failure, true on success
      */
-    public function writeTo($key, $data, array $params = [])
+    public function writeTo(string $key, $data, array $params = []): bool
     {
         $result = false;
 
@@ -247,7 +245,7 @@ class Cache implements ErrorAwareInterface
      * @param mixed $value Value to check
      * @return bool False if invalid, true if valid
      */
-    protected function isValidCache($value)
+    protected function isValidCache($value): bool
     {
         $result = false;
 

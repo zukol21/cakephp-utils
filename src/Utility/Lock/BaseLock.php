@@ -18,12 +18,12 @@ use NinjaMutex\Mutex;
 class BaseLock implements LockInterface
 {
     /**
-     * @var $locker
+     * @var \NinjaMutex\Mutex $locker
      */
     private $locker = null;
 
     /**
-     * @var $timeout
+     * @var int|null $timeout
      *
      * 1. null if you want blocking lock
      * 2. 0 if you want just lock and go
@@ -37,7 +37,7 @@ class BaseLock implements LockInterface
      * @param string $key to use for lock operation
      * @param MutexLockInterface $lock for lock operation
      */
-    public function __construct($key, MutexLockInterface $lock)
+    public function __construct(string $key, MutexLockInterface $lock)
     {
         $config = Configure::read('Locker');
         if (!empty($config['timeout'])) {
@@ -49,9 +49,9 @@ class BaseLock implements LockInterface
     /**
      * lock method
      *
-     * @return bool
+     * @return bool True on success, false otherwise
      */
-    public function lock()
+    public function lock(): bool
     {
         $result = false;
 
@@ -65,9 +65,9 @@ class BaseLock implements LockInterface
     /**
      * unlock method
      *
-     * @return bool
+     * @return bool True on success, false otherwise
      */
-    public function unlock()
+    public function unlock(): bool
     {
         $result = false;
 

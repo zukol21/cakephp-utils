@@ -11,7 +11,7 @@
  */
 namespace Qobo\Utils\ModuleConfig\Cache;
 
-use Exception;
+use InvalidArgumentException;
 use Qobo\Utils\Utility;
 
 /**
@@ -36,7 +36,7 @@ class PathCache extends Cache
      * and the boolean for whether or not empty values
      * are allowed.
      *
-     * @param array $requiredKeys Cached value validation
+     * @param mixed[] $requiredKeys Cached value validation
      */
     protected $requiredKeys = [
             'path' => true,
@@ -50,7 +50,7 @@ class PathCache extends Cache
      * @param mixed $value Value to check
      * @return bool False if invalid, true if valid
      */
-    protected function isValidCache($value)
+    protected function isValidCache($value): bool
     {
         $result = false;
 
@@ -62,14 +62,15 @@ class PathCache extends Cache
         $path = array_key_exists('path', $value) ? $value['path'] : '';
         try {
             Utility::validatePath($path);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             $this->errors[] = "Path does not exist or is not readable: $path";
 
             return $result;
         }
 
         $md5 = array_key_exists('md5', $value) ? $value['md5'] : '';
-        if (md5(file_get_contents($value['path'])) <> $md5) {
+        $content = (string)file_get_contents($value['path']);
+        if (md5($content) <> $md5) {
             $this->warnings[] = 'Stale cache found. Cleaning up and ignoring';
 
             return $result;
@@ -85,10 +86,10 @@ class PathCache extends Cache
      *
      * @param string $key Cache key
      * @param mixed $data Data to cache
-     * @param array $params Additional parameters
+     * @param mixed[] $params Additional parameters
      * @return bool False on failure, true on success
      */
-    public function writeTo($key, $data, array $params = [])
+    public function writeTo(string $key, $data, array $params = []): bool
     {
         $result = false;
 
@@ -101,15 +102,16 @@ class PathCache extends Cache
 
         try {
             Utility::validatePath($path);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             $this->errors[] = "Path does not exist or is not readable: $path";
 
             return $result;
         }
 
+        $content = (string)file_get_contents($path);
         $cachedData = [
             'path' => $path,
-            'md5' => md5(file_get_contents($path)),
+            'md5' => md5($content),
             'data' => $data,
         ];
 
