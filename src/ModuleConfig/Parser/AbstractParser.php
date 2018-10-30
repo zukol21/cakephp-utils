@@ -11,7 +11,6 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser;
 
-use Exception;
 use InvalidArgumentException;
 use League\JsonGuard\Dereferencer;
 use League\JsonGuard\Validator;
@@ -65,7 +64,7 @@ abstract class AbstractParser implements ParserInterface
 
         try {
             Utility::validatePath($path);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             if ($this->isPathRequired) {
                 throw $e;
             }
@@ -112,7 +111,7 @@ abstract class AbstractParser implements ParserInterface
             $result = $this->getDataFromPath($path);
             $schema = $this->getSchema();
             $this->validateData($result, $schema);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             $this->fail(new InvalidArgumentException("[" . basename($path) . "] : " . $e->getMessage()));
         }
 

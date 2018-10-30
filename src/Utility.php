@@ -20,6 +20,7 @@ use Cake\Utility\Inflector;
 use DirectoryIterator;
 use Exception;
 use InvalidArgumentException;
+use UnexpectedValueException;
 
 class Utility
 {
@@ -78,10 +79,8 @@ class Utility
      * @param string $path Path to validate
      * @return void
      */
-    public static function validatePath($path)
+    public static function validatePath(string $path = null)
     {
-        $path = (string)$path;
-
         if (empty($path)) {
             throw new InvalidArgumentException("Cannot validate empty path");
         }
@@ -183,7 +182,9 @@ class Utility
         try {
             static::validatePath($path);
             $dir = new DirectoryIterator($path);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
+            return $result;
+        } catch (UnexpectedValueException $e) {
             return $result;
         }
 
@@ -296,9 +297,11 @@ class Utility
         $result = [];
 
         try {
-            self::validatePath($path);
+            static::validatePath($path);
             $path = new DirectoryIterator($path);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
+            return $result;
+        } catch (UnexpectedValueException $e) {
             return $result;
         }
 

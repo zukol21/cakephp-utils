@@ -11,6 +11,7 @@ class PathCacheTest extends TestCase
     /**
      * @var string $cacheFile
      */
+    protected $cacheFile;
 
     public function setUp()
     {

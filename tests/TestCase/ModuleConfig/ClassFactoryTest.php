@@ -16,7 +16,7 @@ class ClassFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \InvalidArgumentException
      */
     public function testCreateBadClassMapException(): void
     {
@@ -24,7 +24,7 @@ class ClassFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \InvalidArgumentException
      */
     public function testCreateNoClassException(): void
     {

@@ -11,7 +11,7 @@
  */
 namespace Qobo\Utils\ModuleConfig;
 
-use Exception;
+use InvalidArgumentException;
 use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
@@ -133,7 +133,7 @@ class ModuleConfig implements ErrorAwareInterface
             // Real response
             $finder = $this->getFinder();
             $result = $finder->find($this->module, $this->configFile, $validate);
-        } catch (Exception $exception) {
+        } catch (InvalidArgumentException $exception) {
             $this->mergeMessages($exception, __FUNCTION__);
         }
 
@@ -173,7 +173,7 @@ class ModuleConfig implements ErrorAwareInterface
             // Real response
             $parser = $this->getParser();
             $result = $parser->parse($path, $this->options);
-        } catch (Exception $exception) {
+        } catch (InvalidArgumentException $exception) {
             $this->mergeMessages($exception, __FUNCTION__);
         }
 
@@ -233,7 +233,7 @@ class ModuleConfig implements ErrorAwareInterface
     {
         $source = is_object($source) ? $source : new stdClass();
 
-        if ($source instanceof Exception) {
+        if ($source instanceof InvalidArgumentException) {
             $this->errors = array_merge($this->errors, $this->formatMessages($source->getMessage(), $caller));
 
             return;

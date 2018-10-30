@@ -12,7 +12,6 @@
 namespace Qobo\Utils\ModuleConfig\PathFinder\V2;
 
 use Cake\Core\Configure;
-use Exception;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\PathFinder\BasePathFinder;
 
@@ -74,7 +73,7 @@ class ListPathFinder extends BasePathFinder
         $result = null;
         try {
             $result = parent::find($module, $path, true);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             if ($module == self::DEFAULT_MODULE) {
                 $this->fail($e);
             }

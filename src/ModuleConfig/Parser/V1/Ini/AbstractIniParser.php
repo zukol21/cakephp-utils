@@ -11,7 +11,6 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser\V1\Ini;
 
-use Exception;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\Parser\AbstractParser;
 use Qobo\Utils\Utility;
@@ -27,11 +26,9 @@ abstract class AbstractIniParser extends AbstractParser
      */
     protected function getDataFromRealPath(string $path)
     {
-        try {
-            $data = parse_ini_file($path, true, INI_SCANNER_TYPED);
-            $data = json_decode(json_encode($data), false);
-        } catch (Exception $e) {
-            throw new InvalidArgumentException("Failed to read path: $path");
+        $data = @parse_ini_file($path, true, INI_SCANNER_TYPED);
+        if ($data === false) {
+            throw new InvalidArgumentException("Failed to parse INI file: $path");
         }
 
         $data = json_encode($data);
