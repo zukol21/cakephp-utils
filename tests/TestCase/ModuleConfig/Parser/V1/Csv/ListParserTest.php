@@ -5,7 +5,7 @@ use Cake\Core\Configure;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Csv\ListParser;
-use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
 
 class ListParserTest extends TestCase
 {
@@ -33,7 +33,7 @@ class ListParserTest extends TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
-        $result = Utility::objectToArray($result);
+        $result = Convert::objectToArray($result);
         $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertFalse(empty($result['items']), "Parser returned empty items");
         $this->assertEquals(2, count($result['items']), "Parser returned incorrect count of list items");
@@ -56,7 +56,7 @@ class ListParserTest extends TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
-        $result = Utility::objectToArray($result);
+        $result = Convert::objectToArray($result);
         $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertFalse(empty($result['items']), "Parser returned empty items");
         $this->assertEquals(3, count($result['items']), "Parser returned incorrect count of list items");

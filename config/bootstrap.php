@@ -4,7 +4,7 @@ use Burzum\FileStorage\Storage\StorageManager;
 use Burzum\FileStorage\Storage\StorageUtils;
 use Cake\Core\Configure;
 use Cake\Event\EventManager;
-use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
 
 /**
  * Burzum File-Storage configuration
@@ -93,7 +93,7 @@ EventManager::instance()->on(new BaseListener(Configure::read('FileStorage')));
 function sizeToBytes($size)
 {
     try {
-        $result = Utility::valueToBytes($size);
+        $result = Convert::valueToBytes($size);
     } catch (Exception $e) {
         // Mimic initial behavior, before exception was introduced
         $result = (string)$size;

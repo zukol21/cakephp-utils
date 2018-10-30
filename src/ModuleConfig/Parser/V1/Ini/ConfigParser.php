@@ -11,7 +11,7 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser\V1\Ini;
 
-use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
 use stdClass;
 
 /**
@@ -117,7 +117,7 @@ class ConfigParser extends AbstractIniParser
         }
 
         if (property_exists($data, 'virtualFields')) {
-            $virtualFields = Utility::objectToArray($data->virtualFields);
+            $virtualFields = Convert::objectToArray($data->virtualFields);
             foreach ($virtualFields as $virtualField => $realFields) {
                 $data->virtualFields->$virtualField = $this->csv2array($realFields);
             }

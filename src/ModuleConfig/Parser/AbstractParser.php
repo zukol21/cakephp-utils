@@ -16,6 +16,7 @@ use League\JsonGuard\Dereferencer;
 use League\JsonGuard\Validator;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
 use stdClass;
 
 abstract class AbstractParser implements ParserInterface
@@ -128,7 +129,7 @@ abstract class AbstractParser implements ParserInterface
     protected function validateData($data = null, $schema = null): void
     {
         // No need to validate empty data (empty() does not work on objects)
-        $dataArray = Utility::objectToArray($data);
+        $dataArray = Convert::objectToArray($data);
         if (empty($dataArray)) {
             $this->warnings[] = "Skipping validation of empty data";
 
@@ -136,7 +137,7 @@ abstract class AbstractParser implements ParserInterface
         }
 
         // No need to validate with empty schema (empty() does not work on objects)
-        $schemaArray = Utility::objectToArray($schema);
+        $schemaArray = Convert::objectToArray($schema);
         if (empty($schemaArray)) {
             $this->warnings[] = "Skipping validation with empty schema";
 

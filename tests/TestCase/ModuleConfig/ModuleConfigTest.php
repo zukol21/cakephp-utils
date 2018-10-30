@@ -6,7 +6,7 @@ use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
-use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
 
 class ModuleConfigTest extends TestCase
 {
@@ -106,7 +106,7 @@ class ModuleConfigTest extends TestCase
             $this->fail($e->getMessage());
         }
         $this->assertTrue(is_object($result), "Result is not an object");
-        $result = Utility::objectToArray($result);
+        $result = Convert::objectToArray($result);
         $this->assertFalse(empty($result), "Result is empty");
     }
 
@@ -129,7 +129,7 @@ class ModuleConfigTest extends TestCase
         }
         $this->assertTrue(is_object($resultObject), "Result object is not an object");
         $this->assertTrue(is_array($resultArray), "Result array is not an array");
-        $expected = Utility::objectToArray($resultObject);
+        $expected = Convert::objectToArray($resultObject);
         $this->assertEquals($expected, $resultArray, "Result object is different from result array");
     }
 
