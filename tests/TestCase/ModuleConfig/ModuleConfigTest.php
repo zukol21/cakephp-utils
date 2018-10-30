@@ -3,7 +3,7 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig;
 
 use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
-use Exception;
+use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
 use Qobo\Utils\ModuleConfig\Parser\Ini\ConfigParser;
@@ -102,10 +102,9 @@ class ModuleConfigTest extends TestCase
         $result = null;
         try {
             $result = $mc->parse();
-        } catch (Exception $e) {
-            debug($e->getMessage());
-            debug($mc->getErrors());
-            debug($mc->getWarnings());
+        } catch (InvalidArgumentException $e) {
+            print_r($mc->getErrors());
+            $this->fail($e->getMessage());
         }
         $this->assertTrue(is_object($result), "Result is not an object");
         $this->assertFalse(empty(json_decode(json_encode($result), true)), "Result is empty");
@@ -140,8 +139,9 @@ class ModuleConfigTest extends TestCase
         $result = null;
         try {
             $result = $mc->parse();
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             print_r($mc->getErrors());
+            $this->fail($e->getMessage());
         }
         // After parsing
         $result = $mc->getErrors();
@@ -165,8 +165,9 @@ class ModuleConfigTest extends TestCase
         $result = null;
         try {
             $result = $mc->parse();
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             print_r($mc->getErrors());
+            $this->fail($e->getMessage());
         }
         // After parsing
         $result = $mc->getErrors();

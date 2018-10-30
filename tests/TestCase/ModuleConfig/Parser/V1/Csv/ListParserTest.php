@@ -2,7 +2,7 @@
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Csv;
 
 use Cake\Core\Configure;
-use Exception;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Csv\ListParser;
 
@@ -25,10 +25,9 @@ class ListParserTest extends TestCase
         $result = null;
         try {
             $result = $this->parser->parse($file);
-        } catch (\Exception $e) {
-            print_r($e->getMessage());
+        } catch (InvalidArgumentException $e) {
             print_r($this->parser->getErrors());
-            print_r($this->parser->getWarnings());
+            $this->fail($e->getMessage());
         }
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
@@ -50,10 +49,9 @@ class ListParserTest extends TestCase
         $result = null;
         try {
             $result = $this->parser->parse($file);
-        } catch (\Exception $e) {
-            print_r($e->getMessage());
+        } catch (InvalidArgumentException $e) {
             print_r($this->parser->getErrors());
-            print_r($this->parser->getWarnings());
+            $this->fail($e->getMessage());
         }
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
@@ -76,7 +74,7 @@ class ListParserTest extends TestCase
         $exception = null;
         try {
             $result = $this->parser->parse($file);
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             $exception = $e;
         }
 
