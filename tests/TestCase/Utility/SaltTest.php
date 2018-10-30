@@ -54,7 +54,7 @@ class SaltTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \InvalidArgumentException
      */
     public function testGetSaltExceptionBadMinLength(): void
     {

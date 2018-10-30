@@ -15,7 +15,6 @@ use Cake\Log\Log;
 use Exception;
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
-use RuntimeException;
 
 /**
  * Salt class
@@ -53,7 +52,7 @@ class Salt
      * If the salt was not properly configured, a new salt string
      * will be generated, stored, and returned.
      *
-     * @throws \RuntimeException when cannot read or regenerate salt
+     * @throws \InvalidArgumentException when cannot read or regenerate salt
      * @return string Salt string
      */
     public static function getSalt(): string
@@ -62,7 +61,7 @@ class Salt
 
         try {
             $result = static::readSaltFromFile();
-        } catch (Exception $e) {
+        } catch (InvalidArgumentException $e) {
             Log::warning("Failed to read salt from file");
         }
 
@@ -74,8 +73,8 @@ class Salt
             $salt = static::generateSalt();
             static::writeSaltToFile($salt);
             $result = static::readSaltFromFile();
-        } catch (Exception $e) {
-            throw new RuntimeException("Failed to regenerate and save new salt: " . $e->getMessage());
+        } catch (InvalidArgumentException $e) {
+            throw new InvalidArgumentException("Failed to regenerate and save new salt: " . $e->getMessage(), 0, $e);
         }
         Log::warning("New salt is generated and stored.  Users might need to logout and clean their cookies.");
 
@@ -100,7 +99,7 @@ class Salt
     /**
      * Write a valid salt string to file
      *
-     * @throws \RuntimeException when storing fails
+     * @throws \InvalidArgumentException when storing fails
      * @param string $salt Valid salt string
      * @return void
      */
@@ -110,7 +109,7 @@ class Salt
         $result = @file_put_contents(static::$saltFile, $salt);
 
         if (($result === false) || ($result <> strlen($salt))) {
-            throw new RuntimeException("Failed to write salt to file");
+            throw new InvalidArgumentException("Failed to write salt to file [" . static::$saltFile . "]");
         }
     }
 
@@ -138,21 +137,20 @@ class Salt
     /**
      * Check that the saltMinLength is correct
      *
-     * @throws \RuntimeException if saltMinLength is too short
+     * @throws \InvalidArgumentException if saltMinLength is too short
      * @return void
      */
     protected static function validateSaltMinLength(): void
     {
-        $length = (int)static::$saltMinLength;
+        $length = static::$saltMinLength;
         if ($length <= 0) {
-            throw new RuntimeException("Minimum salt length can't be 0 or less. 32 or more is recommended");
+            throw new InvalidArgumentException("Minimum salt length can't be 0 or less. [$length] given. 32 or more is recommended");
         }
     }
 
     /**
      * Generate salt string
      *
-     * @throws \RuntimeException when salt minimum length is misconfigured
      * @return string Salt string
      */
     protected static function generateSalt(): string
