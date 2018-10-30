@@ -16,6 +16,11 @@
             ""
         ],
         [
+            "Details",
+            "created",
+            "modified"
+        ],
+        [
             "Personal",
             "gender",
             "birthdate",

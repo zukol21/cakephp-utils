@@ -1,0 +1,48 @@
+{
+    "table": {
+        "alias": "Foobar",
+        "searchable": true,
+        "display_field": "name",
+        "typeahead_fields": [
+            "name",
+            "foobar"
+        ],
+        "lookup_fields": [
+            "foo",
+            "bar",
+            "baz"
+        ],
+        "type": "module",
+        "icon": "cube",
+        "basic_search_fields": [],
+        "allow_reminders": [],
+        "translatable": false,
+        "permissions_parent_modules": []
+    },
+    "virtualFields": {
+        "name": [
+            "foo",
+            "bar"
+        ]
+    },
+    "parent": {
+        "module": "TestModule",
+        "redirect": "self"
+    },
+    "associations": {
+        "hide_associations": [
+            "TestTable"
+        ]
+    },
+    "associationLabels": {
+        "FieldIdTable": "Table",
+        "AnotherIdTableTwo": "Pretty Table"
+    },
+    "notifications": {
+        "enable": false,
+        "ignored_fields": []
+    },
+    "manyToMany": {
+        "modules": []
+    }
+}

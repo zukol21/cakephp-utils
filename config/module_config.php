@@ -45,36 +45,6 @@ return [
                     $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V2\\Json\\DuplicatesParser',
                 ],
             ],
-            'V1' => [
-                (string)ConfigType::MIGRATION() => [
-                    $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V1\\MigrationPathFinder',
-                    $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V1\\Csv\\MigrationParser',
-                ],
-                (string)ConfigType::MODULE() => [
-                    $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V1\\ConfigPathFinder',
-                    $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V1\\Ini\\ConfigParser',
-                ],
-                (string)ConfigType::LISTS() => [
-                    $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V1\\ListPathFinder',
-                    $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V1\\Csv\\ListParser',
-                ],
-                (string)ConfigType::FIELDS() => [
-                    $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V1\\FieldsPathFinder',
-                    $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V1\\Ini\\FieldsParser',
-                ],
-                (string)ConfigType::MENUS() => [
-                    $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V1\\MenusPathFinder',
-                    $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V1\\Json\\MenusParser',
-                ],
-                (string)ConfigType::REPORTS() => [
-                    $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V1\\ReportsPathFinder',
-                    $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V1\\Ini\\ReportsParser',
-                ],
-                (string)ConfigType::VIEW() => [
-                    $classTypeFinder => 'Qobo\\Utils\\ModuleConfig\\PathFinder\\V1\\ViewPathFinder',
-                    $classTypeParser => 'Qobo\\Utils\\ModuleConfig\\Parser\\V1\\Csv\\ViewParser',
-                ],
-            ],
         ],
     ],
 ];
