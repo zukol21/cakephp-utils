@@ -80,7 +80,7 @@ class Utility
      * @param string $path Path to validate
      * @return void
      */
-    public static function validatePath(string $path = null)
+    public static function validatePath(string $path = null): void
     {
         if (empty($path)) {
             throw new InvalidArgumentException("Cannot validate empty path");
