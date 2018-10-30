@@ -4,6 +4,7 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Ini;
 use Cake\Core\Configure;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Ini\ConfigParser;
+use Qobo\Utils\Utility;
 
 class ConfigParserTest extends TestCase
 {
@@ -25,8 +26,7 @@ class ConfigParserTest extends TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = Utility::objectToArray($result);
 
         $this->assertFalse(empty($result), "Parser returned empty result");
 
@@ -52,8 +52,7 @@ class ConfigParserTest extends TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = Utility::objectToArray($result);
 
         $this->assertFalse(empty($result), "Parser returned empty result");
 
@@ -69,8 +68,7 @@ class ConfigParserTest extends TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = Utility::objectToArray($result);
 
         $this->assertArrayHasKey('associations', $result, "No associations found in the table config");
         $this->assertArrayHasKey('association_labels', $result['associations'], "No associations found in the table config");
@@ -92,8 +90,7 @@ class ConfigParserTest extends TestCase
         $this->assertTrue(is_array($warnings), "Warnings is not an array");
         $this->assertFalse(empty($warnings), "Warnings are empty");
 
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = Utility::objectToArray($result);
 
         $this->assertFalse(empty($result['table']), "Parser missed 'table' section");
         $this->assertFalse(empty($result['table']['icon']), "Parser missed 'icon' default key");

@@ -37,8 +37,11 @@ class SchemaTest extends TestCase
             if (empty($realPath)) {
                 continue;
             }
-
             $content = file_get_contents($realPath);
+            if (empty($content)) {
+                $content = '';
+            }
+
             $this->assertFalse(empty($content), "Empty file or failed to read: " . $realPath);
             $data = json_decode($content);
             $this->assertFalse(empty($data), "Empty structure or failed to parse: " . $realPath);

@@ -6,6 +6,7 @@ use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
+use Qobo\Utils\Utility;
 
 class ModuleConfigTest extends TestCase
 {
@@ -105,7 +106,8 @@ class ModuleConfigTest extends TestCase
             $this->fail($e->getMessage());
         }
         $this->assertTrue(is_object($result), "Result is not an object");
-        $this->assertFalse(empty(json_decode(json_encode($result), true)), "Result is empty");
+        $result = Utility::objectToArray($result);
+        $this->assertFalse(empty($result), "Result is empty");
     }
 
     /**
