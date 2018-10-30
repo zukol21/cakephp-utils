@@ -161,7 +161,8 @@ class ModuleConfig implements ErrorAwareInterface
      */
     public function parse()
     {
-        $cache = $parser = $exception = $cacheKey = $result = $path = null;
+        $result = new stdClass();
+        $cache = $parser = $exception = $cacheKey = $path = null;
         try {
             $path = $this->find(false);
             // Cached response
@@ -243,7 +244,7 @@ class ModuleConfig implements ErrorAwareInterface
      * @param string $caller Caller that generated a message
      * @return void
      */
-    protected function mergeMessages($source, string $caller = 'ModuleConfig'): void
+    protected function mergeMessages($source = null, string $caller = 'ModuleConfig'): void
     {
         $source = is_object($source) ? $source : new stdClass();
 
