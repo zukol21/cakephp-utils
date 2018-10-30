@@ -37,7 +37,7 @@ class MenusParserTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testParseEmpty(): void
     {

@@ -2,11 +2,9 @@
 namespace Qobo\Utils\Model\Behavior;
 
 use ArrayObject;
-use Cake\Controller\Component\AuthComponent;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
-use Cake\Routing\Router;
 use Qobo\Utils\Utility\User;
 
 class FootprintBehavior extends Behavior

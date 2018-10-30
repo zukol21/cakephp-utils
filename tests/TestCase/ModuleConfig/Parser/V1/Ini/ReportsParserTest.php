@@ -5,7 +5,6 @@ use Cake\Core\Configure;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Ini\ReportsParser;
-use RuntimeException;
 
 class ReportsParserTest extends TestCase
 {

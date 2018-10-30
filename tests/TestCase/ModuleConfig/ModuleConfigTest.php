@@ -6,8 +6,6 @@ use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
-use Qobo\Utils\ModuleConfig\Parser\Ini\ConfigParser;
-use Qobo\Utils\ModuleConfig\PathFinder\ConfigPathFinder;
 
 class ModuleConfigTest extends TestCase
 {

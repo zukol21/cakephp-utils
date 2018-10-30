@@ -1,7 +1,6 @@
 <?php
 namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\Schema;
 
-use Cake\Core\Configure;
 use DirectoryIterator;
 use PHPUnit\Framework\TestCase;
 

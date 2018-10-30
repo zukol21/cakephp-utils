@@ -55,7 +55,7 @@ class UtilityTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testValueToBytesException(): void
     {
@@ -63,7 +63,7 @@ class UtilityTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testValidatePathExceptionEmpty(): void
     {
@@ -71,7 +71,7 @@ class UtilityTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testValidatePathExceptionNotExist(): void
     {
@@ -79,7 +79,7 @@ class UtilityTest extends TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testValidatePathExceptionNotReadable(): void
     {

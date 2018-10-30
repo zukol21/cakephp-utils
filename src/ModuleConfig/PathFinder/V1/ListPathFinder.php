@@ -11,7 +11,6 @@
  */
 namespace Qobo\Utils\ModuleConfig\PathFinder\V1;
 
-use Cake\Core\Configure;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\PathFinder\BasePathFinder;
 

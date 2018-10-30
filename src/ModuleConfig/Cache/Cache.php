@@ -81,7 +81,6 @@ class Cache implements ErrorAwareInterface
     /**
      * Constructor
      *
-     * @throws \InvalidArgumentException when no name given
      * @param string $name Name of the current cache instance (think prefix)
      * @param mixed[] $options Options
      */

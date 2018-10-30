@@ -12,7 +12,6 @@
 namespace Qobo\Utils\Utility;
 
 use Cake\Log\Log;
-use Exception;
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
 

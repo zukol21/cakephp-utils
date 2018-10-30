@@ -5,7 +5,6 @@ use Cake\TestSuite\TestCase;
 use Qobo\Utils\ModuleConfig\ClassFactory;
 use Qobo\Utils\ModuleConfig\ClassType;
 use Qobo\Utils\ModuleConfig\ConfigType;
-use Qobo\Utils\ModuleConfig\ModuleConfig;
 
 class ClassFactoryTest extends TestCase
 {

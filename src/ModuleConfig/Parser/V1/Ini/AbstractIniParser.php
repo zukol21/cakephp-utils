@@ -13,7 +13,6 @@ namespace Qobo\Utils\ModuleConfig\Parser\V1\Ini;
 
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\Parser\AbstractParser;
-use Qobo\Utils\Utility;
 
 abstract class AbstractIniParser extends AbstractParser
 {

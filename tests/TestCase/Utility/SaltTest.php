@@ -2,7 +2,6 @@
 namespace Qobo\Utils\Test\TestCase\Utility;
 
 use Cake\TestSuite\TestCase;
-use Cake\Utility\Security;
 use Qobo\Utils\Utility\Salt;
 use RuntimeException;
 

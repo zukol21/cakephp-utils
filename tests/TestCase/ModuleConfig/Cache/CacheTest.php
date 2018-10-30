@@ -7,7 +7,7 @@ use Qobo\Utils\ModuleConfig\Cache\Cache;
 class CacheTest extends TestCase
 {
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      */
     public function testConstructException(): void
     {

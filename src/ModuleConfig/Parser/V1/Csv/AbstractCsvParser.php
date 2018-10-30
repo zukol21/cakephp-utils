@@ -73,6 +73,7 @@ abstract class AbstractCsvParser extends AbstractParser
     /**
      * Process each row of data
      *
+     * @throws \InvalidArgumentException when cannot process row
      * @param mixed[] $row Row data
      * @param string $path Path of the source
      * @return mixed
