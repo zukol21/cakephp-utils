@@ -533,4 +533,36 @@ class Utility
 
         return $clientCountryCode;
     }
+
+    /**
+     * Convert an object to associative array
+     *
+     * NOTE: in case of any issues during the conversion, this
+     * method will return an empty array and NOT throw any
+     * exceptions.
+     *
+     * @param object $source Object to convert
+     * @return mixed[]
+     */
+    public static function objectToArray($source): array
+    {
+        $result = [];
+
+        if (!is_object($source)) {
+            return $result;
+        }
+
+        $json = json_encode($source);
+        if ($json === false) {
+            return $result;
+        }
+
+        $array = json_decode($json, true);
+        if ($array === null) {
+            return $result;
+        }
+        $result = $array;
+
+        return $result;
+    }
 }
