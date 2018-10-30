@@ -57,7 +57,7 @@ class MigrationParser extends AbstractCsvParser
     {
         $result = parent::getDataFromPath($path);
 
-        if (empty($result->items)) {
+        if (property_exists($result, 'items') && empty($result->items)) {
             unset($result->items);
 
             return $result;

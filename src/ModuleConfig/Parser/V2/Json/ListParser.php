@@ -53,15 +53,20 @@ class ListParser extends AbstractJsonParser
 
         $result = parent::parse($path, $options);
         $data = Utility::objectToArray($result);
-        $result->items = $this->normalize($data['items']);
+        if (empty($data['items'])) {
+            $data['items'] = [];
+        }
+        $data['items'] = $this->normalize($data['items']);
 
         if ($options['filter']) {
-            $result->items = $this->filter($result->items);
+            $data['items'] = $this->filter($data['items']);
         }
 
         if ($options['flatten']) {
-            $result->items = $this->flatten($result->items);
+            $data['items'] = $this->flatten($data['items']);
         }
+
+        $result = Utility::arrayToObject($data);
 
         return $result;
     }

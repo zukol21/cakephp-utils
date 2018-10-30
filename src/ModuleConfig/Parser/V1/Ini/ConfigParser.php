@@ -74,6 +74,10 @@ class ConfigParser extends AbstractIniParser
      */
     protected function mergeWithDefaults($data = null)
     {
+        if (!is_object($data)) {
+            $data = new stdClass();
+        }
+
         // Set defaults
         foreach ($this->defaults as $section => $options) {
             // Make sure the section exists
@@ -88,19 +92,35 @@ class ConfigParser extends AbstractIniParser
             }
         }
 
-        // Convert CSV string values to arrays
-        $data->table->lookup_fields = $this->csv2array($data->table->lookup_fields);
-        $data->table->typeahead_fields = $this->csv2array($data->table->typeahead_fields);
-        $data->table->permissions_parent_modules = $this->csv2array($data->table->permissions_parent_modules);
-        $data->table->basic_search_fields = $this->csv2array($data->table->basic_search_fields);
-        $data->table->allow_reminders = $this->csv2array($data->table->allow_reminders);
-        $data->associations->hide_associations = $this->csv2array($data->associations->hide_associations);
-        $data->notifications->ignored_fields = $this->csv2array($data->notifications->ignored_fields);
-        $data->manyToMany->modules = $this->csv2array($data->manyToMany->modules);
+        /*
+         * Convert CSV string values to arrays
+         */
 
-        $virtualFields = Utility::objectToArray($data->virtualFields);
-        foreach ($virtualFields as $virtualField => $realFields) {
-            $data->virtualFields->$virtualField = $this->csv2array($realFields);
+        if (property_exists($data, 'table')) {
+            $data->table->lookup_fields = $this->csv2array($data->table->lookup_fields);
+            $data->table->typeahead_fields = $this->csv2array($data->table->typeahead_fields);
+            $data->table->permissions_parent_modules = $this->csv2array($data->table->permissions_parent_modules);
+            $data->table->basic_search_fields = $this->csv2array($data->table->basic_search_fields);
+            $data->table->allow_reminders = $this->csv2array($data->table->allow_reminders);
+        }
+
+        if (property_exists($data, 'associations')) {
+            $data->associations->hide_associations = $this->csv2array($data->associations->hide_associations);
+        }
+
+        if (property_exists($data, 'notifications')) {
+            $data->notifications->ignored_fields = $this->csv2array($data->notifications->ignored_fields);
+        }
+
+        if (property_exists($data, 'manyToMany')) {
+            $data->manyToMany->modules = $this->csv2array($data->manyToMany->modules);
+        }
+
+        if (property_exists($data, 'virtualFields')) {
+            $virtualFields = Utility::objectToArray($data->virtualFields);
+            foreach ($virtualFields as $virtualField => $realFields) {
+                $data->virtualFields->$virtualField = $this->csv2array($realFields);
+            }
         }
 
         return $data;
