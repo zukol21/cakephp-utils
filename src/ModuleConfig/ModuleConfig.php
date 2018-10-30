@@ -16,6 +16,7 @@ use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
+use Qobo\Utils\Utility;
 use stdClass;
 
 /**
@@ -160,7 +161,8 @@ class ModuleConfig implements ErrorAwareInterface
      */
     public function parse()
     {
-        $cache = $parser = $exception = $cacheKey = $result = $path = null;
+        $result = new stdClass();
+        $cache = $parser = $exception = $cacheKey = $path = null;
         try {
             $path = $this->find(false);
             // Cached response
@@ -189,6 +191,19 @@ class ModuleConfig implements ErrorAwareInterface
         if ($cache && $cacheKey) {
             $cache->writeTo($cacheKey, $result, ['path' => $path]);
         }
+
+        return $result;
+    }
+
+    /**
+     * Parse module configuration file to associative array
+     *
+     * @return mixed[] Whatever Parser returned, converted to array
+     */
+    public function parseToArray(): array
+    {
+        $result = $this->parse();
+        $result = Utility::objectToArray($result);
 
         return $result;
     }
@@ -229,7 +244,7 @@ class ModuleConfig implements ErrorAwareInterface
      * @param string $caller Caller that generated a message
      * @return void
      */
-    protected function mergeMessages($source, string $caller = 'ModuleConfig'): void
+    protected function mergeMessages($source = null, string $caller = 'ModuleConfig'): void
     {
         $source = is_object($source) ? $source : new stdClass();
 

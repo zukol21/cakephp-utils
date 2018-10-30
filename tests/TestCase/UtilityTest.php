@@ -5,6 +5,8 @@ use Cake\Core\Configure;
 use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
+use RuntimeException;
+use stdClass;
 
 class UtilityTest extends TestCase
 {
@@ -292,5 +294,40 @@ class UtilityTest extends TestCase
 
         $clientIp = '82.102.92.178'; // CY
         $this->assertEquals(Utility::getCountryByIp($clientIp), $expected, 'Failed to receive correct code by public IP');
+    }
+
+    public function testObjectToArray(): void
+    {
+        // null
+        $result = Utility::objectToArray(null);
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+
+        // scalar
+        $result = Utility::objectToArray('foobar');
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+
+        // object with resource
+        $fh = fopen(__FILE__, "r");
+        if (!is_resource($fh)) {
+            throw new RuntimeException("Failed to open file for reading");
+        }
+        $source = new stdClass();
+        $source->foo = $fh;
+        $result = Utility::objectToArray($source);
+        $this->assertTrue(is_array($result));
+        $this->assertTrue(empty($result));
+        // close file handler, cause we are nice people
+        fclose($fh);
+
+        // object (good)
+        $source = new stdClass();
+        $source->foo = 'bar';
+        $result = Utility::objectToArray($source);
+        $this->assertTrue(is_array($result));
+        $this->assertFalse(empty($result));
+        $this->assertArrayHasKey('foo', $result);
+        $this->assertEquals('bar', $result['foo']);
     }
 }

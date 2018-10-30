@@ -6,6 +6,7 @@ use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
+use Qobo\Utils\Utility;
 
 class ModuleConfigTest extends TestCase
 {
@@ -105,7 +106,31 @@ class ModuleConfigTest extends TestCase
             $this->fail($e->getMessage());
         }
         $this->assertTrue(is_object($result), "Result is not an object");
-        $this->assertFalse(empty(json_decode(json_encode($result), true)), "Result is empty");
+        $result = Utility::objectToArray($result);
+        $this->assertFalse(empty($result), "Result is empty");
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
+     */
+    public function testParseToArray(string $description, array $options): void
+    {
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
+        $resultObject = null;
+        $resultArray = null;
+        try {
+            $resultObject = $mc->parse();
+            $resultArray = $mc->parseToArray();
+        } catch (InvalidArgumentException $e) {
+            print_r($mc->getErrors());
+            $this->fail($e->getMessage());
+        }
+        $this->assertTrue(is_object($resultObject), "Result object is not an object");
+        $this->assertTrue(is_array($resultArray), "Result array is not an array");
+        $expected = Utility::objectToArray($resultObject);
+        $this->assertEquals($expected, $resultArray, "Result object is different from result array");
     }
 
     /**

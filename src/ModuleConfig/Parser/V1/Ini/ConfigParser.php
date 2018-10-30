@@ -11,6 +11,7 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser\V1\Ini;
 
+use Qobo\Utils\Utility;
 use stdClass;
 
 /**
@@ -97,7 +98,7 @@ class ConfigParser extends AbstractIniParser
         $data->notifications->ignored_fields = $this->csv2array($data->notifications->ignored_fields);
         $data->manyToMany->modules = $this->csv2array($data->manyToMany->modules);
 
-        $virtualFields = json_decode(json_encode($data->virtualFields), true);
+        $virtualFields = Utility::objectToArray($data->virtualFields);
         foreach ($virtualFields as $virtualField => $realFields) {
             $data->virtualFields->$virtualField = $this->csv2array($realFields);
         }

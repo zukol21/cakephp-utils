@@ -4,6 +4,7 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V1\Csv;
 use Cake\Core\Configure;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Csv\MigrationParser;
+use Qobo\Utils\Utility;
 
 class MigrationParserTest extends TestCase
 {
@@ -25,8 +26,7 @@ class MigrationParserTest extends TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = Utility::objectToArray($result);
 
         $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertTrue(array_key_exists('id', $result), "Parser missed 'id' field");
@@ -45,8 +45,7 @@ class MigrationParserTest extends TestCase
         $result = $this->parser->parse($file);
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = Utility::objectToArray($result);
 
         $this->assertTrue(empty($result), "Parser returned empty result");
     }
@@ -58,8 +57,7 @@ class MigrationParserTest extends TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = Utility::objectToArray($result);
 
         $this->assertTrue(empty($result), "Parser returned non-empty result");
     }
@@ -70,8 +68,7 @@ class MigrationParserTest extends TestCase
         $result = $this->parser->parse($file);
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
+        $result = Utility::objectToArray($result);
 
         $this->assertFalse(empty($result), "Parser returned empty result");
     }

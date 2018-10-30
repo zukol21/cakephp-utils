@@ -5,6 +5,7 @@ use Cake\Core\Configure;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Csv\ViewParser;
+use Qobo\Utils\Utility;
 
 class ViewParserTest extends TestCase
 {
@@ -35,7 +36,6 @@ class ViewParserTest extends TestCase
         $this->assertFalse(empty($result->items), "Parser returned empty items");
         $this->assertTrue(is_array($result->items), "Parser returned non-array items");
 
-        // Convert object to array recursively
         $result = $result->items;
 
         $this->assertTrue(is_array($result[0]), "Parser returned a non-array first element");
@@ -59,12 +59,9 @@ class ViewParserTest extends TestCase
         $this->assertFalse(empty($result->items), "Parser returned empty items");
         $this->assertTrue(is_array($result->items), "Parser returned non-array items");
 
-        // Convert object to array recursively
         $result = $result->items;
 
-        // Convert object to array recursively
-        $result = json_decode(json_encode($result), true);
-
+        $this->assertFalse(empty($result[0]), "Parser returned an empty array");
         $this->assertTrue(is_array($result[0]), "Parser returned a non-array first element");
         $this->assertFalse(empty($result[0]), "Parser returned a non-array first element");
         $this->assertEquals(1, count($result[0]), "Parser returned incorrect number of items in first element");

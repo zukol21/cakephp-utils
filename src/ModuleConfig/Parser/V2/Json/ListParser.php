@@ -11,6 +11,8 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser\V2\Json;
 
+use Qobo\Utils\Utility;
+
 /**
  * List JSON Parser
  *
@@ -50,7 +52,7 @@ class ListParser extends AbstractJsonParser
         $options = array_merge($this->options, $options);
 
         $result = parent::parse($path, $options);
-        $data = json_decode(json_encode($result), true);
+        $data = Utility::objectToArray($result);
         $result->items = $this->normalize($data['items']);
 
         if ($options['filter']) {
