@@ -80,27 +80,3 @@ StorageManager::config('Local', [
 ]);
 
 EventManager::instance()->on(new BaseListener(Configure::read('FileStorage')));
-
-/**
- * Convert size value to bytes
- *
- * NOTE: This is left here purely for backward-compatibility reasons.
- *
- * @obsolete
- * @param string|int $size Size to convert
- * @return int
- */
-function sizeToBytes($size)
-{
-    try {
-        $result = Convert::valueToBytes($size);
-    } catch (Exception $e) {
-        // Mimic initial behavior, before exception was introduced
-        $result = (string)$size;
-        $result = (int)$result;
-
-        return $result;
-    }
-
-    return $result;
-}
