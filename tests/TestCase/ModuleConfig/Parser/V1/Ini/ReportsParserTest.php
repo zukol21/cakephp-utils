@@ -5,7 +5,7 @@ use Cake\Core\Configure;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V1\Ini\ReportsParser;
-use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
 
 class ReportsParserTest extends TestCase
 {
@@ -33,7 +33,7 @@ class ReportsParserTest extends TestCase
 
         $this->assertTrue(is_object($result), "Parser returned a non-object");
 
-        $result = Utility::objectToArray($result);
+        $result = Convert::objectToArray($result);
 
         $this->assertFalse(empty($result), "Parser returned empty result");
         $this->assertFalse(empty($result['by_campaign_name']), "Parser missed 'by_campaign_name' section");

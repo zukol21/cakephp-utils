@@ -61,7 +61,9 @@ class CacheTest extends TestCase
         ];
         $paramsAll = $params;
         $paramsAll[] = $options;
-        $expected = 'foo_' . md5(json_encode($paramsAll));
+        $paramsAllJson = json_encode($paramsAll);
+        $paramsAllJson = $paramsAllJson ?: '';
+        $expected = 'foo_' . md5($paramsAllJson);
 
         $cache = new Cache('foo', $options);
         $result = $cache->getKey($params);

@@ -73,6 +73,10 @@ class ConfigParser extends AbstractJsonParser
      */
     protected function mergeWithDefaults($data = null)
     {
+        if (!is_object($data)) {
+            $data = new stdClass();
+        }
+
         // Set defaults
         foreach ($this->defaults as $section => $options) {
             // Make sure the section exists

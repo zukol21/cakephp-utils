@@ -5,7 +5,7 @@ use Cake\Core\Configure;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Qobo\Utils\ModuleConfig\Parser\V2\Json\ViewParser;
-use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
 
 class ViewParserTest extends TestCase
 {
@@ -32,7 +32,7 @@ class ViewParserTest extends TestCase
         $file = $this->dataDir . DS . 'Foo' . DS . 'views' . DS . 'add.json';
 
         $result = $this->parser->parse($file);
-        $result = Utility::objectToArray($result);
+        $result = Convert::objectToArray($result);
 
         $this->assertNotEmpty($result);
         $this->assertArrayHasKey('items', $result);

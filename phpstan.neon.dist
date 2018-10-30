@@ -9,6 +9,8 @@ parameters:
     earlyTerminatingMethodCalls:
         Cake\Console\Shell:
             - abort
+    ignoreErrors:
+        - '#^Function geoip_country_code_by_name not found\.$#'
 includes:
     - vendor/thecodingmachine/phpstan-strict-rules/phpstan-strict-rules.neon
     - vendor/timeweb/phpstan-enum/extension.neon

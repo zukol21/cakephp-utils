@@ -13,6 +13,7 @@ namespace Qobo\Utils\ModuleConfig\Parser\V1\Csv;
 
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
+use stdClass;
 
 /**
  * List CSV Parser
@@ -107,7 +108,7 @@ class ListParser extends AbstractCsvParser
 
         $parser = new ListParser();
         $children = $parser->parse($childListPath);
-        $result = $children->items;
+        $result = property_exists($children, 'items') ? $children->items : [];
 
         return $result;
     }

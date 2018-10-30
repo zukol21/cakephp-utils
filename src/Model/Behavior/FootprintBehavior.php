@@ -39,7 +39,7 @@ class FootprintBehavior extends Behavior
      * @param \ArrayObject $options Query options
      * @return void
      */
-    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options)
+    public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options): void
     {
         if (! is_callable($this->getConfig('callback'))) {
             return;

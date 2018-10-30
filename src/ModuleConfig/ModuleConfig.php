@@ -16,7 +16,7 @@ use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
-use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
 use stdClass;
 
 /**
@@ -203,7 +203,7 @@ class ModuleConfig implements ErrorAwareInterface
     public function parseToArray(): array
     {
         $result = $this->parse();
-        $result = Utility::objectToArray($result);
+        $result = Convert::objectToArray($result);
 
         return $result;
     }
