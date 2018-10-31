@@ -49,7 +49,7 @@
         "rlanvin/php-rrule": "^1.6"
     },
     "require-dev": {
-        "qobo/cakephp-composer-dev": "v1.0"
+        "qobo/cakephp-composer-dev": "^v1.0"
     },
     "autoload": {
         "psr-4": {
