@@ -29,11 +29,11 @@
     <file>./src/</file>
     <file>./tests/</file>
     <file>./config/</file>
+    <file>./webroot/</file>
 
-    <!-- Ignore files -->
-    <arg name="ignore" value="config/Migrations/" />
-    <arg name="ignore" value="webroot/plugins/" />
-
-    <!-- Ignore minified files -->
+    <!-- Exclude patterns -->
+    <exclude-pattern>config/Migrations/*</exclude-pattern>
+    <exclude-pattern>config/Seeds/*</exclude-pattern>
+    <exclude-pattern>webroot/plugins/*</exclude-pattern>
     <exclude-pattern>*\.min\.(css|js)</exclude-pattern>
 </ruleset>
