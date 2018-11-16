@@ -33,7 +33,7 @@ class Utility
      *
      * @return mixed Method return.
      */
-    public static function callStaticPrivateMethod(String $object, String $methodName, array $parameters = [])
+    public static function callStaticPrivateMethod($object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass($object);
 
