@@ -11,11 +11,11 @@ class Utility
      *
      * @param object $object    Return method back
      * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
+     * @param mixed[]  $parameters Array of parameters to pass into method.
      *
      * @return mixed Method return.
      */
-    public static function callPrivateMethod($object, $methodName, $parameters = [])
+    public static function callPrivateMethod($object, string $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
@@ -29,11 +29,11 @@ class Utility
      *
      * @param string $object    Return method back
      * @param string $methodName Method name to call
-     * @param array  $parameters Array of parameters to pass into method.
+     * @param mixed[]  $parameters Array of parameters to pass into method.
      *
      * @return mixed Method return.
      */
-    public static function callStaticPrivateMethod($object, $methodName, array $parameters = [])
+    public static function callStaticPrivateMethod(string $object, string $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass($object);
 
