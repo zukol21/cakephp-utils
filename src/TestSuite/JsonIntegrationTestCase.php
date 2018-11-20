@@ -46,7 +46,7 @@ class JsonIntegrationTestCase extends IntegrationTestCase
                 'sub' => $user,
                 'exp' => time() + 604800
             ],
-            Security::salt()
+            Security::getSalt()
         );
 
         return $result;
