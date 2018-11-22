@@ -50,10 +50,14 @@ class FootprintBehavior extends Behavior
             return;
         }
 
-        if ($entity->isNew()) {
+        // Set created_by only if that field is not set during entity creation
+        if ($entity->isNew() && empty($entity->get('created_by'))) {
             $entity->set($this->getConfig('created_by'), $user['id']);
         }
 
-        $entity->set($this->getConfig('modified_by'), $user['id']);
+        // Set modified_by if that field is not set during update
+        if (!$entity->isDirty('modified_by') || empty($entity->get('modified_by'))) {
+            $entity->set($this->getConfig('modified_by'), $user['id']);
+        }
     }
 }
