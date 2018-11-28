@@ -56,7 +56,7 @@ class FootprintBehavior extends Behavior
         }
 
         // Set modified_by if that field is not set during update
-        $userId = isDirty($this->getConfig('modified_by')) && !empty($this->getConfig('modified_by')) ? $entity->get($this->getConfig('modified_by')) : $user['id'];
+        $userId = $entity->isDirty($this->getConfig('modified_by')) && !empty($this->getConfig('modified_by')) ? $entity->get($this->getConfig('modified_by')) : $user['id'];
         $entity->set($this->getConfig('modified_by'), $userId);
     }
 }
