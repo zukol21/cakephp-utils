@@ -131,17 +131,20 @@
                     "title": "Module type",
                     "description": "Type of module",
                     "type": "string",
+                    "default": "module",
                     "enum": ["module", "relation"]
                 },
                 "icon": {
                     "title": "Module icon",
                     "description": "Icon to use for the current module",
-                    "type": "string"
+                    "type": "string",
+                    "default": "cube"
                 },
                 "display_field": {
                     "title": "Display field",
                     "description": "Module display field to use in links to records of this module.",
-                    "$ref": "#/definitions/fieldName"
+                    "$ref": "#/definitions/fieldName",
+                    "default": "id"
                 },
                 "alias": {
                     "title": "Module alias",
@@ -151,11 +154,13 @@
                 "searchable": {
                     "title": "Searchable",
                     "description": "Whether or not the module is searchable.",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": true
                 },
                 "typeahead_fields": {
                     "title": "Type-ahead fields",
                     "description": "Array or comma-separated string with list of fields to use for searching in type-ahead lookups",
+                    "default": [],
                     "anyOf": [
                         { "type": "string" },
                         {
@@ -171,6 +176,7 @@
                 "permissions_parent_modules": {
                     "title": "Parent modules",
                     "description": "Array or comma-separated string with list of parent modules to use them in access control",
+                    "default": [],
                     "anyOf": [
                         { "type": "string" },
                         {
@@ -186,6 +192,7 @@
                 "lookup_fields": {
                     "title": "Lookup fields",
                     "description": "Array or comma-separated string with list of fields to use in the URL for locating module record",
+                    "default": [],
                     "anyOf": [
                         { "type": "string" },
                         {
@@ -201,6 +208,7 @@
                 "basic_search_fields": {
                     "title": "Basic search fields",
                     "description": "Array or comma-separated string with list of fields to use in the basic search",
+                    "default": [],
                     "anyOf": [
                         { "type": "string" },
                         {
@@ -216,6 +224,7 @@
                 "allow_reminders": {
                     "title": "Allow reminders",
                     "description": "Array or comma-separated string with list of modules for which reminders are allowed",
+                    "default": [],
                     "anyOf": [
                         { "type": "string" },
                         {
@@ -231,7 +240,8 @@
                 "translatable": {
                     "title": "Translatable flag",
                     "description": "Whether or not the module is translatable",
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 }
             },
             "required": ["display_field"],
@@ -242,6 +252,7 @@
             "description": "List of virtual fields and their mapping to real fields for SQL queries",
             "type": "object",
             "properties": {},
+            "default": {},
             "additionalProperties": {
                 "anyOf": [
                     { "type": "string" },
@@ -271,10 +282,14 @@
             "title": "Module many-to-many relationships",
             "description": "Configuration of many-to-many relationships",
             "type": "object",
+            "default": {
+                "modules": []
+            },
             "properties": {
                 "modules": {
                     "title": "List of many-to-many modules",
                     "description": "Array or comma-separated string with list of modules for many-to-many relationship",
+                    "default": [],
                     "anyOf": [
                         { "type": "string" },
                         {
@@ -294,19 +309,18 @@
             "title": "Notifications",
             "description": "Enable or disable email notifications for calendar events",
             "type": "object",
+            "default": { "enable": false, "ignored_fields": [] },
             "properties": {
                 "enable": {
                     "title": "Enable or disable email notifications for calendar events",
                     "description": "If enabled, users will receive email notifications with vCal attachments",
-                    "anyOf": [
-                        { "type": "string", "enum": ["", "true", "false"] },
-                        { "type": "boolean" },
-                        { "type": "null" }
-                    ]
+                    "type": "boolean",
+                    "default": false
                 },
                 "ignored_fields": {
                     "title": "Ignore notifications on modified fields",
                     "description": "Array or comma-separated string with list of fields, which if only these are modified, do not send notifications",
+                    "default": [],
                     "anyOf": [
                         { "type": "string" },
                         {
@@ -320,7 +334,7 @@
                     ]
                 }
             },
-            "required": ["enable"]
+            "required": ["enable", "ignored_fields"]
         },
         "conversions": {
             "title": "Module conversion configuration",
@@ -393,6 +407,9 @@
             "title": "Module associations configuration",
             "description": "Defines some association behaviors",
             "type": "object",
+            "default": {
+                "hide_associations": []
+            },
             "properties": {
                 "hide_associations": {
                     "title": "List of hidden associations",
@@ -416,6 +433,7 @@
             "description": "Defines custom labels for association tabs",
             "type": "object",
             "properties": {},
+            "default": {},
             "additionalProperties": {
                 "allOf": [
                     { "type": ["string"] }
