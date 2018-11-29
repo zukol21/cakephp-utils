@@ -23,7 +23,6 @@
                 },
                 "modules": {
                     "title": "List of destination modules",
-                    "description": "Conversion modules configuration",
                     "description": "Describes the list of modules to which current module records will convert",
                     "additionalProperties": {
                         "allOf": [
