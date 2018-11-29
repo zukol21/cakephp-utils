@@ -28,5 +28,6 @@
             }
         }
     },
-    "required": ["items"]
+    "required": ["items"],
+    "additionalProperties": false
 }
