@@ -179,8 +179,6 @@ class ModuleConfig implements ErrorAwareInterface
             $this->mergeMessages($exception, __FUNCTION__);
         }
 
-        // Get parser errors and warnings, if any
-        $this->mergeMessages($parser, __FUNCTION__);
         $this->mergeMessages($cache, __FUNCTION__);
 
         // Re-throw parser exception
