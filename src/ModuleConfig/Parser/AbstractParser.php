@@ -12,8 +12,10 @@
 namespace Qobo\Utils\ModuleConfig\Parser;
 
 use InvalidArgumentException;
-use League\JsonGuard\Dereferencer;
-use League\JsonGuard\Validator;
+use JsonSchema\Constraints\Constraint;
+use JsonSchema\Constraints\Factory;
+use JsonSchema\Exception\ValidationException;
+use JsonSchema\Validator;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\Utility;
 use Qobo\Utils\Utility\Convert;
@@ -43,6 +45,14 @@ abstract class AbstractParser implements ParserInterface
      * @var bool $isPathRequired Is path required?
      */
     protected $isPathRequired = false;
+
+    /**
+     * JSON schema validation modes.
+     *
+     * @see \JsonSchema\Constraints\Constraint
+     * @var int
+     */
+    protected $validationMode = Constraint::CHECK_MODE_EXCEPTIONS | Constraint::CHECK_MODE_APPLY_DEFAULTS;
 
     /**
      * Read and parse a given real path
@@ -124,6 +134,7 @@ abstract class AbstractParser implements ParserInterface
      *
      * @param object $data Data to validate
      * @param object $schema Schema to validate against
+     * @throws \InvalidArgumentException When json validation fails
      * @return void
      */
     protected function validateData($data = null, $schema = null): void
@@ -149,12 +160,12 @@ abstract class AbstractParser implements ParserInterface
             return;
         }
 
-        $validator = new Validator($data, $schema);
-        if ($validator->fails()) {
-            foreach ($validator->errors() as $error) {
-                $this->errors[] = $error->getMessage();
-            }
-            throw new InvalidArgumentException("Validation failed");
+        $validator = new Validator;
+
+        try {
+            $validator->validate($data, $schema, $this->validationMode);
+        } catch (ValidationException $e) {
+            throw new InvalidArgumentException($e->getMessage(), 0, $e);
         }
     }
 
@@ -175,8 +186,7 @@ abstract class AbstractParser implements ParserInterface
         }
 
         if (is_string($this->schema)) {
-            $deref = new Dereferencer();
-            $this->schema = $deref->dereference($this->schema);
+            $this->schema = $this->getDataFromRealPath($this->schema);
 
             return $this->schema;
         }
