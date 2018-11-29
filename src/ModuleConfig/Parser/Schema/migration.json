@@ -1,19 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "definitions": {
-        "booleanString": {
-            "title": "Boolean string",
-            "description": "Shortcut for defining boolean strings that can be empty or null",
-            "anyOf": [
-                {
-                    "type": "string",
-                    "enum": ["", "0", "1"]
-                },
-                {
-                    "type": "null"
-                }
-            ]
-        },
         "migrationField": {
             "title": "Migration field",
             "description": "Representation of a single field from migrations.csv",
@@ -34,27 +21,24 @@
                 "required": {
                     "title": "Required flag",
                     "description": "Defines whether or not the field is required",
-                    "anyOf": [
-                        { "$ref": "#/definitions/booleanString" }
-                    ]
+                    "type": "boolean",
+                    "default": false
                 },
                 "non-searchable": {
                     "title": "Searchable flag",
                     "description": "Defines whether or not the field is searchable",
-                    "anyOf": [
-                        { "$ref": "#/definitions/booleanString" }
-                    ]
+                    "type": "boolean",
+                    "default": false
                 },
                 "unique": {
                     "title": "Unique flag",
                     "description": "Defines whether or not the field is contains unique value",
-                    "anyOf": [
-                        { "$ref": "#/definitions/booleanString" }
-                    ]
+                    "type": "boolean",
+                    "default": false
                 }
             },
             "additionalProperties": false,
-            "required": ["name", "type", "required", "non-searchable", "unique"]
+            "required": ["name", "type"]
         }
     },
     "title": "CSV migration",
