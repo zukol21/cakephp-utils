@@ -16,6 +16,7 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Constraints\Factory;
 use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
+use JsonSchema\SchemaStorage;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\Utility;
 use Qobo\Utils\Utility\Convert;
@@ -52,7 +53,7 @@ abstract class AbstractParser implements ParserInterface
      * @see \JsonSchema\Constraints\Constraint
      * @var int
      */
-    protected $validationMode = Constraint::CHECK_MODE_EXCEPTIONS | Constraint::CHECK_MODE_APPLY_DEFAULTS;
+    protected $validationMode = Constraint::CHECK_MODE_APPLY_DEFAULTS;
 
     /**
      * Read and parse a given real path
@@ -123,7 +124,13 @@ abstract class AbstractParser implements ParserInterface
             $schema = $this->getSchema();
             $this->validateData($result, $schema);
         } catch (InvalidArgumentException $e) {
-            $this->fail(new InvalidArgumentException("[" . basename($path) . "] : " . $e->getMessage()));
+            $newException = new InvalidArgumentException("[" . basename($path) . "] : " . $e->getMessage());
+
+            if ( ! empty($e->getMessage())) {
+                $this->fail($newException);
+            }
+
+            throw $newException;
         }
 
         return $result;
@@ -162,10 +169,14 @@ abstract class AbstractParser implements ParserInterface
 
         $validator = new Validator;
 
-        try {
-            $validator->validate($data, $schema, $this->validationMode);
-        } catch (ValidationException $e) {
-            throw new InvalidArgumentException($e->getMessage(), 0, $e);
+        $validator->validate($data, $schema, $this->validationMode);
+
+        if ( ! $validator->isValid()) {
+            foreach ($validator->getErrors() as $error) {
+                $this->errors[] = sprintf('[%s]: %s', $error['pointer'], $error['message']);
+            }
+
+            throw new InvalidArgumentException();
         }
     }
 
