@@ -55,6 +55,9 @@ class ConfigParserTest extends TestCase
         $result = $this->parser->parse($file);
         $this->assertNotEmpty($result);
         $this->assertEmpty($this->parser->getErrors());
+
+        // var_dump($result);
+        // exit;
     }
 
     /**
@@ -118,8 +121,11 @@ class ConfigParserTest extends TestCase
 
         try {
             $this->parser->parse($file);
+
+            $this->fail('JSON Validation was supposed to fail.');
         } catch (InvalidArgumentException $e) {
-            $this->assertContains('Error validating /table', $e->getMessage());
+            $this->assertCount(1, $this->parser->getErrors(), 'Invalid error count.');
+            $this->assertContains('The property invalidAlias is not defined', $this->parser->getErrors()[0], 'Invalid error occured.');
         }
     }
 }

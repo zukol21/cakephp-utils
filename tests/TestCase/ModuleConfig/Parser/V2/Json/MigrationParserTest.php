@@ -85,8 +85,19 @@ class MigrationParserTest extends TestCase
 
         try {
             $this->parser->parse($file);
+            $this->fail('JSON Validation was supposed to fail.');
         } catch (InvalidArgumentException $e) {
-            $this->assertContains('Error validating /id/required', $e->getMessage());
+            $this->assertCount(4, $this->parser->getErrors(), 'Invalid error count.');
+            $this->assertContains('[/id/required]: NULL value found, but a boolean is required', $this->parser->getErrors(), 'Invalid error occured.');
+            $this->assertContains('[/id/non-searchable]: String value found, but a boolean is required', $this->parser->getErrors(), 'Invalid error occured.');
+            $this->assertContains('[/id/unique]: Integer value found, but a boolean is required', $this->parser->getErrors(), 'Invalid error occured.');
+            $this->assertContains('[/id]: Failed to match all schemas', $this->parser->getErrors(), 'Invalid error occured.');
         }
+
+        // try {
+        //     $this->parser->parse($file);
+        // } catch (InvalidArgumentException $e) {
+        //     $this->assertContains('Error validating /id/required', $e->getMessage());
+        // }
     }
 }

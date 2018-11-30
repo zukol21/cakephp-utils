@@ -8,114 +8,66 @@
     },
     "description": {
         "name": "description",
-        "type": "text",
-        "required": "",
-        "non-searchable": "1",
-        "unique": null
+        "type": "text"
     },
     "name": {
         "name": "name",
-        "type": "string",
-        "required": "1",
-        "non-searchable": "",
-        "unique": "1"
+        "type": "string"
     },
     "status": {
         "name": "status",
-        "type": "list(foo_statuses)",
-        "required": "1",
-        "non-searchable": null,
-        "unique": null
+        "type": "list(foo_statuses)"
     },
     "type": {
         "name": "type",
-        "type": "list(foo_types)",
-        "required": "1",
-        "non-searchable": null,
-        "unique": null
+        "type": "list(foo_types)"
     },
     "gender": {
         "name": "gender",
-        "type": "list(genders)",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "list(genders)"
     },
     "city": {
         "name": "city",
-        "type": "list(cities)",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "list(cities)"
     },
     "country": {
         "name": "country",
-        "type": "list(countries)",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "list(countries)"
     },
     "cost": {
         "name": "cost",
-        "type": "money(currencies)",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "money(currencies)"
     },
     "birthdate": {
         "name": "birthdate",
-        "type": "date",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "date"
     },
     "reminder_date": {
         "name": "reminder_date",
-        "type": "reminder",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "reminder"
     },
     "created": {
         "name": "created",
-        "type": "datetime",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "datetime"
     },
     "modified": {
         "name": "modified",
-        "type": "datetime",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "datetime"
     },
     "garden_area": {
         "name": "garden_area",
-        "type": "metric(units_area)",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "metric(units_area)"
     },
     "is_primary": {
         "name": "is_primary",
-        "type": "boolean",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "boolean"
     },
     "start_time": {
         "name": "start_time",
-        "type": "time",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "time"
     },
     "balance": {
         "name": "balance",
-        "type": "decimal(12.4)",
-        "required": null,
-        "non-searchable": null,
-        "unique": null
+        "type": "decimal(12.4)"
     }
 }

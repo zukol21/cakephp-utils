@@ -72,7 +72,8 @@ class ViewParserTest extends TestCase
         try {
             $this->parser->parse($file);
         } catch (InvalidArgumentException $e) {
-            $this->assertContains('Error validating /items/0: There must be a maximum of 13 items in the array', $e->getMessage());
+            $this->assertContains('[/items/0]: There must be a maximum of 13 items in the array', $this->parser->getErrors());
+            $this->assertContains('[/items/0]: Failed to match all schemas', $this->parser->getErrors());
         }
     }
 }
