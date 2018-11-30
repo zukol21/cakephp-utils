@@ -16,7 +16,6 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Constraints\Factory;
 use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
-use JsonSchema\SchemaStorage;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\Utility;
 use Qobo\Utils\Utility\Convert;
@@ -125,8 +124,7 @@ abstract class AbstractParser implements ParserInterface
             $this->validateData($result, $schema);
         } catch (InvalidArgumentException $e) {
             $newException = new InvalidArgumentException("[" . basename($path) . "] : " . $e->getMessage());
-
-            if ( ! empty($e->getMessage())) {
+            if (!empty($e->getMessage())) {
                 $this->fail($newException);
             }
 
@@ -171,7 +169,7 @@ abstract class AbstractParser implements ParserInterface
 
         $validator->validate($data, $schema, $this->validationMode);
 
-        if ( ! $validator->isValid()) {
+        if (!$validator->isValid()) {
             foreach ($validator->getErrors() as $error) {
                 $this->errors[] = sprintf('[%s]: %s', $error['pointer'], $error['message']);
             }
