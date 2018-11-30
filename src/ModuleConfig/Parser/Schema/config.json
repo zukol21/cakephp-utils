@@ -134,6 +134,11 @@
                     "type": "string",
                     "enum": ["module", "relation"]
                 },
+                "trash": {
+                    "title": "Trash behavior",
+                    "description": "Whether or not the module has the trash behavior.",
+                    "type": "boolean"
+                },                
                 "icon": {
                     "title": "Module icon",
                     "description": "Icon to use for the current module",
