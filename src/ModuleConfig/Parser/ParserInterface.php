@@ -35,7 +35,8 @@ interface ParserInterface extends ErrorAwareInterface
      * Parses a given file against the schema according to the specified options
      *
      * @param string $path Full path to JSON file.
+     * @param mixed[] $options Options
      * @return object
      */
-    public function parse(string $path);
+    public function parse(string $path, array $options = []);
 }

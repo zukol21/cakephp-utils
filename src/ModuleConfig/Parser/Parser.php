@@ -94,8 +94,12 @@ class Parser implements ParserInterface
      * @throws \InvalidArgumentException When data cannot be read from file.
      * @throws \Qobo\Utils\ModuleConfig\Parser\JsonValidationException When json validation fails.
      */
-    public function parse(string $path): object
+    public function parse(string $path, array $options = []): object
     {
+        if (!empty($options)) {
+            $this->setConfig($options);
+        }
+
         $data = $this->getEmptyResult();
 
         try {
