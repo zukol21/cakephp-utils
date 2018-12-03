@@ -11,18 +11,31 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser;
 
+use InvalidArgumentException;
 use Qobo\Utils\ErrorAwareInterface;
 
 interface ParserInterface extends ErrorAwareInterface
 {
     /**
-     * Parse
+     * Sets the schema.
      *
-     * Parses a given file according to the specified options
+     * @param \Qobo\Utils\ModuleConfig\Parser\SchemaInterface $schema JSON schema.
+     * @return void
+     */
+    public function setSchema(SchemaInterface $schema): void;
+
+    /**
+     * Get the schema object.
      *
-     * @param string $path    Path to file
-     * @param mixed[] $options Options for parsing
+     * @return \Qobo\Utils\ModuleConfig\Parser\SchemaInterface JSON schema.
+     */
+    public function getSchema(): SchemaInterface;
+
+    /**
+     * Parses a given file against the schema according to the specified options
+     *
+     * @param string $path Full path to JSON file.
      * @return object
      */
-    public function parse(string $path, array $options = []);
+    public function parse(string $path);
 }
