@@ -94,7 +94,7 @@ class Parser implements ParserInterface
      * @throws \InvalidArgumentException When data cannot be read from file.
      * @throws \Qobo\Utils\ModuleConfig\Parser\JsonValidationException When json validation fails.
      */
-    public function parse(string $path, array $options = []): object
+    public function parse(string $path, array $options = []): \stdClass
     {
         if (!empty($options)) {
             $this->setConfig($options);
@@ -128,11 +128,11 @@ class Parser implements ParserInterface
     /**
      * Validate the JSON object against the schema.
      *
-     * @param object $data JSON object.
+     * @param \stdClass $data JSON object.
      * @throws \Qobo\Utils\ModuleConfig\Parser\JsonValidationException When json validation fails.
      * @return void
      */
-    protected function validate(object $data): void
+    protected function validate(stdClass $data): void
     {
         $config = $this->getConfig();
         $schema = $this->getEmptyResult();

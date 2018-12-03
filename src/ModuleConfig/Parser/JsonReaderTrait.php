@@ -13,6 +13,7 @@ namespace Qobo\Utils\ModuleConfig\Parser;
 
 use InvalidArgumentException;
 use Seld\JsonLint\JsonParser;
+use stdClass;
 
 trait JsonReaderTrait
 {
@@ -29,9 +30,9 @@ trait JsonReaderTrait
      * @param bool $lint True to apply json linting.
      * @throws \Seld\JsonLint\ParsingException When linting is enabled and it fails.
      * @throws \InvalidArgumentException When data is not a valid JSON object and linting is not enabled.
-     * @return object JSON object.
+     * @return \stdClass JSON object.
      */
-    protected function dataToJson(string $data, bool $lint = false): object
+    protected function dataToJson(string $data, bool $lint = false): stdClass
     {
         if ($lint) {
             $this->getLinter()->parse($data);

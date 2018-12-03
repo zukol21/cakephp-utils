@@ -16,6 +16,7 @@ use InvalidArgumentException;
 use Qobo\Utils\Utility;
 use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
+use stdClass;
 
 class Schema implements SchemaInterface
 {
@@ -38,7 +39,7 @@ class Schema implements SchemaInterface
 
     /**
      * Cached schema.
-     * @var object
+     * @var \stdClass
      */
     protected $schema;
 
@@ -98,7 +99,7 @@ class Schema implements SchemaInterface
     /**
      * {@inheritDoc}
      */
-    public function read(): object
+    public function read(): stdClass
     {
         if (!$this->loaded) {
             try {
@@ -119,15 +120,16 @@ class Schema implements SchemaInterface
     /**
      * Apply the optional callback.
      *
-     * @param object $schema JSON schema object.
-     * @return object JSON schema object after callback processing.
+     * @param \stdClass $schema JSON schema object.
+     * @return \stdClass JSON schema object after callback processing.
      */
-    protected function applyCallback(object $schema): object
+    protected function applyCallback(stdClass $schema): stdClass
     {
         if (is_callable($this->callback)) {
             $result = call_user_func_array($this->callback, [$schema]);
 
             if ($result !== false) {
+                /** @var \stdClass */
                 return $result;
             }
         }

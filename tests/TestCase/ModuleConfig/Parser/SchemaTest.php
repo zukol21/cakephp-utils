@@ -9,6 +9,7 @@ use Qobo\Utils\Utility\Convert;
 use RuntimeException;
 use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
+use \stdClass;
 
 class SchemaTest extends TestCase
 {
@@ -109,7 +110,7 @@ class SchemaTest extends TestCase
         $this->expectException(RuntimeException::class);
 
         $schema = $this->getSchema();
-        $schema->setCallback(function (object $schema) {
+        $schema->setCallback(function ($schema) {
             throw new RuntimeException();
         });
 
@@ -125,7 +126,7 @@ class SchemaTest extends TestCase
     public function testSchemaCallbackAmendSchema(): void
     {
         $schema = $this->getSchema();
-        $schema->setCallback(function (object $schema) {
+        $schema->setCallback(function ($schema) {
             $schemaArray = Convert::objectToArray($schema);
             $schemaArray['definitions']['testField']['type'] = 'integer';
 
