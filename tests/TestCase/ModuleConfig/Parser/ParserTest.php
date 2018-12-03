@@ -81,17 +81,6 @@ class ParserTest extends TestCase
     }
 
     /**
-     * Parse an invalid json file.
-     *
-     * @return void
-     */
-    public function testParseInvalidPath(): void
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $this->parser->parse(implode([__DIR__, DIRECTORY_SEPARATOR, 'somebadfile.json']));
-    }
-
-    /**
      * Parse with an invalid `Schema` object
      *
      * @return void
@@ -114,6 +103,18 @@ class ParserTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->parser->parse($this->getFile('sample_error'));
+    }
+
+    /**
+     * Parse an invalid json file.
+     *
+     * @return void
+     */
+    public function testParseInvalidPath(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->parser->setConfig('pathRequired', true);
+        $this->parser->parse(implode([__DIR__, DIRECTORY_SEPARATOR, 'somebadfile.json']));
     }
 
     /**
