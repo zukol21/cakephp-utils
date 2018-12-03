@@ -11,11 +11,14 @@
  */
 namespace Qobo\Utils\ModuleConfig;
 
+use Cake\Core\Configure;
 use InvalidArgumentException;
 use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
+use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
+use Qobo\Utils\ModuleConfig\Parser\Schema;
 use Qobo\Utils\Utility\Convert;
 use stdClass;
 
@@ -69,6 +72,13 @@ class ModuleConfig implements ErrorAwareInterface
     protected $options;
 
     /**
+     * Parser
+     *
+     * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface|null
+     */
+    protected $parser = null;
+
+    /**
      * Constructor
      *
      * @param \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
@@ -104,14 +114,35 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * @return \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
-    protected function getParser(): \Qobo\Utils\ModuleConfig\Parser\ParserInterface
+    protected function getParser(): ParserInterface
     {
-        /**
-         * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface $result
-         */
-        $result = ClassFactory::create($this->configType, ClassType::PARSER(), $this->options);
+        if (is_null($this->parser)) {
+            $schemaPath = implode(DIRECTORY_SEPARATOR, [Configure::read('ModuleConfig.schemaPath'), $this->configType . '.json']);
+            $schema = new Schema($schemaPath);
+            $options = array_merge($this->options, ['classArgs' => [$schema]]);
 
-        return $result;
+            /** @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface&\Cake\Core\InstanceConfigTrait $parser */
+            $parser = ClassFactory::create($this->configType, ClassType::PARSER(), $options);
+
+            if (!empty($this->options)) {
+                $parser->setConfig($this->options);
+            }
+
+            return $parser;
+        }
+
+        return $this->parser;
+    }
+
+    /**
+     * Set parser
+     *
+     * @param \Qobo\Utils\ModuleConfig\Parser\ParserInterface|null $parser Parser
+     * @return void
+     */
+    public function setParser(?ParserInterface $parser): void
+    {
+        $this->parser = $parser;
     }
 
     /**
@@ -174,11 +205,11 @@ class ModuleConfig implements ErrorAwareInterface
             }
             // Real response
             $parser = $this->getParser();
-            $result = $parser->parse($path, $this->options);
+            $result = $parser->parse($path);
         } catch (InvalidArgumentException $exception) {
             $this->mergeMessages($exception, __FUNCTION__);
         }
-
+        $this->mergeMessages($parser, __FUNCTION__);
         $this->mergeMessages($cache, __FUNCTION__);
 
         // Re-throw parser exception
