@@ -39,5 +39,5 @@ interface ParserInterface extends ErrorAwareInterface
      * @param mixed[] $options Options
      * @return \stdClass
      */
-    public function parse(string $path, array $options = []);
+    public function parse(string $path, array $options = []): stdClass;
 }

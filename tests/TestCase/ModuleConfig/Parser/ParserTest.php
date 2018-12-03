@@ -163,7 +163,9 @@ class ParserTest extends TestCase
      */
     public function testParseSkipEmptyData(): void
     {
-        $parser = new Parser($this->getEmptySchema());
+        /** @var \Qobo\Utils\ModuleConfig\Parser\SchemaInterface */
+        $schema = $this->getEmptySchema();
+        $parser = new Parser($schema);
         $parser->parse($this->getFile('sample_empty'));
         $this->assertContains('Skipping validation of empty data', $parser->getWarnings()[0]);
     }
@@ -175,7 +177,9 @@ class ParserTest extends TestCase
      */
     public function testParseSkipEmptySchema(): void
     {
-        $parser = new Parser($this->getEmptySchema());
+        /** @var \Qobo\Utils\ModuleConfig\Parser\SchemaInterface $schema */
+        $schema = $this->getEmptySchema();
+        $parser = new Parser($schema);
         $parser->parse($this->getFile('sample'));
         $this->assertContains('Skipping validation with empty schema', $parser->getWarnings()[0]);
     }
@@ -189,7 +193,9 @@ class ParserTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $parser = new Parser($this->getEmptySchema(), [
+        /** @var \Qobo\Utils\ModuleConfig\Parser\SchemaInterface $schema */
+        $schema = $this->getEmptySchema();
+        $parser = new Parser($schema, [
             'allowEmptyData' => false,
             'allowEmptySchema' => false,
         ]);
@@ -206,7 +212,9 @@ class ParserTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $parser = new Parser($this->getEmptySchema(), [
+        /** @var \Qobo\Utils\ModuleConfig\Parser\SchemaInterface $schema */
+        $schema = $this->getEmptySchema();
+        $parser = new Parser($schema, [
             'allowEmptyData' => false,
             'allowEmptySchema' => false,
         ]);
@@ -228,9 +236,9 @@ class ParserTest extends TestCase
     /**
      * Returns a mock of SchemaInterface.
      *
-     * @return \Qobo\Utils\ModuleConfig\Parser\SchemaInterface Schema mock
+     * @return \PHPUnit\Framework\MockObject\MockObject Schema mock
      */
-    protected function getEmptySchema(): SchemaInterface
+    protected function getEmptySchema(): MockObject
     {
         $schemaMock = $this->getMockBuilder(SchemaInterface::class)->getMock();
         $schemaMock->method('read')->willReturn(new stdClass);
