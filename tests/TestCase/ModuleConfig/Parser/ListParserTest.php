@@ -3,8 +3,8 @@ namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser;
 
 use Cake\Core\Configure;
 use PHPUnit\Framework\TestCase;
-use Qobo\Utils\ModuleConfig\Parser\Schema;
 use Qobo\Utils\ModuleConfig\Parser\ListParser;
+use Qobo\Utils\ModuleConfig\Parser\Schema;
 use Qobo\Utils\Utility\Convert;
 
 class ListParserTest extends TestCase
@@ -32,11 +32,6 @@ class ListParserTest extends TestCase
         unset($this->parser);
         unset($this->dataDir);
     }
-
-    // public function testtest(): void
-    // {
-    //     $this->assertTrue(true);
-    // }
 
     public function testParse(): void
     {
