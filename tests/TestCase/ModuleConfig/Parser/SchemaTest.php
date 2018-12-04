@@ -126,11 +126,10 @@ class SchemaTest extends TestCase
     public function testSchemaCallbackAmendSchema(): void
     {
         $schema = $this->getSchema();
-        $schema->setCallback(function ($schema) {
-            $schemaArray = Convert::objectToArray($schema);
-            $schemaArray['definitions']['testField']['type'] = 'integer';
+        $schema->setCallback(function (array $schema) {
+            $schema['definitions']['testField']['type'] = 'integer';
 
-            return Convert::arrayToObject($schemaArray);
+            return $schema;
         });
 
         $result = $schema->read();

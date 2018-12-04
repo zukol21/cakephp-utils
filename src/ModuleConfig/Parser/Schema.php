@@ -14,6 +14,8 @@ namespace Qobo\Utils\ModuleConfig\Parser;
 use Cake\Core\InstanceConfigTrait;
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
+use Qobo\Utils\Utility\Convert;
+
 use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
 use stdClass;
@@ -126,11 +128,11 @@ class Schema implements SchemaInterface
     protected function applyCallback(stdClass $schema): stdClass
     {
         if (is_callable($this->callback)) {
-            $result = call_user_func_array($this->callback, [$schema]);
+            $result = call_user_func_array($this->callback, [Convert::objectToArray($schema)]);
 
             if ($result !== false) {
-                /** @var \stdClass */
-                return $result;
+                /** @var array */
+                return Convert::arrayToObject($result);
             }
         }
 
