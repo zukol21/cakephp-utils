@@ -35,6 +35,7 @@ class Parser implements ParserInterface
      * @var array
      */
     protected $_defaultConfig = [
+        'pathRequired' => false,
         'allowEmptyData' => true,
         'allowEmptySchema' => true,
         'lint' => false,
@@ -57,8 +58,9 @@ class Parser implements ParserInterface
      * Class constructor.
      *
      * Options:
+     * - pathRequired: Will throw an exception when the path cannot be read.
      * - allowEmptyData: Throw an exception when the data is empty.
-     * - allowEmptySchema: Throw an exception when the data is empty.
+     * - allowEmptySchema: Throw an exception when the schema is empty.
      * - lint: Whether to lint the json file or not.
      * - validationMode: Validation mode which will be passed to Json validation.
      * See \JsonSchema\Constraints\Constraint::class for more on those.
@@ -94,18 +96,19 @@ class Parser implements ParserInterface
      * @throws \InvalidArgumentException When data cannot be read from file.
      * @throws \Qobo\Utils\ModuleConfig\Parser\JsonValidationException When json validation fails.
      */
-    public function parse(string $path, array $options = []): object
+    public function parse(string $path, array $options = []): \stdClass
     {
+        $data = $this->getEmptyResult();
+
         if (!empty($options)) {
             $this->setConfig($options);
         }
 
-        $data = $this->getEmptyResult();
-
         try {
-            Utility::validatePath($path);
-            $result = (string)file_get_contents($path);
+            $result = $this->getDataFromPath($path);
             $data = $this->dataToJson($result, $this->getConfig('lint'));
+
+            $this->validate($data);
         } catch (ParsingException $e) {
             $this->errors[] = $e->getMessage();
 
@@ -114,10 +117,6 @@ class Parser implements ParserInterface
             $this->errors[] = $e->getMessage();
 
             throw $e;
-        }
-
-        try {
-            $this->validate($data);
         } catch (JsonValidationException $e) {
             throw new InvalidArgumentException($e->getMessage(), 0, $e);
         }
@@ -126,24 +125,47 @@ class Parser implements ParserInterface
     }
 
     /**
+     * Read raw data from path.
+     *
+     * If the configuration option `pathRequired` is set to `true`, then an
+     * exception will be raised if the path cannot be validated.
+     *
+     * Otherwise a warning will be raised and a string representation of an
+     * empty json object will be sent back to the caller.
+     *
+     * @see \Qobo\Utils\Utility::validatePath()
+     * @param string $path Full path to file.
+     * @return string File contents.
+     */
+    protected function getDataFromPath(string $path): string
+    {
+        $isPathRequired = $this->getConfig('pathRequired');
+
+        try {
+            Utility::validatePath($path);
+        } catch (InvalidArgumentException $e) {
+            if ($isPathRequired) {
+                throw $e;
+            }
+            $this->warnings[] = $e->getMessage();
+
+            return (string)json_encode($this->getEmptyResult());
+        }
+
+        return (string)file_get_contents($path);
+    }
+
+    /**
      * Validate the JSON object against the schema.
      *
-     * @param object $data JSON object.
+     * @param \stdClass $data JSON object.
      * @throws \Qobo\Utils\ModuleConfig\Parser\JsonValidationException When json validation fails.
      * @return void
      */
-    protected function validate(object $data): void
+    protected function validate(stdClass $data): void
     {
         $config = $this->getConfig();
-        $schema = $this->getEmptyResult();
-
-        try {
-            $schema = $this->getSchema()->read();
-        } catch (InvalidArgumentException $e) {
-            $this->errors[] = $e->getMessage();
-
-            throw new JsonValidationException("Schema file `{$this->schema->getSchemaPath()}` cannot be read", 0, $e);
-        }
+        $schema = $this->readSchema();
 
         // No need to validate empty data (empty() does not work on objects)
         $dataArray = Convert::objectToArray($data);
@@ -166,6 +188,42 @@ class Parser implements ParserInterface
 
             return;
         }
+
+        $this->runValidator($data, $schema);
+    }
+
+    /**
+     * Reads the schema.
+     *
+     * @throws \Qobo\Utils\ModuleConfig\Parser\JsonValidationException When the schema cannot be read.
+     * @return \stdClass Schema
+     */
+    protected function readSchema(): \stdClass
+    {
+        $schema = $this->getEmptyResult();
+
+        try {
+            $schema = $this->getSchema()->read();
+        } catch (InvalidArgumentException $e) {
+            $this->errors[] = $e->getMessage();
+
+            throw new JsonValidationException("Schema file `{$this->schema->getSchemaPath()}` cannot be read", 0, $e);
+        }
+
+        return $schema;
+    }
+
+    /**
+     * Runs the json validation.
+     *
+     * @param stdClass $data Data to validate against a schema.
+     * @param stdClass $schema The schema which is used to validate the data.
+     * @throws \Qobo\Utils\ModuleConfig\Parser\JsonValidationException When the validation fails.
+     * @return void
+     */
+    protected function runValidator(stdClass $data, stdClass $schema): void
+    {
+        $config = $this->getConfig();
 
         $validator = new Validator;
         $validator->validate($data, $schema, $config['validationMode']);

@@ -39,7 +39,7 @@ class ListParser extends Parser
     /**
      * {@inheritDoc}
      */
-    public function parse(string $path, array $options = []): object
+    public function parse(string $path, array $options = []): \stdClass
     {
         $result = parent::parse($path, $options);
         $data = Convert::objectToArray($result);

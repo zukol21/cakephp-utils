@@ -13,6 +13,7 @@ namespace Qobo\Utils\ModuleConfig\Parser;
 
 use InvalidArgumentException;
 use Qobo\Utils\ErrorAwareInterface;
+use \stdClass;
 
 interface ParserInterface extends ErrorAwareInterface
 {
@@ -36,7 +37,7 @@ interface ParserInterface extends ErrorAwareInterface
      *
      * @param string $path Full path to JSON file.
      * @param mixed[] $options Options
-     * @return object
+     * @return \stdClass
      */
-    public function parse(string $path, array $options = []);
+    public function parse(string $path, array $options = []): stdClass;
 }

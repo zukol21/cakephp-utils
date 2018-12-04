@@ -12,6 +12,7 @@
 namespace Qobo\Utils\ModuleConfig\Parser;
 
 use \InvalidArgumentException;
+use \stdClass;
 
 interface SchemaInterface
 {
@@ -43,7 +44,7 @@ interface SchemaInterface
      * Read the json schema file.
      *
      * @throws \InvalidArgumentException When the the schema file cannot be read
-     * @return object JSON Schema object
+     * @return \stdClass JSON Schema object
      */
-    public function read(): object;
+    public function read(): stdClass;
 }
