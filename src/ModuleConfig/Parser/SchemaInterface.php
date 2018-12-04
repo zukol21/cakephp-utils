@@ -44,6 +44,7 @@ interface SchemaInterface
      * Read the json schema file.
      *
      * @throws \InvalidArgumentException When the the schema file cannot be read
+     * or the callback returned a null.
      * @return \stdClass JSON Schema object
      */
     public function read(): stdClass;
