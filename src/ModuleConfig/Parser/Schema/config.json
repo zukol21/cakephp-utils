@@ -6,6 +6,24 @@
             "description": "A single module field name",
             "type": "string"
         },
+        "virtualFieldName": {
+            "title": "Module field name",
+            "description": "A single module field name",
+            "type": "string",
+            "enum": []
+        },
+        "displayFieldBad": {
+            "title": "Display field bad values",
+            "description": "Enumeration of bad values for display_field",
+            "type": "string",
+            "enum": []
+        },
+        "iconBad": {
+            "title": "Icon bad values",
+            "description": "Enumeration of bad values for icon",
+            "type": "string",
+            "enum": []
+        },
         "moduleName": {
             "title": "Module name",
             "description": "A single module name",
@@ -25,7 +43,7 @@
                     "title": "List of destination modules",
                     "description": "Describes the list of modules to which current module records will convert",
                     "additionalProperties": {
-                        "allOf": [
+                        "anyOf": [
                             {
                                 "title": "Conversion module",
                                 "description": "Single conversion module",
@@ -39,8 +57,9 @@
                                     "field": {
                                         "title": "Conversion module field",
                                         "description": "Conversion module field associated with source module",
-                                        "allOf": [
-                                            { "$ref": "#/definitions/fieldName" }
+                                        "anyOf": [
+                                            { "$ref": "#/definitions/fieldName" },
+                                            { "enum": ["unknown"] }
                                         ]
                                     },
                                     "action": {
@@ -138,13 +157,22 @@
                     "title": "Module icon",
                     "description": "Icon to use for the current module",
                     "type": "string",
-                    "default": "cube"
+                    "default": "cube",
+                    "not": {
+                        "$ref": "#/definitions/iconBad"
+                    }
                 },
                 "display_field": {
                     "title": "Display field",
                     "description": "Module display field to use in links to records of this module.",
-                    "$ref": "#/definitions/fieldName",
-                    "default": "id"
+                    "default": "id",
+                    "anyOf": [
+                        { "$ref": "#/definitions/fieldName" },
+                        { "$ref": "#/definitions/virtualFieldName" }
+                    ],
+                    "not": {
+                        "$ref": "#/definitions/displayFieldBad"
+                    }
                 },
                 "alias": {
                     "title": "Module alias",
@@ -252,7 +280,6 @@
             "description": "List of virtual fields and their mapping to real fields for SQL queries",
             "type": "object",
             "properties": {},
-            "default": {},
             "additionalProperties": {
                 "anyOf": [
                     { "type": "string" },
@@ -289,18 +316,13 @@
                 "modules": {
                     "title": "List of many-to-many modules",
                     "description": "Array or comma-separated string with list of modules for many-to-many relationship",
+                    "type": "array",
                     "default": [],
-                    "anyOf": [
-                        { "type": "string" },
-                        {
-                            "type": "array",
-                            "items": {
-                                "allOf": [
-                                    { "$ref": "#/definitions/moduleName" }
-                                ]
-                            }
-                        }
-                    ]
+                    "items": {
+                        "allOf": [
+                            { "$ref": "#/definitions/moduleName" }
+                        ]
+                    }
                 }
             },
             "required": ["modules"]
@@ -319,19 +341,15 @@
                 },
                 "ignored_fields": {
                     "title": "Ignore notifications on modified fields",
-                    "description": "Array or comma-separated string with list of fields, which if only these are modified, do not send notifications",
+                    "description": "Array of fields, which if only these are modified, do not send notifications",
+                    "type": "array",
                     "default": [],
-                    "anyOf": [
-                        { "type": "string" },
-                        {
-                            "type": "array",
-                            "items": {
-                                "allOf": [
-                                    { "$ref": "#/definitions/fieldName" }
-                                ]
-                            }
-                        }
-                    ]
+                    "items": {
+                        "anyOf": [
+                            { "$ref": "#/definitions/fieldName" },
+                            { "$ref": "#/definitions/virtualFieldName" }
+                        ]
+                    }
                 }
             },
             "required": ["enable", "ignored_fields"]
@@ -433,7 +451,6 @@
             "description": "Defines custom labels for association tabs",
             "type": "object",
             "properties": {},
-            "default": {},
             "additionalProperties": {
                 "allOf": [
                     { "type": ["string"] }
