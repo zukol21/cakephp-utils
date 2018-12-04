@@ -19,6 +19,7 @@ use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
 use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
 use Qobo\Utils\ModuleConfig\Parser\Schema;
+use Qobo\Utils\ModuleConfig\Parser\SchemaInterface;
 use Qobo\Utils\Utility\Convert;
 use stdClass;
 
@@ -117,9 +118,7 @@ class ModuleConfig implements ErrorAwareInterface
     protected function getParser(): ParserInterface
     {
         if (is_null($this->parser)) {
-            $schemaPath = implode(DIRECTORY_SEPARATOR, [Configure::read('ModuleConfig.schemaPath'), $this->configType . '.json']);
-            $schema = new Schema($schemaPath);
-            $options = array_merge($this->options, ['classArgs' => [$schema]]);
+            $options = array_merge($this->options, ['classArgs' => [$this->createSchema()]]);
 
             /** @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface&\Cake\Core\InstanceConfigTrait $parser */
             $parser = ClassFactory::create($this->configType, ClassType::PARSER(), $options);
@@ -128,10 +127,26 @@ class ModuleConfig implements ErrorAwareInterface
                 $parser->setConfig($this->options);
             }
 
-            return $parser;
+            $this->parser = $parser;
         }
 
         return $this->parser;
+    }
+
+    /**
+     * Creates a new Schema instance for the current config type.
+     *
+     * Reads the following configuration option: `ModuleConfig.schemaPath`.
+     *
+     * @return SchemaInterface Schema object
+     */
+    public function createSchema(): SchemaInterface
+    {
+        $path = rtrim(Configure::read('ModuleConfig.schemaPath'), '/');
+        $file = $this->configType . '.json';
+        $schemaPath = implode(DIRECTORY_SEPARATOR, [$path, $file]);
+
+        return new Schema($schemaPath);
     }
 
     /**

@@ -130,6 +130,10 @@ class Schema implements SchemaInterface
         if (is_callable($this->callback)) {
             $result = call_user_func_array($this->callback, [Convert::objectToArray($schema)]);
 
+            if (is_null($result)) {
+                throw new InvalidArgumentException('Callback returned `null`. Did you forget to `return $schema;`?');
+            }
+
             if ($result !== false) {
                 /** @var array */
                 return Convert::arrayToObject($result);
