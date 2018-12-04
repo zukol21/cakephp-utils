@@ -11,6 +11,22 @@
             "uniqueItems": true,
             "minItems": 1,
             "maxItems": 13
+        },
+        "fieldLabel": {
+            "title": "Field Label",
+            "description": "Label for a row of fields",
+            "type": "string"
+        },
+        "fieldName": {
+            "title": "Module field name",
+            "description": "A single module field name",
+            "type": "string"
+        },
+        "emptyField": {
+            "title": "Empty field",
+            "description": "Empty fields are allowed by the builder.",
+            "type": "string",
+            "pattern": "^$"
         }
     },
     "title": "View configuration",
@@ -22,9 +38,17 @@
             "description": "All rows for a given view",
             "type": "array",
             "items": {
-                "allOf": [
-                    { "$ref": "#/definitions/viewRow" }
-                ]
+                "type": "array",
+                "uniqueItems": true,
+                "minItems": 1,
+                "maxItems": 13,
+                "items": [ { "$ref": "#/definitions/fieldLabel" } ],
+                "additionalItems": {
+                    "anyOf": [
+                    	{ "$ref": "#/definitions/fieldName" },
+                    	{ "$ref": "#/definitions/emptyField" }
+                    ]
+                }
             }
         }
     },
