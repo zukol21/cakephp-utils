@@ -118,7 +118,9 @@ class Parser implements ParserInterface
 
             throw $e;
         } catch (JsonValidationException $e) {
-            throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            $schemaFile = explode(DIRECTORY_SEPARATOR, $path);
+
+            throw new InvalidArgumentException(sprintf('[%s] : %s', end($schemaFile), $e->getMessage()), 0, $e);
         }
 
         return $data;
