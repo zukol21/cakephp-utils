@@ -1,8 +1,8 @@
 <?php
 use Qobo\Utils\ModuleConfig\ClassType;
 use Qobo\Utils\ModuleConfig\ConfigType;
-use Qobo\Utils\ModuleConfig\Parser\Parser;
 use Qobo\Utils\ModuleConfig\Parser\ListParser;
+use Qobo\Utils\ModuleConfig\Parser\Parser;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\ConfigPathFinder;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\DuplicatesPathFinder;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\FieldsPathFinder;
@@ -23,9 +23,9 @@ return [
             dirname(__DIR__),
             'src', 'ModuleConfig', 'Parser', 'Schema'
         ]),
-        'classMapVersion' => 'V2',
+        'classMapVersion' => 'V3',
         'classMap' => [
-            'V2' => [
+            'V3' => [
                 (string)ConfigType::MIGRATION() => [
                     $classTypeFinder => MigrationPathFinder::class,
                     $classTypeParser => Parser::class,
