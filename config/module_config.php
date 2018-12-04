@@ -2,6 +2,7 @@
 use Qobo\Utils\ModuleConfig\ClassType;
 use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\Parser\Parser;
+use Qobo\Utils\ModuleConfig\Parser\ListParser;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\ConfigPathFinder;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\DuplicatesPathFinder;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\FieldsPathFinder;
@@ -35,7 +36,7 @@ return [
                 ],
                 (string)ConfigType::LISTS() => [
                     $classTypeFinder => ListPathFinder::class,
-                    $classTypeParser => Parser::class,
+                    $classTypeParser => ListParser::class,
                 ],
                 (string)ConfigType::FIELDS() => [
                     $classTypeFinder => FieldsPathFinder::class,
