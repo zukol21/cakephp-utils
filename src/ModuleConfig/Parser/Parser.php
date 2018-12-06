@@ -110,9 +110,10 @@ class Parser implements ParserInterface
 
             $this->validate($data);
         } catch (ParsingException $e) {
-            $this->errors[] = $e->getMessage();
+            $message = sprintf("File: %s\n%s", $path, $e->getMessage());
+            $this->errors[] = $message;
 
-            throw new InvalidArgumentException($e->getMessage(), 0, $e);
+            throw new InvalidArgumentException($message, 0, $e);
         } catch (InvalidArgumentException $e) {
             $this->errors[] = $e->getMessage();
 

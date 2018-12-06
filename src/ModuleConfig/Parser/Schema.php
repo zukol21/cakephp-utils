@@ -110,7 +110,7 @@ class Schema implements SchemaInterface
                 $this->schema = $this->dataToJson($data, $this->getConfig('lint'));
                 $this->loaded = true;
             } catch (ParsingException $e) {
-                throw new InvalidArgumentException($e->getMessage(), 0, $e);
+                throw new InvalidArgumentException(sprintf("Schema file: %s\n%s", $this->schemaPath, $e->getMessage()), 0, $e);
             }
         }
 
