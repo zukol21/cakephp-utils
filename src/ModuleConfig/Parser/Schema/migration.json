@@ -1,6 +1,30 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "definitions": {
+        "checkRequiredFalseAndUniqueFalse": {
+            "properties": {
+                "required": {
+                    "type": "boolean",
+                    "enum": [false]
+                },
+                "unique": {
+                    "type": "boolean",
+                    "enum": [false]
+                }
+            }
+        },
+        "checkRequiredFalseAndUniqueAny": {
+            "properties": {
+                "required": {
+                    "type": "boolean",
+                    "enum": [true]
+                },
+                "unique": {
+                    "type": "boolean",
+                    "enum": [true,false]
+                }
+            }
+        },
         "migrationField": {
             "title": "Migration field",
             "description": "Representation of a single field from migrations.csv",
@@ -38,7 +62,15 @@
                 }
             },
             "additionalProperties": false,
-            "required": ["name", "type"]
+            "required": ["name", "type"],
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/checkRequiredFalseAndUniqueFalse"
+                },
+                {
+                    "$ref": "#/definitions/checkRequiredFalseAndUniqueAny"
+                }
+            ]
         }
     },
     "title": "CSV migration",
@@ -49,5 +81,6 @@
         "allOf": [
             { "$ref": "#/definitions/migrationField" }
         ]
-    }
+    },
+    "required": ["id", "created", "modified"]
 }
