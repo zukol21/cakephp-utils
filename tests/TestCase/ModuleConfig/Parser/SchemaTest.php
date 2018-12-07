@@ -119,6 +119,31 @@ class SchemaTest extends TestCase
     }
 
     /**
+     * Test the schema callback
+     *
+     * @return void
+     */
+    public function testSchemaCallbackForgotToReturnSchema(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $schema = $this->getSchema();
+        $schema->setCallback(function ($schema) {
+            $schema['foo'] = 'bar'; // intentionally do not return the schema.
+        });
+
+        try {
+            $schema->read();
+        } catch (InvalidArgumentException $e) {
+            $this->assertContains('Callback returned `null`', $e->getMessage());
+
+            throw $e;
+        }
+
+        $this->fail('Callback did not execute as expected.');
+    }
+
+    /**
      * Test the schema callback which amends the schema.
      *
      * @return void
