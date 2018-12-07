@@ -15,7 +15,6 @@ use Cake\Core\InstanceConfigTrait;
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
 use Qobo\Utils\Utility\Convert;
-
 use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
 use stdClass;
@@ -23,7 +22,6 @@ use stdClass;
 class Schema implements SchemaInterface
 {
     use InstanceConfigTrait;
-    use JsonReaderTrait;
 
     /**
      * Default configuration
@@ -107,7 +105,7 @@ class Schema implements SchemaInterface
             try {
                 Utility::validatePath($this->schemaPath);
                 $data = (string)file_get_contents($this->schemaPath);
-                $this->schema = $this->dataToJson($data, $this->getConfig('lint'));
+                $this->schema = Convert::dataToJson($data, $this->getConfig('lint'));
                 $this->loaded = true;
             } catch (ParsingException $e) {
                 throw new InvalidArgumentException(sprintf("Schema file: %s\n%s", $this->schemaPath, $e->getMessage()), 0, $e);

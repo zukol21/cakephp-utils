@@ -12,6 +12,7 @@
 namespace Qobo\Utils\Utility;
 
 use InvalidArgumentException;
+use Seld\JsonLint\JsonParser;
 use stdClass;
 
 /**
@@ -132,5 +133,29 @@ class Convert
         $result = $object;
 
         return $result;
+    }
+
+    /**
+     * Returns the json encoded data and applies linting if necessary.
+     *
+     * @param string $data JSON string.
+     * @param bool $lint True to apply json linting.
+     * @throws \Seld\JsonLint\ParsingException When linting is enabled and it fails.
+     * @throws \InvalidArgumentException When data is not a valid JSON object and linting is not enabled.
+     * @return \stdClass JSON object.
+     */
+    public static function dataToJson(string $data, bool $lint = false): stdClass
+    {
+        if ($lint) {
+            $linter = new JsonParser();
+            $linter->parse($data);
+        }
+
+        $data = json_decode($data);
+        if ($data === null) {
+            throw new InvalidArgumentException("Failed to decode json");
+        }
+
+        return (object)$data;
     }
 }

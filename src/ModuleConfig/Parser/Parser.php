@@ -28,7 +28,6 @@ class Parser implements ParserInterface
 {
     use ErrorTrait;
     use InstanceConfigTrait;
-    use JsonReaderTrait;
 
     /**
      * Default configuration.
@@ -108,7 +107,7 @@ class Parser implements ParserInterface
 
         try {
             $result = $this->getDataFromPath($path);
-            $data = $this->dataToJson($result, $this->getConfig('lint'));
+            $data = Convert::dataToJson($result, $this->getConfig('lint'));
             if ($this->getConfig('validate') === true) {
                 $this->validate($data);
             }
