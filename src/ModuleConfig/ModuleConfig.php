@@ -115,7 +115,7 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * @return \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
-    protected function getParser(): ParserInterface
+    public function getParser(): ParserInterface
     {
         if (is_null($this->parser)) {
             $options = array_merge($this->options, ['classArgs' => [$this->createSchema()]]);
