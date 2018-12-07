@@ -13,6 +13,7 @@ namespace Qobo\Utils\ModuleConfig;
 
 use Cake\Core\Configure;
 use InvalidArgumentException;
+use ReflectionClass;
 
 /**
  * ClassFactory Class
@@ -25,6 +26,9 @@ class ClassFactory
 {
     /**
      * Create a new instance of a helper class
+     *
+     * Options:
+     * - classArgs: array of class arguments which will be passed to the constructor.
      *
      * @throws \InvalidArgumentException when cannot create instance
      * @param string $configType Configuration type
@@ -43,7 +47,8 @@ class ClassFactory
         }
 
         $className = $classMap[$configType][$classType];
-        $result = static::getInstance($className);
+        $params = $options['classArgs'] ?? [];
+        $result = static::getInstance($className, $params);
 
         return $result;
     }
@@ -56,14 +61,21 @@ class ClassFactory
      *
      * @throws \InvalidArgumentException when cannot create instance
      * @param string $class Class name to instantiate
+     * @param mixed[] $params Optional parameters to the class
      * @return object
      */
-    public static function getInstance(string $class)
+    public static function getInstance(string $class, array $params = [])
     {
         if (!class_exists($class)) {
             throw new InvalidArgumentException("Class [$class] does not exist");
         }
 
-        return new $class;
+        if (empty($params)) {
+            return new $class;
+        }
+
+        $reflection = new ReflectionClass($class);
+
+        return $reflection->newInstanceArgs($params);
     }
 }

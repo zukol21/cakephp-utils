@@ -43,8 +43,8 @@
         "friendsofcake/crud": "^5.4",
         "fzaninotto/faker": "^1.0",
         "josegonzalez/dotenv": "^3.2",
+        "justinrainbow/json-schema": "^5.0",
         "league/csv": "^8.1",
-        "league/json-guard": "^0.5",
         "lorenzo/audit-stash": "^2.0",
         "maiconpinto/cakephp-adminlte-theme": "^1.0",
         "mobiledetect/mobiledetectlib": "2.*",
@@ -52,7 +52,8 @@
         "myclabs/php-enum": "^1.5",
         "pyrech/composer-changelogs": "^1.4",
         "riesenia/cakephp-duplicatable": "^3.0",
-        "rlanvin/php-rrule": "^1.6"
+        "rlanvin/php-rrule": "^1.6",
+        "seld/jsonlint": "^1.7"
     },
     "require-dev": {
         "qobo/cakephp-composer-dev": "^v1.0"

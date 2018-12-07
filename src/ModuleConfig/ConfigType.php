@@ -26,7 +26,7 @@ class ConfigType extends Enum
     /**
      * Module configuration (config.ini)
      */
-    const MODULE = 'module';
+    const MODULE = 'config';
 
     /**
      * Menus configuration (menus.json)

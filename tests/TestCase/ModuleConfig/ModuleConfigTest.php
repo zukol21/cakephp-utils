@@ -6,6 +6,10 @@ use Cake\TestSuite\TestCase;
 use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
+use Qobo\Utils\ModuleConfig\Parser\Parser;
+use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
+use Qobo\Utils\ModuleConfig\Parser\Schema;
+
 use Qobo\Utils\Utility\Convert;
 
 class ModuleConfigTest extends TestCase
@@ -16,7 +20,7 @@ class ModuleConfigTest extends TestCase
     {
         $this->dataDir = dirname(dirname(__DIR__)) . DS . 'data' . DS . 'Modules' . DS;
         Configure::write('CsvMigrations.modules.path', $this->dataDir);
-        Configure::write('ModuleConfig.classMapVersion', 'V2');
+        Configure::write('ModuleConfig.classMapVersion', 'V3');
     }
 
     /**
@@ -195,5 +199,19 @@ class ModuleConfigTest extends TestCase
         // After parsing
         $result = $mc->getErrors();
         $this->assertTrue(is_array($result), "Warnings is not an array after parsing");
+    }
+
+    /**
+     * @dataProvider optionsProvider
+     * @param string $description Options description
+     * @param mixed[] $options Array of options
+     */
+    public function testSetCustomParser(string $description, array $options): void
+    {
+        $mc = new ModuleConfig(ConfigType::MODULE(), 'Foo', null, $options);
+        $parser = new Parser($mc->createSchema());
+        $mc->setParser($parser);
+
+        $this->assertSame($parser, $mc->getParser());
     }
 }

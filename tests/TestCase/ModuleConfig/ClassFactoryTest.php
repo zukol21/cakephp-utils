@@ -5,12 +5,18 @@ use Cake\TestSuite\TestCase;
 use Qobo\Utils\ModuleConfig\ClassFactory;
 use Qobo\Utils\ModuleConfig\ClassType;
 use Qobo\Utils\ModuleConfig\ConfigType;
+use Qobo\Utils\ModuleConfig\Parser\SchemaInterface;
+use stdClass;
 
 class ClassFactoryTest extends TestCase
 {
     public function testCreate(): void
     {
-        $result = ClassFactory::create(ConfigType::MIGRATION(), ClassType::PARSER());
+        $schemaMock = $this->getMockBuilder(SchemaInterface::class)->getMock();
+        $schemaMock->method('read')->willReturn(new stdClass);
+        $options = ['classArgs' => [$schemaMock]];
+
+        $result = ClassFactory::create(ConfigType::MIGRATION(), ClassType::PARSER(), $options);
         $this->assertTrue(is_object($result), "create() returned a non-object result");
     }
 

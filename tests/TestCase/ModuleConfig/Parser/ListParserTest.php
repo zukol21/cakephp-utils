@@ -1,9 +1,10 @@
 <?php
-namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser\V2\Json;
+namespace Qobo\Utils\Test\TestCase\ModuleConfig\Parser;
 
 use Cake\Core\Configure;
 use PHPUnit\Framework\TestCase;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\ListParser;
+use Qobo\Utils\ModuleConfig\Parser\ListParser;
+use Qobo\Utils\ModuleConfig\Parser\Schema;
 use Qobo\Utils\Utility\Convert;
 
 class ListParserTest extends TestCase
@@ -13,7 +14,13 @@ class ListParserTest extends TestCase
 
     public function setUp()
     {
-        $this->parser = new ListParser();
+        $schemaPath = implode(DIRECTORY_SEPARATOR, [
+            Configure::read('ModuleConfig.schemaPath'),
+            'list.json'
+        ]);
+        $schema = new Schema($schemaPath);
+
+        $this->parser = new ListParser($schema);
         $this->dataDir = TESTS . 'data' . DS . 'Modules';
 
         Configure::write('CsvMigrations.modules.path', $this->dataDir);

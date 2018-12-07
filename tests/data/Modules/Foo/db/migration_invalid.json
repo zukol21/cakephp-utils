@@ -1,0 +1,73 @@
+{
+    "id": {
+        "name": "id",
+        "type": "uuid",
+        "required": null,
+        "non-searchable": "",
+        "unique": 0
+    },
+    "description": {
+        "name": "description",
+        "type": "text"
+    },
+    "name": {
+        "name": "name",
+        "type": "string"
+    },
+    "status": {
+        "name": "status",
+        "type": "list(foo_statuses)"
+    },
+    "type": {
+        "name": "type",
+        "type": "list(foo_types)"
+    },
+    "gender": {
+        "name": "gender",
+        "type": "list(genders)"
+    },
+    "city": {
+        "name": "city",
+        "type": "list(cities)"
+    },
+    "country": {
+        "name": "country",
+        "type": "list(countries)"
+    },
+    "cost": {
+        "name": "cost",
+        "type": "money(currencies)"
+    },
+    "birthdate": {
+        "name": "birthdate",
+        "type": "date"
+    },
+    "reminder_date": {
+        "name": "reminder_date",
+        "type": "reminder"
+    },
+    "created": {
+        "name": "created",
+        "type": "datetime"
+    },
+    "modified": {
+        "name": "modified",
+        "type": "datetime"
+    },
+    "garden_area": {
+        "name": "garden_area",
+        "type": "metric(units_area)"
+    },
+    "is_primary": {
+        "name": "is_primary",
+        "type": "boolean"
+    },
+    "start_time": {
+        "name": "start_time",
+        "type": "time"
+    },
+    "balance": {
+        "name": "balance",
+        "type": "decimal(12.4)"
+    }
+}

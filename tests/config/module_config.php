@@ -1,14 +1,8 @@
 <?php
 use Qobo\Utils\ModuleConfig\ClassType;
 use Qobo\Utils\ModuleConfig\ConfigType;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\ConfigParser;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\DuplicatesParser;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\FieldsParser;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\ListParser;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\MenusParser;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\MigrationParser;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\ReportsParser;
-use Qobo\Utils\ModuleConfig\Parser\V2\Json\ViewParser;
+use Qobo\Utils\ModuleConfig\Parser\ListParser;
+use Qobo\Utils\ModuleConfig\Parser\Parser;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\ConfigPathFinder;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\DuplicatesPathFinder;
 use Qobo\Utils\ModuleConfig\PathFinder\V2\FieldsPathFinder;
@@ -25,16 +19,16 @@ $classTypeParser = (string)ClassType::PARSER();
 
 return [
     'ModuleConfig' => [
-        'classMapVersion' => 'V2',
+        'classMapVersion' => 'V3',
         'classMap' => [
-            'V2' => [
+            'V3' => [
                 (string)ConfigType::MIGRATION() => [
                     $classTypeFinder => MigrationPathFinder::class,
-                    $classTypeParser => MigrationParser::class,
+                    $classTypeParser => Parser::class,
                 ],
                 (string)ConfigType::MODULE() => [
                     $classTypeFinder => ConfigPathFinder::class,
-                    $classTypeParser => ConfigParser::class,
+                    $classTypeParser => Parser::class,
                 ],
                 (string)ConfigType::LISTS() => [
                     $classTypeFinder => ListPathFinder::class,
@@ -42,23 +36,23 @@ return [
                 ],
                 (string)ConfigType::FIELDS() => [
                     $classTypeFinder => FieldsPathFinder::class,
-                    $classTypeParser => FieldsParser::class,
+                    $classTypeParser => Parser::class,
                 ],
                 (string)ConfigType::MENUS() => [
                     $classTypeFinder => MenusPathFinder::class,
-                    $classTypeParser => MenusParser::class,
+                    $classTypeParser => Parser::class,
                 ],
                 (string)ConfigType::REPORTS() => [
                     $classTypeFinder => ReportsPathFinder::class,
-                    $classTypeParser => ReportsParser::class,
+                    $classTypeParser => Parser::class,
                 ],
                 (string)ConfigType::VIEW() => [
                     $classTypeFinder => ViewPathFinder::class,
-                    $classTypeParser => ViewParser::class,
+                    $classTypeParser => Parser::class,
                 ],
                 (string)ConfigType::DUPLICATES() => [
                     $classTypeFinder => DuplicatesPathFinder::class,
-                    $classTypeParser => DuplicatesParser::class,
+                    $classTypeParser => Parser::class,
                 ],
             ],
         ],

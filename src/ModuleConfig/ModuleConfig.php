@@ -11,11 +11,15 @@
  */
 namespace Qobo\Utils\ModuleConfig;
 
+use Cake\Core\Configure;
 use InvalidArgumentException;
 use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
 use Qobo\Utils\ModuleConfig\Cache\PathCache;
+use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
+use Qobo\Utils\ModuleConfig\Parser\Schema;
+use Qobo\Utils\ModuleConfig\Parser\SchemaInterface;
 use Qobo\Utils\Utility\Convert;
 use stdClass;
 
@@ -69,19 +73,28 @@ class ModuleConfig implements ErrorAwareInterface
     protected $options;
 
     /**
+     * Parser
+     *
+     * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface
+     */
+    protected $parser;
+
+    /**
      * Constructor
      *
      * @param \Qobo\Utils\ModuleConfig\ConfigType $configType Type of configuration
      * @param string $module     Module name
      * @param string $configFile (Optional) name of the config file
      * @param mixed[] $options    (Optional) Finding, parsing, etc. options
+     * @param \Qobo\Utils\ModuleConfig\Parser\ParserInterface $parser Custom parser instance.
      */
-    public function __construct(ConfigType $configType, string $module, string $configFile = null, array $options = [])
+    public function __construct(ConfigType $configType, string $module, string $configFile = null, array $options = [], ?ParserInterface $parser = null)
     {
         $this->configType = (string)$configType;
         $this->module = $module;
         $this->configFile = (string)$configFile;
         $this->options = $options;
+        $this->setParser($parser);
     }
 
     /**
@@ -104,14 +117,48 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * @return \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
-    protected function getParser(): \Qobo\Utils\ModuleConfig\Parser\ParserInterface
+    public function getParser(): ParserInterface
     {
-        /**
-         * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface $result
-         */
-        $result = ClassFactory::create($this->configType, ClassType::PARSER(), $this->options);
+        return $this->parser;
+    }
 
-        return $result;
+    /**
+     * Creates a new Schema instance for the current config type.
+     *
+     * Reads the following configuration option: `ModuleConfig.schemaPath`.
+     *
+     * @param mixed[] $config Schema config.
+     * @return SchemaInterface Schema object.
+     */
+    public function createSchema(array $config = []): SchemaInterface
+    {
+        $path = rtrim(Configure::read('ModuleConfig.schemaPath'), '/');
+        $file = $this->configType . '.json';
+        $schemaPath = implode(DIRECTORY_SEPARATOR, [$path, $file]);
+
+        return new Schema($schemaPath, null, $config);
+    }
+
+    /**
+     * Set parser
+     *
+     * @param \Qobo\Utils\ModuleConfig\Parser\ParserInterface|null $parser Parser
+     * @return void
+     */
+    public function setParser(?ParserInterface $parser): void
+    {
+        if (is_null($parser)) {
+            $options = array_merge($this->options, ['classArgs' => [$this->createSchema()]]);
+
+            /** @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface&\Cake\Core\InstanceConfigTrait $parser */
+            $parser = ClassFactory::create($this->configType, ClassType::PARSER(), $options);
+
+            if (!empty($this->options)) {
+                $parser->setConfig($this->options);
+            }
+        }
+
+        $this->parser = $parser;
     }
 
     /**
@@ -174,12 +221,10 @@ class ModuleConfig implements ErrorAwareInterface
             }
             // Real response
             $parser = $this->getParser();
-            $result = $parser->parse($path, $this->options);
+            $result = $parser->parse($path);
         } catch (InvalidArgumentException $exception) {
             $this->mergeMessages($exception, __FUNCTION__);
         }
-
-        // Get parser errors and warnings, if any
         $this->mergeMessages($parser, __FUNCTION__);
         $this->mergeMessages($cache, __FUNCTION__);
 

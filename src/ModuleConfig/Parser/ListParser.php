@@ -9,8 +9,9 @@
  * @copyright     Copyright (c) Qobo Ltd. (https://www.qobo.biz)
  * @license       https://opensource.org/licenses/mit-license.php MIT License
  */
-namespace Qobo\Utils\ModuleConfig\Parser\V2\Json;
+namespace Qobo\Utils\ModuleConfig\Parser;
 
+use JsonSchema\Constraints\Constraint;
 use Qobo\Utils\Utility\Convert;
 
 /**
@@ -20,49 +21,38 @@ use Qobo\Utils\Utility\Convert;
  *
  * @author Leonid Mamchenkov <l.mamchenkov@qobo.biz>
  */
-class ListParser extends AbstractJsonParser
+class ListParser extends Parser
 {
     /**
-     * JSON schema
-     *
-     * This can either be a string, pointing to the file
-     * or an stdClass with an instance of an already parsed
-     * schema
-     *
-     * @var string|\stdClass $schema JSON schema
+     * Default options
+     * @var array
      */
-    protected $schema = 'file://' . __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Schema' . DIRECTORY_SEPARATOR . 'list.json';
+    protected $_defaultConfig = [
+        'allowEmptyData' => true,
+        'allowEmptySchema' => true,
+        'lint' => false,
+        'validationMode' => Constraint::CHECK_MODE_APPLY_DEFAULTS,
+        'filter' => false,
+        'flatten' => false,
+    ];
 
     /**
-     * @var array $options Parsing options
+     * {@inheritDoc}
      */
-    protected $options = ['filter' => false, 'flatten' => false];
-
-    /**
-     * Parse
-     *
-     * Parses a given file according to the specified options
-     *
-     * @param string $path    Path to file
-     * @param mixed[]  $options Options for parsing
-     * @return object
-     */
-    public function parse(string $path, array $options = [])
+    public function parse(string $path, array $options = []): \stdClass
     {
-        $options = array_merge($this->options, $options);
-
         $result = parent::parse($path, $options);
         $data = Convert::objectToArray($result);
-        if (empty($data['items'])) {
-            $data['items'] = [];
-        }
+
         $data['items'] = $this->normalize($data['items']);
 
-        if ($options['filter']) {
+        $config = $this->getConfig();
+
+        if ($config['filter']) {
             $data['items'] = $this->filter($data['items']);
         }
 
-        if ($options['flatten']) {
+        if ($config['flatten']) {
             $data['items'] = $this->flatten($data['items']);
         }
 
