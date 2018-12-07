@@ -7,8 +7,8 @@ use InvalidArgumentException;
 use Qobo\Utils\ModuleConfig\ConfigType;
 use Qobo\Utils\ModuleConfig\ModuleConfig;
 use Qobo\Utils\ModuleConfig\Parser\Parser;
-use Qobo\Utils\ModuleConfig\Parser\Schema;
 use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
+use Qobo\Utils\ModuleConfig\Parser\Schema;
 
 use Qobo\Utils\Utility\Convert;
 
