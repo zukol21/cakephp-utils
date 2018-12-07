@@ -75,9 +75,9 @@ class ModuleConfig implements ErrorAwareInterface
     /**
      * Parser
      *
-     * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface|null
+     * @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface
      */
-    protected $parser = null;
+    protected $parser;
 
     /**
      * Constructor
@@ -86,13 +86,15 @@ class ModuleConfig implements ErrorAwareInterface
      * @param string $module     Module name
      * @param string $configFile (Optional) name of the config file
      * @param mixed[] $options    (Optional) Finding, parsing, etc. options
+     * @param \Qobo\Utils\ModuleConfig\Parser\ParserInterface $parser Custom parser instance.
      */
-    public function __construct(ConfigType $configType, string $module, string $configFile = null, array $options = [])
+    public function __construct(ConfigType $configType, string $module, string $configFile = null, array $options = [], ?ParserInterface $parser = null)
     {
         $this->configType = (string)$configType;
         $this->module = $module;
         $this->configFile = (string)$configFile;
         $this->options = $options;
+        $this->setParser($parser);
     }
 
     /**
@@ -117,19 +119,6 @@ class ModuleConfig implements ErrorAwareInterface
      */
     public function getParser(): ParserInterface
     {
-        if (is_null($this->parser)) {
-            $options = array_merge($this->options, ['classArgs' => [$this->createSchema()]]);
-
-            /** @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface&\Cake\Core\InstanceConfigTrait $parser */
-            $parser = ClassFactory::create($this->configType, ClassType::PARSER(), $options);
-
-            if (!empty($this->options)) {
-                $parser->setConfig($this->options);
-            }
-
-            $this->parser = $parser;
-        }
-
         return $this->parser;
     }
 
@@ -158,6 +147,17 @@ class ModuleConfig implements ErrorAwareInterface
      */
     public function setParser(?ParserInterface $parser): void
     {
+        if (is_null($parser)) {
+            $options = array_merge($this->options, ['classArgs' => [$this->createSchema()]]);
+
+            /** @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface&\Cake\Core\InstanceConfigTrait $parser */
+            $parser = ClassFactory::create($this->configType, ClassType::PARSER(), $options);
+
+            if (!empty($this->options)) {
+                $parser->setConfig($this->options);
+            }
+        }
+
         $this->parser = $parser;
     }
 
