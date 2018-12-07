@@ -138,15 +138,16 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * Reads the following configuration option: `ModuleConfig.schemaPath`.
      *
-     * @return SchemaInterface Schema object
+     * @param mixed[] $config Schema config.
+     * @return SchemaInterface Schema object.
      */
-    public function createSchema(): SchemaInterface
+    public function createSchema(array $config = []): SchemaInterface
     {
         $path = rtrim(Configure::read('ModuleConfig.schemaPath'), '/');
         $file = $this->configType . '.json';
         $schemaPath = implode(DIRECTORY_SEPARATOR, [$path, $file]);
 
-        return new Schema($schemaPath);
+        return new Schema($schemaPath, null, $config);
     }
 
     /**

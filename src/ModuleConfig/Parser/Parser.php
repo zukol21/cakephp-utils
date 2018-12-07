@@ -39,6 +39,7 @@ class Parser implements ParserInterface
         'allowEmptyData' => true,
         'allowEmptySchema' => true,
         'lint' => false,
+        'validate' => true,
         'validationMode' => Constraint::CHECK_MODE_APPLY_DEFAULTS
     ];
 
@@ -62,6 +63,7 @@ class Parser implements ParserInterface
      * - allowEmptyData: Throw an exception when the data is empty.
      * - allowEmptySchema: Throw an exception when the schema is empty.
      * - lint: Whether to lint the json file or not.
+     * - validate: Whether json validation should be performed.
      * - validationMode: Validation mode which will be passed to Json validation.
      * See \JsonSchema\Constraints\Constraint::class for more on those.
      *
@@ -107,8 +109,9 @@ class Parser implements ParserInterface
         try {
             $result = $this->getDataFromPath($path);
             $data = $this->dataToJson($result, $this->getConfig('lint'));
-
-            $this->validate($data);
+            if ($this->getConfig('validate') === true) {
+                $this->validate($data);
+            }
         } catch (ParsingException $e) {
             $message = sprintf("File: %s\n%s", $path, $e->getMessage());
             $this->errors[] = $message;
