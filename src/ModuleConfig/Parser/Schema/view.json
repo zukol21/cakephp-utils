@@ -22,6 +22,12 @@
             "description": "A single module field name",
             "type": "string"
         },
+        "embeddedField": {
+            "title": "Embedded field",
+            "description": "Embedded fields are valid references.",
+            "type": "string",
+            "pattern": "^(EMBEDDED)\\((.+)\\)$"
+        },
         "emptyField": {
             "title": "Empty field",
             "description": "Empty fields are allowed by the builder.",
@@ -46,6 +52,7 @@
                 "additionalItems": {
                     "anyOf": [
                     	{ "$ref": "#/definitions/fieldName" },
+                    	{ "$ref": "#/definitions/embeddedField" },
                     	{ "$ref": "#/definitions/emptyField" }
                     ]
                 }
