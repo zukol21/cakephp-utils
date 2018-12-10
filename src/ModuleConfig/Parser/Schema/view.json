@@ -23,8 +23,8 @@
             "type": "string"
         },
         "embeddedField": {
-            "title": "Empty field",
-            "description": "Empty fields are allowed by the builder.",
+            "title": "Embedded field",
+            "description": "Embedded fields are valid references.",
             "type": "string",
             "pattern": "^(EMBEDDED)\\((.+)\\)$"
         },
