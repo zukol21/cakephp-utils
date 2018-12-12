@@ -284,9 +284,9 @@
         "virtualFields": {
             "title": "Module virtual fields configuration",
             "description": "List of virtual fields and their mapping to real fields for SQL queries",
-            "type": "object",
+            "type": ["array", "object"],
             "properties": {},
-            "default": {},
+            "default": [],
             "additionalProperties": {
                 "anyOf": [
                     { "type": "string" },
@@ -457,9 +457,9 @@
         "associationLabels": {
             "title": "Association labels",
             "description": "Defines custom labels for association tabs",
-            "type": "object",
+            "type": ["array", "object"],
             "properties": {},
-            "default": {},
+            "default": [],
             "additionalProperties": {
                 "allOf": [
                     { "type": ["string"] }
