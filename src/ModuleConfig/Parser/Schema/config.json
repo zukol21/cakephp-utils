@@ -158,7 +158,7 @@
                     "title": "Trash behavior",
                     "description": "Whether or not the module has the trash behavior.",
                     "type": "boolean"
-                },                
+                },
                 "icon": {
                     "title": "Module icon",
                     "description": "Icon to use for the current module",
@@ -286,6 +286,7 @@
             "description": "List of virtual fields and their mapping to real fields for SQL queries",
             "type": "object",
             "properties": {},
+            "default": {},
             "additionalProperties": {
                 "anyOf": [
                     { "type": "string" },
@@ -438,6 +439,7 @@
                 "hide_associations": {
                     "title": "List of hidden associations",
                     "description": "Array or comma-separated string with list of associations that should not be displayed",
+                    "default": [],
                     "anyOf": [
                         { "type": "string" },
                         {
@@ -457,6 +459,7 @@
             "description": "Defines custom labels for association tabs",
             "type": "object",
             "properties": {},
+            "default": {},
             "additionalProperties": {
                 "allOf": [
                     { "type": ["string"] }
