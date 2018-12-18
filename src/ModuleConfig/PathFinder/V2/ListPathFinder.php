@@ -78,7 +78,8 @@ class ListPathFinder extends BasePathFinder
             }
         }
 
-        if (($result === null) && ($module <> self::DEFAULT_MODULE)) {
+        $distributionPath = $this->getDistributionFilePath($path);
+        if (($distributionPath !== $path) && ($result === null) && ($module <> self::DEFAULT_MODULE)) {
             $this->warnings[] = "Module list not found.  Falling back on module " . self::DEFAULT_MODULE;
             $result = parent::find(self::DEFAULT_MODULE, $path, true);
         }
