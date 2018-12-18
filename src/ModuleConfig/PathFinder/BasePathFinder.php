@@ -81,12 +81,12 @@ abstract class BasePathFinder implements PathFinderInterface
             $distributionPath = $this->getDistributionFilePath($path);
 
             // We rethrow the exception, only if the validate flag is enabled
-            if ($validate && $distributionPath === $path) {
+            if ($validate && $this->isDistributionFilePath($path)) {
                 throw $e;
             }
 
             // Try to find the distribution file
-            if ($distributionPath !== $path) {
+            if (!$this->isDistributionFilePath($path)) {
                 $result = $this->find($module, $distributionPath, $validate);
             }
         }
@@ -154,6 +154,17 @@ abstract class BasePathFinder implements PathFinderInterface
         }
 
         return $path;
+    }
+
+    /**
+     * Returns true only and only if the provided file path is a distribution path
+     *
+     * @param string $path File path
+     * @return bool
+     */
+    protected function isDistributionFilePath(string $path): bool
+    {
+        return $this->getDistributionFilePath($path) === $path;
     }
 
     /**
