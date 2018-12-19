@@ -78,7 +78,9 @@ class ListPathFinder extends BasePathFinder
             }
         }
 
-        if (($result === null) && ($module <> self::DEFAULT_MODULE)) {
+        // Module list was not found so we are falling back to the default module
+        // We ignore distribution files so that we will attempt to load custom file as well
+        if (!$this->isDistributionFilePath($path) && ($result === null) && ($module <> self::DEFAULT_MODULE)) {
             $this->warnings[] = "Module list not found.  Falling back on module " . self::DEFAULT_MODULE;
             $result = parent::find(self::DEFAULT_MODULE, $path, true);
         }
