@@ -183,6 +183,11 @@ DataTablesInit.prototype = {
             var $form = $(
                 '<form method="post" action="' + $(this).data('batch-url') + '"></form>'
             );
+
+            if ($(this).data('csrf-token')) {
+                $form.append('<input type="text" name="_csrfToken" value="' + $(this).data('csrf-token') + '">');
+            }
+
             $('#' + table.table().node().id + ' tr.selected').each(function () {
                 $form.append('<input type="text" name="batch[ids][]" value="' + $(this).attr('data-id') + '">');
             });
