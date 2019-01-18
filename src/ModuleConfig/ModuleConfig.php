@@ -13,6 +13,7 @@ namespace Qobo\Utils\ModuleConfig;
 
 use Cake\Core\Configure;
 use InvalidArgumentException;
+use Qobo\Utils\ConfigInterface;
 use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
@@ -150,10 +151,8 @@ class ModuleConfig implements ErrorAwareInterface
         if (is_null($parser)) {
             $options = array_merge($this->options, ['classArgs' => [$this->createSchema()]]);
 
-            /** @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface&\Cake\Core\InstanceConfigTrait $parser */
-            $parser = ClassFactory::create($this->configType, ClassType::PARSER(), $options);
-
-            if (!empty($this->options)) {
+            $parser = ClassFactory::createParser($this->configType, $options);
+            if (!empty($this->options) && $parser instanceof ConfigInterface) {
                 $parser->setConfig($this->options);
             }
         }

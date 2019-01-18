@@ -17,6 +17,7 @@ use JsonSchema\Constraints\Constraint;
 use JsonSchema\Constraints\Factory;
 use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
+use Qobo\Utils\ConfigInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Parser\SchemaInterface;
 use Qobo\Utils\Utility;
@@ -24,7 +25,7 @@ use Qobo\Utils\Utility\Convert;
 use Seld\JsonLint\ParsingException;
 use stdClass;
 
-class Parser implements ParserInterface
+class Parser implements ConfigInterface, ParserInterface
 {
     use ErrorTrait;
     use InstanceConfigTrait;
