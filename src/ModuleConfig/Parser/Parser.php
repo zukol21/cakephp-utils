@@ -14,8 +14,6 @@ namespace Qobo\Utils\ModuleConfig\Parser;
 use Cake\Core\InstanceConfigTrait;
 use InvalidArgumentException;
 use JsonSchema\Constraints\Constraint;
-use JsonSchema\Constraints\Factory;
-use JsonSchema\Exception\ValidationException;
 use JsonSchema\Validator;
 use Qobo\Utils\ConfigInterface;
 use Qobo\Utils\ErrorTrait;

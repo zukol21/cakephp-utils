@@ -15,7 +15,6 @@ use Cake\Core\InstanceConfigTrait;
 use InvalidArgumentException;
 use Qobo\Utils\Utility;
 use Qobo\Utils\Utility\Convert;
-use Seld\JsonLint\JsonParser;
 use Seld\JsonLint\ParsingException;
 use stdClass;
 
