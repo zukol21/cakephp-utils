@@ -21,6 +21,7 @@ use Qobo\Utils\ModuleConfig\Cache\PathCache;
 use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
 use Qobo\Utils\ModuleConfig\Parser\Schema;
 use Qobo\Utils\ModuleConfig\Parser\SchemaInterface;
+use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
 use Qobo\Utils\Utility\Convert;
 use stdClass;
 
@@ -103,12 +104,9 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * @return \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
      */
-    protected function getFinder(): \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
+    protected function getFinder(): PathFinderInterface
     {
-        /**
-         * @var \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface $result
-         */
-        $result = ClassFactory::create($this->configType, ClassType::FINDER(), $this->options);
+        $result = ClassFactory::createFinder($this->configType, $this->options);
 
         return $result;
     }
