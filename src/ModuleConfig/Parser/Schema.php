@@ -133,7 +133,6 @@ class Schema implements SchemaInterface
             }
 
             if ($result !== false) {
-                /** @var array */
                 return Convert::arrayToObject($result);
             }
         }
