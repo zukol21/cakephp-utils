@@ -214,4 +214,18 @@ class ModuleConfigTest extends TestCase
 
         $this->assertSame($parser, $mc->getParser());
     }
+
+    public function testExists(): void
+    {
+        $this->assertTrue(ModuleConfig::exists('Foo'));
+        $this->assertFalse(ModuleConfig::exists('Boo'));
+    }
+
+    public function testHasMigrationFields(): void
+    {
+        $this->assertTrue(ModuleConfig::hasMigrationFields('Foo', []));
+        $this->assertTrue(ModuleConfig::hasMigrationFields('Foo', ['id', 'name', 'description']));
+        $this->assertFalse(ModuleConfig::hasMigrationFields('Foo', ['id', 'name', 'unknown']));
+        $this->assertFalse(ModuleConfig::hasMigrationFields('Foo', ['unknown']));
+    }
 }

@@ -308,4 +308,44 @@ class ModuleConfig implements ErrorAwareInterface
 
         $this->errors[] = "Cannot merge messages from [" . get_class($source) . "]";
     }
+
+    /**
+     * Checks if the provided module name exists
+     *
+     * @param string $moduleName Module name
+     * @param mixed[] $options Options for ModuleConfig constructor
+     * @return bool
+     */
+    public static function exists(string $moduleName, array $options = []) : bool
+    {
+        $config = (new ModuleConfig(ConfigType::MIGRATION(), $moduleName, null, $options))->parseToArray();
+        if (empty($config)) {
+            return false;
+        }
+
+        $config = (new ModuleConfig(ConfigType::MODULE(), $moduleName, null, $options))->parseToArray();
+        if (empty($config['table']) || empty($config['table']['type'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks whether the provided fields exists in migration configuration
+     *
+     * @param string $moduleName Module name
+     * @param mixed[] $fields List of fields to be checked
+     * @param mixed[] $options Options for ModuleConfig constructor
+     * @return bool
+     */
+    public static function hasMigrationFields(string $moduleName, array $fields, array $options = []): bool
+    {
+        $config = (new ModuleConfig(ConfigType::MIGRATION(), $moduleName, null, $options))->parseToArray();
+
+        $fieldKeys = array_flip($fields);
+        $diff = array_diff_key($fieldKeys, $config);
+
+        return empty($diff);
+    }
 }
