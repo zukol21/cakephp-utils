@@ -244,9 +244,12 @@ class EncryptedFieldsBehavior extends Behavior
             $encryptionKey = $this->getConfig('encryptionKey');
             $base64 = $this->getConfig('base64');
             $encoded = $entity->get($field);
-            if (!empty($encoded)) {
+            if (!empty($encoded) && $encoded !== false) {
                 if ($base64 === true) {
                     $encoded = base64_decode($encoded, true);
+                    if ($encoded === false) {
+                        return null;
+                    }
                 }
                 $decrypted = Security::decrypt($encoded, $encryptionKey);
                 if ($decrypted === false) {
