@@ -123,7 +123,7 @@ class EncryptedFieldsBehavior extends Behavior
     }
 
     /**
-     * Callback to never really delete a record but instead mark it as `trashed`.
+     * `Modele.beforeSave` callback which runs the entity encryption.
      *
      * @param \Cake\Event\Event $event The beforeDelete event that was fired.
      * @param \Cake\Datasource\EntityInterface $entity The entity to be deleted.
