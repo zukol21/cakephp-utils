@@ -138,6 +138,9 @@ class EncryptedFieldsBehavior extends Behavior
     /**
      * Encrypts the fields.
      *
+     * If the value of the fields is null or a resource the encryption process
+     * if skipped for this field.
+     *
      * @param \Cake\Datasource\EntityInterface $entity Entity object.
      * @return \Cake\Datasource\EntityInterface Entity object.
      */
@@ -158,7 +161,7 @@ class EncryptedFieldsBehavior extends Behavior
                 continue;
             }
             $value = $entity->get($name);
-            if ($value === null) {
+            if ($value === null || is_resource($value)) {
                 continue;
             }
             $encrypted = Security::encrypt($value, $encryptionKey);
