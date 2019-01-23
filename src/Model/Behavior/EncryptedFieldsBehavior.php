@@ -116,14 +116,10 @@ class EncryptedFieldsBehavior extends Behavior
 
         $mapper = function (EntityInterface $entity, $key, MapReduce $mapReduce) use ($fields) {
             $entity = $this->decryptEntity($entity, $fields);
-            $mapReduce->emitIntermediate($entity, $key);
+            $mapReduce->emit($entity);
         };
 
-        $reducer = function ($accounts, $key, MapReduce $mapReduce) {
-            $mapReduce->emit($accounts, $key);
-        };
-
-        return $query->mapReduce($mapper, $reducer);
+        return $query->mapReduce($mapper);
     }
 
     /**
