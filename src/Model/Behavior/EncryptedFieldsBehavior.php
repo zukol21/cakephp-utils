@@ -2,9 +2,11 @@
 namespace Qobo\Utils\Model\Behavior;
 
 use ArrayObject;
+use Cake\Collection\Iterator\MapReduce;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
+use Cake\ORM\Query;
 use Cake\Utility\Security;
 use RuntimeException;
 
@@ -49,6 +51,45 @@ class EncryptedFieldsBehavior extends Behavior
     public function initialize(array $config)
     {
         $this->setConfig($config);
+    }
+
+    /**
+     * Custom finder method which decrypts the given fields with map/reduce.
+     *
+     * Example:
+     * ```php
+     * <?php
+     * $sensitiveData = $this->Users->find('decrypt', ['decryptFields' => ['token']])->contain(['Groups']);
+     * ```
+     *
+     * @param \Cake\ORM\Query $query Query object.
+     * @param mixed[] $options Options array.
+     * @return \Cake\ORM\Query|array Query object.
+     */
+    public function findDecrypt(Query $query, array $options = [])
+    {
+        $fields = $options['decryptFields'] ?? [];
+        $decryptAll = $this->getConfig('decryptAll');
+
+        // Should we enable decryption of all fields if no fields are given to us?
+        if (empty($fields) && $decryptAll === true) {
+            $fields = $this->getConfig('fields');
+        }
+
+        if (empty($fields)) {
+            return $query;
+        }
+
+        $mapper = function (EntityInterface $entity, $key, MapReduce $mapReduce) use ($fields) {
+            $entity = $this->decryptEntity($entity, $fields);
+            $mapReduce->emitIntermediate($entity, $key);
+        };
+
+        $reducer = function ($accounts, $key, MapReduce $mapReduce) {
+            $mapReduce->emit($accounts, $key);
+        };
+
+        return $query->mapReduce($mapper, $reducer);
     }
 
     /**
@@ -193,7 +234,7 @@ class EncryptedFieldsBehavior extends Behavior
      */
     protected function canDecryptField(EntityInterface $entity, string $field): bool
     {
-        $decryptAll = $this->getConfig('canDecryptAllFields');
+        $decryptAll = $this->getConfig('decryptAll');
         if ($decryptAll === true) {
             return true;
         }
