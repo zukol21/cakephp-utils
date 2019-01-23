@@ -276,9 +276,7 @@ class EncryptedFieldsBehavior extends Behavior
             return true;
         }
 
-        $decryptFields = [];
         $fields = $this->getFields();
-
         if (!isset($fields[$field])) {
             return false;
         }
