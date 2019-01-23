@@ -4,7 +4,9 @@ namespace Qobo\Utils\Test\TestCase\Model\Behavior;
 use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
+use Cake\Utility\Security;
 use Qobo\Utils\Model\Behavior\EncryptedFieldsBehavior;
+use RuntimeException;
 
 /**
  * Qobo\Utils\Model\Behavior\EncryptedFieldsBehavior Test Case
@@ -84,12 +86,91 @@ class EncryptedFieldsBehaviorTest extends TestCase
     }
 
     /**
-     * Test initial setup
+     * Test encryption key validation during initialization
      *
      * @return void
      */
-    public function testInitialization(): void
+    public function testInitializeEncryptionKeyValidation(): void
     {
-        $this->markTestIncomplete('Not implemented yet.');
+        $this->expectException(RuntimeException::class);
+        $this->EncryptedFields->setConfig(['encryptionKey' => '']);
+        $this->EncryptedFields->initialize([]);
+    }
+
+    /**
+     * Test `enabled` validation during initialization
+     *
+     * @return void
+     */
+    public function testInitializeEnabledValidationInvalidType(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->EncryptedFields->setConfig(['enabled' => 'foobar']);
+        $this->EncryptedFields->initialize([]);
+    }
+
+    /**
+     * Test `enabled` validation during initialization
+     *
+     * @return void
+     */
+    public function testInitializeEnabledValidationValidType(): void
+    {
+        $this->EncryptedFields->setConfig(['enabled' => false]);
+        $this->EncryptedFields->initialize([]);
+        $this->assertFalse($this->EncryptedFields->getConfig('enabled'));
+
+        $this->EncryptedFields->setConfig(['enabled' => function () {
+            return false;
+        }]);
+        $this->EncryptedFields->initialize([]);
+        $this->assertTrue(is_callable($this->EncryptedFields->getConfig('enabled')));
+    }
+
+    /**
+     * Test no encryption is done if behavior is disabled.
+     *
+     * @return void
+     */
+    public function testEncryptionDisabled(): void
+    {
+        $this->EncryptedFields->setConfig([
+            'enabled' => false
+        ]);
+        $this->EncryptedFields->initialize([]);
+
+        $name = 'foobar';
+        $entity = $this->Users->newEntity([
+            'name' => $name,
+        ]);
+
+        $actualEntity = $this->EncryptedFields->encrypt($entity);
+        $this->assertSame($entity, $actualEntity);
+        $this->assertEquals($entity, $actualEntity);
+        $this->assertEquals($name, $actualEntity->get('name'));
+    }
+
+    /**
+     * Test success field encryption
+     *
+     * @return void
+     */
+    public function testEncryptSuccess(): void
+    {
+        $name = 'foobar';
+        $encryptedName = Security::encrypt($name, $this->key);
+        $entity = $this->Users->newEntity([
+            'name' => $name,
+        ]);
+
+        // Assert name was changed
+        $actualEntity = $this->EncryptedFields->encrypt($entity);
+        $this->assertTrue($actualEntity->isDirty('name'));
+
+        // Decrypt the name and compare
+        $actualName = $actualEntity->get('name');
+        $decodedName = (string)base64_decode($actualName, true);
+        $decryptedName = Security::decrypt($decodedName, $this->key);
+        $this->assertEquals($name, $decryptedName);
     }
 }
