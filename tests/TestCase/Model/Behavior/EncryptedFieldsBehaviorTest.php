@@ -385,6 +385,36 @@ class EncryptedFieldsBehaviorTest extends TestCase
      *
      * @return void
      */
+    public function testFinderWithoutFieldsDecryptAllEnabled(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $this->Users->save($entity);
+
+        $this->Users->getBehavior('EncryptedFields')->setConfig(
+            [
+                'decryptAll' => true,
+                'fields' => [
+                    'name' => [
+                        'decrypt' => false,
+                    ],
+                ],
+            ]
+        );
+
+        $query = $this->Users->find('decrypt');
+        $this->assertEquals(3, $query->count());
+        $users = $query->toArray();
+        $this->assertEquals('user1', $users[0]->get('name'));
+        $this->assertEquals('user2', $users[1]->get('name'));
+        $this->assertEquals($name, $users[2]->get('name'));
+    }
+
+    /**
+     * Test custom finder method when decryption is disabled.
+     *
+     * @return void
+     */
     public function testEncryptWithInaccessibleField(): void
     {
         $name = 'foobar';
