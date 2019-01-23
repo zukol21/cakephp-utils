@@ -5,6 +5,8 @@ use ArrayObject;
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\Behavior;
+use Cake\Utility\Security;
+use RuntimeException;
 
 /**
  * EncryptedFields behavior
@@ -70,6 +72,81 @@ class EncryptedFieldsBehavior extends Behavior
      */
     public function encrypt(EntityInterface $entity): EntityInterface
     {
+        if (!$this->isEncryptable($entity)) {
+            return $entity;
+        }
+
+        $fields = $this->getFields();
+        $encryptionKey = $this->getConfig('encryptionKey');
+        $base64 = $this->getConfig('base64');
+        $table = $this->getTable();
+
+        $patch = [];
+        foreach ($fields as $name => $field) {
+            if (!$table->hasField($name)) {
+                continue;
+            }
+            $value = $entity->get($name);
+            $encrypted = Security::encrypt($value, $encryptionKey);
+            if ($base64 === true) {
+                $encrypted = base64_encode($encrypted);
+            }
+            $patch[$name] = $encrypted;
+        }
+
+        if (!empty($patch)) {
+            $accessible = array_fill_keys(array_keys($patch), true);
+            $entity = $table->patchEntity($entity, $patch, [
+                'accessibleField' => $accessible,
+            ]);
+        }
+
         return $entity;
+    }
+
+    /**
+     * Checks whether the given entity can be encrypted.
+     *
+     * @param \Cake\Datasource\EntityInterface $entity Entity object.
+     * @throws \RuntimeException When `condition` callable returns a non-boolean value.
+     * @return bool True if encryption is allowed
+     */
+    public function isEncryptable(EntityInterface $entity): bool
+    {
+        $enabled = $this->getConfig('enabled');
+        if (is_callable($enabled)) {
+            $enabled = $enabled($entity);
+            if (!is_bool($enabled)) {
+                throw new RuntimeException('Condition callable must return a boolean.');
+            }
+        }
+
+        return $enabled;
+    }
+
+    /**
+     * Returns a processed list of fields with applied default values.
+     *
+     * @return mixed[] Fields array.
+     */
+    protected function getFields(): array
+    {
+        $fields = $this->getConfig('fields');
+
+        $defaults = [
+            'decrypt' => false,
+        ];
+
+        $result = [];
+        foreach ($fields as $field => $values) {
+            if (is_numeric($field)) {
+                $field = $values;
+                $values = [];
+            }
+            $values = array_merge($defaults, $values);
+            $result[$field] = $values;
+        }
+
+        return $result;
     }
 }
