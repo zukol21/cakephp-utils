@@ -184,4 +184,63 @@ class EncryptedFieldsBehaviorTest extends TestCase
         $this->assertSame($entity, $actualEntity);
         $this->assertEquals($entity, $actualEntity);
     }
+
+    /**
+     * Test decrypt entity.
+     *
+     * @return void
+     */
+    public function testDencryptEntity(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $encrypted = $this->EncryptedFields->encrypt($entity);
+
+        $decrypted = $this->EncryptedFields->decryptEntity($encrypted, ['name']);
+        $this->assertEquals($name, $decrypted->get('name'));
+    }
+
+    /**
+     * Test missing fields are skipped
+     *
+     * @return void
+     */
+    public function testDencryptMissingFieldsAreSkipped(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $encrypted = $this->EncryptedFields->encrypt($entity);
+        $decrypted = $this->EncryptedFields->decryptEntity($encrypted, ['missing_field']);
+        // No errors should be produced, and `name` should still be encrypted
+        $decodedName = (string)base64_decode($decrypted->get('name'));
+        $decryptedName = Security::decrypt($decodedName, $this->key);
+        $this->assertEquals($name, $decryptedName);
+    }
+
+    /**
+     * Test missing fields are skipped
+     *
+     * @return void
+     */
+    public function testDencryptFailure(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $encrypted = $this->EncryptedFields->encrypt($entity);
+
+        $this->EncryptedFields->setConfig([
+            // Has to be long otherwirse Security class will throw an exception.
+            'encryptionKey' => 'badkeybadkeybadkeybadkeybadkeybadkeybadkeybadkey'
+        ]);
+
+        try {
+            $decrypted = $this->EncryptedFields->decryptEntity($encrypted, ['name']);
+        } catch (RuntimeException $e) {
+            $this->assertContains('Unable to decypher `name`', $e->getMessage());
+
+            throw $e;
+        }
+    }
 }
