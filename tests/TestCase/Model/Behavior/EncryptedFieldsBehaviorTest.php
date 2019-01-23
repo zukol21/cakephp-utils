@@ -178,6 +178,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
         // Assert name was changed
         $actualEntity = $this->EncryptedFields->encryptEntity($entity);
         $this->assertTrue($actualEntity->isDirty('name'));
+        $this->assertNotEquals($name, $actualEntity->get('name'));
     }
 
     /**
