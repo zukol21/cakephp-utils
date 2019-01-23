@@ -162,6 +162,9 @@ class EncryptedFieldsBehavior extends Behavior
                 continue;
             }
             $value = $entity->get($name);
+            if ($value === null) {
+                continue;
+            }
             $encrypted = Security::encrypt($value, $encryptionKey);
             if ($base64 === true) {
                 $encrypted = base64_encode($encrypted);
