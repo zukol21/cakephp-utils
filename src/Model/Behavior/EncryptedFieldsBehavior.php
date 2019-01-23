@@ -14,6 +14,19 @@ class EncryptedFieldsBehavior extends Behavior
     /**
      * Default configuration.
      *
+     * - enabled: Boolean or custom callable which returns a boolean and accepts
+     *      {@link \Cake\Datasource\EntityInterface} as a parameter.
+     *      Determines if encryption is enabled for this particular entity.
+     * - encryptionKey: Encryption key. Mandatory if `enabled` is set to `true`.
+     * - fields: Array of fields to encrypt. Each field may be an array of the following settings:
+     *      - decrypt: boolean or callable which accepts {@link \Cake\Datasource\EntityInterface}
+     *          and field name as parameters, and return a boolean, which determines
+     *          if decryption is enabled for this field. Useful for permission checks.
+     * - base64: Whether to encode/decode the encrypted string in base64 so the
+     *      encrypted field can be stored as a string.
+     * - decryptAll: Set to true to allow decrypting all `fields`.
+     *      Overrides the decryption values specified in `fields`.
+     *
      * @var array
      */
     protected $_defaultConfig = [
