@@ -105,8 +105,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     public function testInitializeEnabledValidationInvalidType(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->EncryptedFields->setConfig(['enabled' => 'foobar']);
-        $this->EncryptedFields->initialize([]);
+        $this->EncryptedFields->initialize(['enabled' => 'foobar']);
     }
 
     /**
@@ -116,8 +115,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
      */
     public function testInitializeEnabledValidationValidType(): void
     {
-        $this->EncryptedFields->setConfig(['enabled' => false]);
-        $this->EncryptedFields->initialize([]);
+        $this->EncryptedFields->initialize(['enabled' => false]);
         $this->assertFalse($this->EncryptedFields->getConfig('enabled'));
 
         $this->EncryptedFields->setConfig(['enabled' => function () {
@@ -172,5 +170,28 @@ class EncryptedFieldsBehaviorTest extends TestCase
         $decodedName = (string)base64_decode($actualName, true);
         $decryptedName = Security::decrypt($decodedName, $this->key);
         $this->assertEquals($name, $decryptedName);
+    }
+
+    /**
+     * Test missing fields are skipped
+     *
+     * @return void
+     */
+    public function testEncryptMissingFieldsAreSkipped(): void
+    {
+        $this->EncryptedFields->setConfig(['fields' => [
+                'invalid_field' => [
+                    'decrypt' => true,
+                ],
+            ]
+        ]);
+
+        $name = 'foobar';
+        $encryptedName = Security::encrypt($name, $this->key);
+        $entity = $this->Users->newEntity();
+
+        $actualEntity = $this->EncryptedFields->encrypt($entity);
+        $this->assertSame($entity, $actualEntity);
+        $this->assertEquals($entity, $actualEntity);
     }
 }
