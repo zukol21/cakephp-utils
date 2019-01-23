@@ -156,10 +156,9 @@ class EncryptedFieldsBehaviorTest extends TestCase
         $entity = $this->Users->newEntity([
             'name' => $name,
         ]);
-
+        $expected = clone $entity;
         $actualEntity = $this->EncryptedFields->encryptEntity($entity);
-        $this->assertSame($entity, $actualEntity);
-        $this->assertEquals($entity, $actualEntity);
+        $this->assertEquals($expected, $actualEntity);
         $this->assertEquals($name, $actualEntity->get('name'));
     }
 
@@ -196,9 +195,9 @@ class EncryptedFieldsBehaviorTest extends TestCase
         ]);
 
         $entity = $this->Users->newEntity();
+        $expected = clone $entity;
         $actualEntity = $this->EncryptedFields->encryptEntity($entity);
-        $this->assertSame($entity, $actualEntity);
-        $this->assertEquals($entity, $actualEntity);
+        $this->assertEquals($expected, $actualEntity);
     }
 
     /**
@@ -206,7 +205,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function testDencryptEntity(): void
+    public function testDecryptEntity(): void
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
@@ -221,7 +220,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function testDencryptMissingFieldsAreSkipped(): void
+    public function testDecryptMissingFieldsAreSkipped(): void
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
@@ -238,7 +237,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function testDencryptFailure(): void
+    public function testDecryptFailure(): void
     {
         $this->expectException(RuntimeException::class);
 
@@ -265,7 +264,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function testDencryptEntityWhenDisabled(): void
+    public function testDecryptEntityWhenDisabled(): void
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
@@ -282,7 +281,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
      *
      * @return void
      */
-    public function testDencryptEntityFieldsCannotBeDecrypted(): void
+    public function testDecryptEntityFieldsCannotBeDecrypted(): void
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
