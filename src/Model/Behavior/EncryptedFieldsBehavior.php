@@ -20,7 +20,7 @@ use RuntimeException;
  * Encrypt columns by attaching the behavior:
  *
  * ```php
- * $this->addBehavior('Qobo/Social.EncryptedColumn', [
+ * $this->addBehavior('Qobo/Utils.EncryptedColumn', [
  *     'enabled' => true,
  *     'encryptionKey' => Configure::readOrFail('App.customEncryptionKey'),
  *     'fields' => [
