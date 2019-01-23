@@ -379,4 +379,23 @@ class EncryptedFieldsBehaviorTest extends TestCase
         $this->assertEquals('user2', $users[1]->get('name'));
         $this->assertNotEquals($name, $users[2]->get('name'));
     }
+
+    /**
+     * Test custom finder method when decryption is disabled.
+     *
+     * @return void
+     */
+    public function testEncryptWithInaccessibleField(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity([
+            'name' => $name,
+        ]);
+        $entity->setAccess('name', false);
+
+        // Assert name was changed
+        $actualEntity = $this->EncryptedFields->encryptEntity($entity);
+        $this->assertTrue($actualEntity->isDirty('name'));
+        $this->assertNotEquals($name, $actualEntity->get('name'));
+    }
 }
