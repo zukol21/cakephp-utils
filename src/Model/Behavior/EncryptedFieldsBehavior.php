@@ -102,20 +102,21 @@ class EncryptedFieldsBehavior extends Behavior
      */
     public function findDecrypt(Query $query, array $options = [])
     {
-        $fields = $options['decryptFields'] ?? [];
+        $decryptFields = $options['decryptFields'] ?? [];
+        $fields = $this->getFields();
         $decryptAll = $this->getConfig('decryptAll');
 
         // Should we enable decryption of all fields if no fields are given to us?
-        if (empty($fields) && $decryptAll === true) {
-            $fields = $this->getConfig('fields');
+        if (empty($decryptFields) && $decryptAll === true) {
+            $decryptFields = array_keys($fields);
         }
 
-        if (empty($fields)) {
+        if (empty($decryptFields)) {
             return $query;
         }
 
-        $mapper = function (EntityInterface $entity, $key, MapReduce $mapReduce) use ($fields) {
-            $entity = $this->decryptEntity($entity, $fields);
+        $mapper = function (EntityInterface $entity, $key, MapReduce $mapReduce) use ($decryptFields) {
+            $entity = $this->decryptEntity($entity, $decryptFields);
             $mapReduce->emit($entity);
         };
 
