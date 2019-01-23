@@ -125,6 +125,95 @@ class EncryptedFieldsBehavior extends Behavior
     }
 
     /**
+     * Decrypts entity fields and runs the conditions check to determine whether
+     * the given entity can be decrypted.
+     *
+     * @param \Cake\Datasource\EntityInterface $entity Entity object.
+     * @param string[] $fields Fields to decrypt.
+     * @return \Cake\Datasource\EntityInterface Entity object.
+     */
+    public function decryptEntity(EntityInterface $entity, array $fields): EntityInterface
+    {
+        if (!$this->isEncryptable($entity)) {
+            return $entity;
+        }
+
+        $table = $this->getTable();
+        foreach ($fields as $field) {
+            if (!$table->hasField($field)) {
+                continue;
+            }
+            $value = $this->decryptEntityField($entity, $field);
+            if ($value !== null) {
+                $entity->set([$field => $value], ['guard' => false]);
+                $entity->setDirty($field, false);
+            }
+        }
+
+        return $entity;
+    }
+
+    /**
+     * Returns the decrypted field value. Assumes that the field is actually encrypted.
+     *
+     * @param \Cake\Datasource\EntityInterface $entity Entity.
+     * @param string $field Field name.
+     * @return mixed|null Credentials or null when empty.
+     */
+    public function decryptEntityField(EntityInterface $entity, string $field)
+    {
+        if (!$this->canDecryptField($entity, $field)) {
+            return null;
+        }
+        $encryptionKey = $this->getConfig('encryptionKey');
+        $base64 = $this->getConfig('base64');
+        $encoded = $entity->get($field);
+        if (!empty($encoded)) {
+            if ($base64 === true) {
+                $encoded = base64_decode($encoded, true);
+            }
+            // $decoded = base64_decode($encoded, true);
+            $decrypted = Security::decrypt($encoded, $encryptionKey);
+            if ($decrypted === false) {
+                throw new RuntimeException('Unable to decypher credentials. Check your enryption key.');
+            }
+
+            return $decrypted;
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns true when the field can be decrypted.
+     *
+     * @param \Cake\Datasource\EntityInterface $entity Entity object.
+     * @param string $field Field name.
+     * @return bool True is decryption is allowed.
+     */
+    protected function canDecryptField(EntityInterface $entity, string $field): bool
+    {
+        $decryptAll = $this->getConfig('canDecryptAllFields');
+        if ($decryptAll === true) {
+            return true;
+        }
+
+        $decryptFields = [];
+        $fields = $this->getFields();
+
+        if (!isset($fields[$field])) {
+            return false;
+        }
+
+        $decrypt = $fields[$field]['decrypt'];
+        if (is_callable($decrypt)) {
+            $decrypt = $decrypt($entity, $field);
+        }
+
+        return $decrypt;
+    }
+
+    /**
      * Returns a processed list of fields with applied default values.
      *
      * @return mixed[] Fields array.
