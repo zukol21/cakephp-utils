@@ -250,10 +250,9 @@ class EncryptedFieldsBehavior extends Behavior
             if ($base64 === true) {
                 $encoded = base64_decode($encoded, true);
             }
-            // $decoded = base64_decode($encoded, true);
             $decrypted = Security::decrypt($encoded, $encryptionKey);
             if ($decrypted === false) {
-                throw new RuntimeException('Unable to decypher credentials. Check your enryption key.');
+                throw new RuntimeException("Unable to decypher `{$field}`. Check your enryption key.");
             }
 
             return $decrypted;
