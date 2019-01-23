@@ -157,7 +157,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
             'name' => $name,
         ]);
 
-        $actualEntity = $this->EncryptedFields->encrypt($entity);
+        $actualEntity = $this->EncryptedFields->encryptEntity($entity);
         $this->assertSame($entity, $actualEntity);
         $this->assertEquals($entity, $actualEntity);
         $this->assertEquals($name, $actualEntity->get('name'));
@@ -176,7 +176,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
         ]);
 
         // Assert name was changed
-        $actualEntity = $this->EncryptedFields->encrypt($entity);
+        $actualEntity = $this->EncryptedFields->encryptEntity($entity);
         $this->assertTrue($actualEntity->isDirty('name'));
     }
 
@@ -195,7 +195,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
         ]);
 
         $entity = $this->Users->newEntity();
-        $actualEntity = $this->EncryptedFields->encrypt($entity);
+        $actualEntity = $this->EncryptedFields->encryptEntity($entity);
         $this->assertSame($entity, $actualEntity);
         $this->assertEquals($entity, $actualEntity);
     }
@@ -209,7 +209,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
-        $encrypted = $this->EncryptedFields->encrypt($entity);
+        $encrypted = $this->EncryptedFields->encryptEntity($entity);
 
         $decrypted = $this->EncryptedFields->decryptEntity($encrypted, ['name']);
         $this->assertEquals($name, $decrypted->get('name'));
@@ -224,7 +224,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
-        $encrypted = $this->EncryptedFields->encrypt($entity);
+        $encrypted = $this->EncryptedFields->encryptEntity($entity);
         $decrypted = $this->EncryptedFields->decryptEntity($encrypted, ['missing_field']);
         // No errors should be produced, and `name` should still be encrypted
         $decodedName = (string)base64_decode($decrypted->get('name'));
@@ -243,7 +243,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
 
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
-        $encrypted = $this->EncryptedFields->encrypt($entity);
+        $encrypted = $this->EncryptedFields->encryptEntity($entity);
 
         $this->EncryptedFields->setConfig([
             // Has to be long otherwirse Security class will throw an exception.
@@ -268,7 +268,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
-        $this->EncryptedFields->encrypt($entity);
+        $this->EncryptedFields->encryptEntity($entity);
         $encrypted = clone $entity;
 
         $this->EncryptedFields->setConfig(['enabled' => false]);
@@ -285,7 +285,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
-        $encrypted = $this->EncryptedFields->encrypt($entity);
+        $encrypted = $this->EncryptedFields->encryptEntity($entity);
 
         $this->EncryptedFields->setConfig(
             [
@@ -316,7 +316,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity(['name' => $name]);
-        $encrypted = $this->EncryptedFields->encrypt($entity);
+        $encrypted = $this->EncryptedFields->encryptEntity($entity);
 
         $this->EncryptedFields->setConfig(
             [

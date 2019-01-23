@@ -132,7 +132,7 @@ class EncryptedFieldsBehavior extends Behavior
      */
     public function beforeSave(Event $event, EntityInterface $entity, ArrayObject $options): void
     {
-        $entity = $this->encrypt($entity);
+        $entity = $this->encryptEntity($entity);
     }
 
     /**
@@ -141,7 +141,7 @@ class EncryptedFieldsBehavior extends Behavior
      * @param \Cake\Datasource\EntityInterface $entity Entity object.
      * @return \Cake\Datasource\EntityInterface Entity object.
      */
-    public function encrypt(EntityInterface $entity): EntityInterface
+    public function encryptEntity(EntityInterface $entity): EntityInterface
     {
         if (!$this->isEncryptable($entity)) {
             return $entity;
