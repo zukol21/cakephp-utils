@@ -11,7 +11,26 @@ use Cake\Utility\Security;
 use RuntimeException;
 
 /**
- * EncryptedFields behavior
+ * Encrypted Fields Behavior.
+ *
+ * Allows to encrypt specified columns in `Model.beforeSave` event. Provides methods
+ * to decrypt columns via a custom finder, which internally uses map/reduce.
+ * Encryption and decryption is done via native Cake class {@link \Cake\Utility\Security}.
+ *
+ * Encrypt columns by attaching the behavior:
+ *
+ * ```php
+ * $this->addBehavior('Qobo/Social.EncryptedColumn', [
+ *     'enabled' => true,
+ *     'encryptionKey' => Configure::readOrFail('App.customEncryptionKey'),
+ *     'fields' => [
+ *         'credit_card',
+ *     ]
+ * ]);
+ * ```
+ *
+ * Decryption is provided via custom finder and other public methods which can be used
+ * directly on entities.
  */
 class EncryptedFieldsBehavior extends Behavior
 {
