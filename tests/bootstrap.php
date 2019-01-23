@@ -107,6 +107,12 @@ Cake\Core\Configure::load('icons', 'default');
 Cake\Core\Configure::load('colors', 'default');
 Cake\Core\Configure::load('module_config', 'default');
 
+/**
+ * Setup a sample encryption key for {@link \Qobo\Utils\Test\TestCase\Model\Behavior\EncryptedFieldsBehaviorTest}
+ * @link https://book.cakephp.org/3.0/en/core-libraries/security.html#encrypting-and-decrypting-data
+ */
+Configure::write('Qobo/' . $pluginName . '.encryptionKey', 'wt1U5MACWJFTXGenFoZoiLwQGrLgdbHA1');
+
 // Alias AppController to the test App
 class_alias('Qobo\\' . $pluginName . '\Test\App\Controller\AppController', 'App\Controller\AppController');
 // If plugin has routes.php/bootstrap.php then load them, otherwise don't.
