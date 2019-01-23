@@ -139,7 +139,7 @@ class EncryptedFieldsBehavior extends Behavior
      * Encrypts the fields.
      *
      * If the value of the fields is null or a resource the encryption process
-     * if skipped for this field.
+     * is skipped for this field.
      *
      * @param \Cake\Datasource\EntityInterface $entity Entity object.
      * @return \Cake\Datasource\EntityInterface Entity object.
@@ -174,7 +174,7 @@ class EncryptedFieldsBehavior extends Behavior
         if (!empty($patch)) {
             $accessible = array_fill_keys(array_keys($patch), true);
             $entity = $table->patchEntity($entity, $patch, [
-                'accessibleField' => $accessible,
+                'accessibleFields' => $accessible,
             ]);
         }
 
