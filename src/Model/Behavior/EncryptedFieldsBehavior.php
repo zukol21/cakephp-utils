@@ -296,11 +296,9 @@ class EncryptedFieldsBehavior extends Behavior
     protected function getFields(): array
     {
         $fields = $this->getConfig('fields');
-
         $defaults = [
             'decrypt' => false,
         ];
-
         $result = [];
         foreach ($fields as $field => $values) {
             if (is_numeric($field)) {
