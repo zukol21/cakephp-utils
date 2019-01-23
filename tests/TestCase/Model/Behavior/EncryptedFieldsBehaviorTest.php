@@ -109,6 +109,21 @@ class EncryptedFieldsBehaviorTest extends TestCase
     }
 
     /**
+     * Test `enabled` callback fails when non-boolean value is returned.
+     *
+     * @return void
+     */
+    public function testInitializeEnabledCallbackReturnedNonBoolean(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->EncryptedFields->initialize(['enabled' => function () {
+            return null;
+        }]);
+        $entity = $this->Users->newEntity([]);
+        $this->EncryptedFields->isEncryptable($entity);
+    }
+
+    /**
      * Test `enabled` validation during initialization
      *
      * @return void
@@ -201,7 +216,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     }
 
     /**
-     * Test missing fields are skipped
+     * Test decryption skips missing fields
      *
      * @return void
      */
@@ -218,7 +233,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     }
 
     /**
-     * Test missing fields are skipped
+     * Test decryption failure
      *
      * @return void
      */
@@ -242,5 +257,77 @@ class EncryptedFieldsBehaviorTest extends TestCase
 
             throw $e;
         }
+    }
+
+    /**
+     * Test decryption of entity return early if disabled.
+     *
+     * @return void
+     */
+    public function testDencryptEntityWhenDisabled(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $this->EncryptedFields->encrypt($entity);
+        $encrypted = clone $entity;
+
+        $this->EncryptedFields->setConfig(['enabled' => false]);
+        $decrypted = $this->EncryptedFields->decryptEntity($encrypted, ['name']);
+        $this->assertEquals($entity, $decrypted);
+    }
+
+    /**
+     * Test decryption of entity when fields are not allowed to be decrypted.
+     *
+     * @return void
+     */
+    public function testDencryptEntityFieldsCannotBeDecrypted(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $encrypted = $this->EncryptedFields->encrypt($entity);
+
+        $this->EncryptedFields->setConfig(
+            [
+                'decryptAll' => false,
+                'fields' => [
+                    'name' => [
+                        'decrypt' => function () {
+                            return false;
+                        },
+                    ],
+                ]
+            ]
+        );
+
+        $decrypted = $this->EncryptedFields->decryptEntityField($encrypted, 'name');
+        $this->assertNull($decrypted);
+
+        $decrypted = $this->EncryptedFields->decryptEntityField($encrypted, 'invalid_field');
+        $this->assertNull($decrypted);
+    }
+
+    /**
+     * Test decryption of entity fields automatically marked as non decryptable.
+     *
+     * @return void
+     */
+    public function testDencryptEntityFieldsNonDecryptableByDefault(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $encrypted = $this->EncryptedFields->encrypt($entity);
+
+        $this->EncryptedFields->initialize(
+            [
+                'decryptAll' => false,
+                'fields' => [
+                    'name' // should be marked as non decryptable by default.
+                ]
+            ]
+        );
+
+        $decrypted = $this->EncryptedFields->decryptEntityField($encrypted, 'name');
+        $this->assertNull($decrypted);
     }
 }
