@@ -318,7 +318,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
         $entity = $this->Users->newEntity(['name' => $name]);
         $encrypted = $this->EncryptedFields->encrypt($entity);
 
-        $this->EncryptedFields->initialize(
+        $this->EncryptedFields->setConfig(
             [
                 'decryptAll' => false,
                 'fields' => [
@@ -329,5 +329,54 @@ class EncryptedFieldsBehaviorTest extends TestCase
 
         $decrypted = $this->EncryptedFields->decryptEntityField($encrypted, 'name');
         $this->assertNull($decrypted);
+    }
+
+    /**
+     * Test custom finder method
+     *
+     * @return void
+     */
+    public function testFinder(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $this->Users->save($entity);
+
+        $query = $this->Users->find('decrypt', ['decryptFields' => ['name']]);
+        $this->assertEquals(3, $query->count());
+        $users = $query->toArray();
+        $this->assertEquals('user1', $users[0]->get('name'));
+        $this->assertEquals('user2', $users[1]->get('name'));
+        $this->assertEquals($name, $users[2]->get('name'));
+    }
+
+    /**
+     * Test custom finder method when decryption is disabled.
+     *
+     * @return void
+     */
+    public function testFinderWithoutFieldsDecryptAllDisabled(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $this->Users->save($entity);
+
+        $this->Users->getBehavior('EncryptedFields')->setConfig(
+            [
+                'decryptAll' => false,
+                'fields' => [
+                    'name' => [
+                        'decrypt' => false,
+                    ],
+                ],
+            ]
+        );
+
+        $query = $this->Users->find('decrypt');
+        $this->assertEquals(3, $query->count());
+        $users = $query->toArray();
+        $this->assertEquals('user1', $users[0]->get('name'));
+        $this->assertEquals('user2', $users[1]->get('name'));
+        $this->assertNotEquals($name, $users[2]->get('name'));
     }
 }
