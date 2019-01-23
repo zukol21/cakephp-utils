@@ -156,7 +156,6 @@ class EncryptedFieldsBehaviorTest extends TestCase
     public function testEncryptSuccess(): void
     {
         $name = 'foobar';
-        $encryptedName = Security::encrypt($name, $this->key);
         $entity = $this->Users->newEntity([
             'name' => $name,
         ]);
@@ -164,12 +163,6 @@ class EncryptedFieldsBehaviorTest extends TestCase
         // Assert name was changed
         $actualEntity = $this->EncryptedFields->encrypt($entity);
         $this->assertTrue($actualEntity->isDirty('name'));
-
-        // Decrypt the name and compare
-        $actualName = $actualEntity->get('name');
-        $decodedName = (string)base64_decode($actualName, true);
-        $decryptedName = Security::decrypt($decodedName, $this->key);
-        $this->assertEquals($name, $decryptedName);
     }
 
     /**
@@ -186,10 +179,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
             ]
         ]);
 
-        $name = 'foobar';
-        $encryptedName = Security::encrypt($name, $this->key);
         $entity = $this->Users->newEntity();
-
         $actualEntity = $this->EncryptedFields->encrypt($entity);
         $this->assertSame($entity, $actualEntity);
         $this->assertEquals($entity, $actualEntity);
