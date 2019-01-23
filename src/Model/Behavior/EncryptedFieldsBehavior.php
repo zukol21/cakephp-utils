@@ -69,6 +69,21 @@ class EncryptedFieldsBehavior extends Behavior
      */
     public function initialize(array $config)
     {
+        $encryptionKey = $this->getConfig('encryptionKey');
+        if (!empty($config['encryptionKey'])) {
+            $encryptionKey = $config['encryptionKey'];
+        }
+        if (empty($encryptionKey)) {
+            throw new RuntimeException('Encryption key is required.');
+        }
+
+        $enabled = $this->getConfig('enabled');
+        if (!empty($config['enabled'])) {
+            $enabled = $config['enabled'];
+        }
+        if (!is_callable($enabled) && !is_bool($enabled)) {
+            throw new RuntimeException('Enabled flag must be a boolean or a callable which returns a boolean.');
+        }
         $this->setConfig($config);
     }
 
