@@ -381,7 +381,7 @@ class EncryptedFieldsBehaviorTest extends TestCase
     }
 
     /**
-     * Test custom finder method when decryption is disabled.
+     * Test custom finder method when decryption is enabled.
      *
      * @return void
      */
