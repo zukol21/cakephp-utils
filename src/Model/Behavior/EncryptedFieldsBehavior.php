@@ -216,11 +216,7 @@ class EncryptedFieldsBehavior extends Behavior
             return $entity;
         }
 
-        $table = $this->getTable();
         foreach ($fields as $field) {
-            if (!$table->hasField($field)) {
-                continue;
-            }
             $value = $this->decryptEntityField($entity, $field);
             if ($value !== null) {
                 $entity->set([$field => $value], ['guard' => false]);
@@ -274,6 +270,9 @@ class EncryptedFieldsBehavior extends Behavior
      */
     protected function canDecryptField(EntityInterface $entity, string $field): bool
     {
+        if (!$this->getTable()->hasField($field)) {
+            return false;
+        }
         $decryptAll = $this->getConfig('decryptAll');
         if ($decryptAll === true) {
             return true;
