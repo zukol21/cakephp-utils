@@ -430,11 +430,36 @@ class EncryptedFieldsBehaviorTest extends TestCase
     }
 
     /**
-     * Test custom finder method when decryption is disabled.
+     * Test entity decryption when you pass a valid field, but it's not present
+     * in the behavior config.
      *
      * @return void
      */
     public function testDecryptWithEmptyFieldReturnsNull(): void
+    {
+        $name = 'foobar';
+        $entity = $this->Users->newEntity(['name' => $name]);
+        $encrypted = $this->EncryptedFields->encryptEntity($entity);
+
+        $this->EncryptedFields->setConfig(
+            [
+                'decryptAll' => false,
+                'fields' => [],
+            ],
+            null,
+            false
+        );
+
+        $actual = $this->EncryptedFields->decryptEntityField($entity, 'name');
+        $this->assertNull($actual);
+    }
+
+    /**
+     * Test custom finder method when decryption is disabled.
+     *
+     * @return void
+     */
+    public function testDecryptExistingFieldWhichIsMissingFromConfig(): void
     {
         $name = 'foobar';
         $entity = $this->Users->newEntity([

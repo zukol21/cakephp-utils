@@ -216,11 +216,7 @@ class EncryptedFieldsBehavior extends Behavior
             return $entity;
         }
 
-        $table = $this->getTable();
         foreach ($fields as $field) {
-            if (!$table->hasField($field)) {
-                continue;
-            }
             $value = $this->decryptEntityField($entity, $field);
             if ($value !== null) {
                 $entity->set([$field => $value], ['guard' => false]);
@@ -240,29 +236,29 @@ class EncryptedFieldsBehavior extends Behavior
      */
     public function decryptEntityField(EntityInterface $entity, string $field)
     {
-        if ($this->canDecryptField($entity, $field)) {
-            $encryptionKey = $this->getConfig('encryptionKey');
-            $base64 = $this->getConfig('base64');
-            $encoded = $entity->get($field);
-            if (empty($encoded) || $encoded === false) {
-                return null;
-            }
-
-            if ($base64 === true) {
-                $encoded = base64_decode($encoded, true);
-                if ($encoded === false) {
-                    return null;
-                }
-            }
-            $decrypted = Security::decrypt($encoded, $encryptionKey);
-            if ($decrypted === false) {
-                throw new RuntimeException("Unable to decypher `{$field}`. Check your enryption key.");
-            }
-
-            return $decrypted;
+        if (!$this->canDecryptField($entity, $field)) {
+            return null;
         }
 
-        return null;
+        $encryptionKey = $this->getConfig('encryptionKey');
+        $base64 = $this->getConfig('base64');
+        $encoded = $entity->get($field);
+        if (empty($encoded) || $encoded === false) {
+            return null;
+        }
+
+        if ($base64 === true) {
+            $encoded = base64_decode($encoded, true);
+            if ($encoded === false) {
+                return null;
+            }
+        }
+        $decrypted = Security::decrypt($encoded, $encryptionKey);
+        if ($decrypted === false) {
+            throw new RuntimeException("Unable to decypher `{$field}`. Check your enryption key.");
+        }
+
+        return $decrypted;
     }
 
     /**
@@ -274,6 +270,9 @@ class EncryptedFieldsBehavior extends Behavior
      */
     protected function canDecryptField(EntityInterface $entity, string $field): bool
     {
+        if (!$this->getTable()->hasField($field)) {
+            return false;
+        }
         $decryptAll = $this->getConfig('decryptAll');
         if ($decryptAll === true) {
             return true;
