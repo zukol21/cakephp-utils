@@ -65,8 +65,8 @@ class ListParser extends Parser
     /**
      * Method that restructures list options csv data for better handling.
      *
-     * @param  mixed[]  $data     csv data
-     * @param  string $prefix   nested option prefix
+     * @param mixed[] $data csv data
+     * @param string|null $prefix nested option prefix
      * @return mixed[]
      */
     protected function normalize(array $data, string $prefix = null): array
