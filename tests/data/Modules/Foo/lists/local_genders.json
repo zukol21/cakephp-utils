@@ -3,36 +3,36 @@
         {
             "value": "m",
             "label": "M - Male",
-            "inactive": "",
+            "inactive": false,
             "children": []
         },
         {
             "value": "f",
             "label": "F - Female",
-            "inactive": "",
+            "inactive": false,
             "children": []
         },
         {
             "value": "foo",
             "label": "Foo - inactive",
-            "inactive": "1",
+            "inactive": true,
             "children": []
         },
         {
             "value": "bar",
             "label": "Bar - with children",
-            "inactive": "",
+            "inactive": false,
             "children": [
                 {
                     "value": "bar_one",
                     "label": "bar One",
-                    "inactive": "",
+                    "inactive": false,
                     "children": []
                 },
                 {
                     "value": "bar_two",
                     "label": "bar Two",
-                    "inactive": "",
+                    "inactive": false,
                     "children": []
                 }
             ]
