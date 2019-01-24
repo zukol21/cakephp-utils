@@ -31,6 +31,7 @@ class ListParser extends Parser
         'allowEmptyData' => true,
         'allowEmptySchema' => true,
         'lint' => false,
+        'validate' => true,
         'validationMode' => Constraint::CHECK_MODE_APPLY_DEFAULTS,
         'filter' => false,
         'flatten' => false,
