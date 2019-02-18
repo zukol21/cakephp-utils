@@ -53,7 +53,8 @@
         "pyrech/composer-changelogs": "^1.4",
         "riesenia/cakephp-duplicatable": "^3.0",
         "rlanvin/php-rrule": "^1.6",
-        "seld/jsonlint": "^1.7"
+        "seld/jsonlint": "^1.7",
+        "webmozart/assert": "^1.4"
     },
     "require-dev": {
         "qobo/cakephp-composer-dev": "^v1.0"

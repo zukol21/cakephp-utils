@@ -13,7 +13,10 @@ namespace Qobo\Utils\ModuleConfig;
 
 use Cake\Core\Configure;
 use InvalidArgumentException;
+use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
+use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
 use ReflectionClass;
+use Webmozart\Assert\Assert;
 
 /**
  * ClassFactory Class
@@ -51,6 +54,42 @@ class ClassFactory
         $result = static::getInstance($className, $params);
 
         return $result;
+    }
+
+    /**
+     * Create a new instance of a Parser class
+     *
+     * Options:
+     * - classArgs: array of class arguments which will be passed to the constructor.
+     *
+     * @param string $configType Configuration type
+     * @param mixed[] $options Options
+     * @return \Qobo\Utils\ModuleConfig\Parser\ParserInterface
+     */
+    public static function createParser(string $configType, array $options = []): ParserInterface
+    {
+        $parser = self::create($configType, ClassType::PARSER(), $options);
+        Assert::isInstanceOf($parser, ParserInterface::class);
+
+        return $parser;
+    }
+
+    /**
+     * Create a new instance of a Parser class
+     *
+     * Options:
+     * - classArgs: array of class arguments which will be passed to the constructor.
+     *
+     * @param string $configType Configuration type
+     * @param mixed[] $options Options
+     * @return \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
+     */
+    public static function createFinder(string $configType, array $options = []): PathFinderInterface
+    {
+        $parser = self::create($configType, ClassType::FINDER(), $options);
+        Assert::isInstanceOf($parser, PathFinderInterface::class);
+
+        return $parser;
     }
 
     /**

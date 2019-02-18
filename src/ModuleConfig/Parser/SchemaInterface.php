@@ -11,7 +11,6 @@
  */
 namespace Qobo\Utils\ModuleConfig\Parser;
 
-use \InvalidArgumentException;
 use \stdClass;
 
 interface SchemaInterface

@@ -13,6 +13,7 @@ namespace Qobo\Utils\ModuleConfig;
 
 use Cake\Core\Configure;
 use InvalidArgumentException;
+use Qobo\Utils\ConfigInterface;
 use Qobo\Utils\ErrorAwareInterface;
 use Qobo\Utils\ErrorTrait;
 use Qobo\Utils\ModuleConfig\Cache\Cache;
@@ -20,6 +21,7 @@ use Qobo\Utils\ModuleConfig\Cache\PathCache;
 use Qobo\Utils\ModuleConfig\Parser\ParserInterface;
 use Qobo\Utils\ModuleConfig\Parser\Schema;
 use Qobo\Utils\ModuleConfig\Parser\SchemaInterface;
+use Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface;
 use Qobo\Utils\Utility\Convert;
 use stdClass;
 
@@ -102,12 +104,9 @@ class ModuleConfig implements ErrorAwareInterface
      *
      * @return \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
      */
-    protected function getFinder(): \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface
+    protected function getFinder(): PathFinderInterface
     {
-        /**
-         * @var \Qobo\Utils\ModuleConfig\PathFinder\PathFinderInterface $result
-         */
-        $result = ClassFactory::create($this->configType, ClassType::FINDER(), $this->options);
+        $result = ClassFactory::createFinder($this->configType, $this->options);
 
         return $result;
     }
@@ -150,10 +149,8 @@ class ModuleConfig implements ErrorAwareInterface
         if (is_null($parser)) {
             $options = array_merge($this->options, ['classArgs' => [$this->createSchema()]]);
 
-            /** @var \Qobo\Utils\ModuleConfig\Parser\ParserInterface&\Cake\Core\InstanceConfigTrait $parser */
-            $parser = ClassFactory::create($this->configType, ClassType::PARSER(), $options);
-
-            if (!empty($this->options)) {
+            $parser = ClassFactory::createParser($this->configType, $options);
+            if (!empty($this->options) && $parser instanceof ConfigInterface) {
                 $parser->setConfig($this->options);
             }
         }

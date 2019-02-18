@@ -21,7 +21,6 @@ use Cake\Filesystem\Folder;
 use Cake\Utility\Inflector;
 use DirectoryIterator;
 use InvalidArgumentException;
-use stdClass;
 use UnexpectedValueException;
 
 class Utility

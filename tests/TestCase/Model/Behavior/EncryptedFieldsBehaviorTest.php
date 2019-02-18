@@ -6,7 +6,9 @@ use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 use Cake\Utility\Security;
 use Qobo\Utils\Model\Behavior\EncryptedFieldsBehavior;
+use Qobo\Utils\Test\App\Model\Table\UsersTable;
 use RuntimeException;
+use Webmozart\Assert\Assert;
 
 /**
  * Qobo\Utils\Model\Behavior\EncryptedFieldsBehavior Test Case
@@ -54,8 +56,9 @@ class EncryptedFieldsBehaviorTest extends TestCase
         parent::setUp();
 
         $this->key = Configure::readOrFail('Qobo/Utils.encryptionKey');
-        /** @var \Qobo\Utils\Test\App\Model\Table\UsersTable $table */
         $table = TableRegistry::getTableLocator()->get('Users');
+        Assert::isInstanceOf($table, UsersTable::class);
+
         $this->Users = $table;
         $this->Users->setTable('users');
 

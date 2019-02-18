@@ -231,13 +231,12 @@ class Cache implements ErrorAwareInterface
             $cachedData = $data;
         }
 
-        /** @var bool|null */
         $result = CakeCache::write($key, $cachedData, $this->getConfig());
         if (!$result) {
             $this->errors[] = 'Failed to write value to cache';
         }
 
-        return is_bool($result) ? $result : (bool)$result;
+        return $result;
     }
 
     /**
