@@ -22,15 +22,8 @@
                 "inactive": {
                     "title": "Inactive",
                     "description": "Whether or not the item is active",
-                    "anyOf": [
-                        {
-                            "type": "string",
-                            "enum": ["", "0", "1"]
-                        },
-                        {
-                            "type": "null"
-                        }
-                    ]
+                    "type": "boolean",
+                    "default": false
                 },
                 "children": {
                     "title": "List item children",
