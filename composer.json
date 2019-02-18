@@ -50,7 +50,6 @@
         "mobiledetect/mobiledetectlib": "2.*",
         "muffin/trash": "^2.1",
         "myclabs/php-enum": "^1.5",
-        "phpstan/phpstan-webmozart-assert": "^0.10",
         "pyrech/composer-changelogs": "^1.4",
         "riesenia/cakephp-duplicatable": "^3.0",
         "rlanvin/php-rrule": "^1.6",
