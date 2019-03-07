@@ -22,6 +22,12 @@
             "description": "A single module field name",
             "type": "string"
         },
+        "relation": {
+            "title": "Relation field name",
+            "description": "A single relation field name",
+            "type": "string",
+            "enum": []
+        },
         "embeddedField": {
             "title": "Embedded field",
             "description": "Embedded fields are valid references.",
@@ -50,9 +56,10 @@
                 "items": [ { "$ref": "#/definitions/fieldLabel" } ],
                 "additionalItems": {
                     "anyOf": [
-                    	{ "$ref": "#/definitions/fieldName" },
-                    	{ "$ref": "#/definitions/embeddedField" },
-                    	{ "$ref": "#/definitions/emptyField" }
+                        { "$ref": "#/definitions/fieldName" },
+                        { "$ref": "#/definitions/embeddedField" },
+                        { "$ref": "#/definitions/emptyField" },
+                        { "$ref": "#/definitions/relation" }
                     ]
                 }
             }
