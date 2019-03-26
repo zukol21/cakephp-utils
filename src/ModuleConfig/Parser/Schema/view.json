@@ -22,11 +22,11 @@
             "description": "A single module field name",
             "type": "string"
         },
-        "relation": {
+        "relationField": {
             "title": "Relation field name",
             "description": "A single relation field name",
             "type": "string",
-            "enum": []
+            "pattern": "^(ASSOCIATION)\\((.+)\\)$"
         },
         "embeddedField": {
             "title": "Embedded field",
@@ -59,7 +59,7 @@
                         { "$ref": "#/definitions/fieldName" },
                         { "$ref": "#/definitions/embeddedField" },
                         { "$ref": "#/definitions/emptyField" },
-                        { "$ref": "#/definitions/relation" }
+                        { "$ref": "#/definitions/relationField" }
                     ]
                 }
             }
