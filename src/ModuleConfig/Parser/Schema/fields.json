@@ -92,6 +92,16 @@
                     "title": "Adding time handlers into popup",
                     "description": "Adds select boxes to choose times in addition to dates",
                     "type": "boolean"
+                },
+                "max": {
+                    "title": "Maximal value",
+                    "description": "Define a maximal value for field",
+                    "type": "integer"
+                },
+                "step": {
+                    "title": "Step value",
+                    "description": "Define a step value to increase/decrease numeric field",
+                    "type": "integer"
                 }
             },
             "additionalProperties": false

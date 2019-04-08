@@ -52,7 +52,7 @@
                     "title": "Report rendering choice",
                     "description": "How the report should be rendered/presented",
                     "type": "string",
-                    "enum": ["barChart", "donutChart", "knobChart", "lineChart", "table"]
+                    "enum": ["barChart", "donutChart", "knobChart", "lineChart", "table", "polarArea", "pieChart", "horizontalBar"]
                 },
                 "y_axis": {
                     "title": "Y-axis column",
@@ -78,6 +78,11 @@
                     "title": "Report value maximum",
                     "description": "A maximum for a single value in basic reports (knob)",
                     "type": "string"
+                },
+                "options": {
+                    "title": "Other options",
+                    "description": "Additional options for the chats",
+                    "type": "object"
                 }
             },
             "additionalProperties": false,
