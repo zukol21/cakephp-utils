@@ -91,7 +91,7 @@ class ParserTest extends TestCase
 
         $schema = new Schema(implode([__DIR__, DIRECTORY_SEPARATOR, 'somebadschema.json']));
         $parser = new Parser($schema);
-        $parser->parse($this->getFile());
+        $parser->parse($this->getFile(), ['validate' => true]);
     }
 
     /**
@@ -164,7 +164,7 @@ class ParserTest extends TestCase
         // $this->parser->setConfig('lint', true);
 
         try {
-            $this->parser->parse($this->getFile('sample_bad'));
+            $this->parser->parse($this->getFile('sample_bad'), ['validate' => true]);
         } catch (InvalidArgumentException $e) {
             $this->assertContains('Failed to validate json', $e->getMessage());
             $this->assertContains('Integer value found, but a string is required', $this->parser->getErrors()[0]);
@@ -182,7 +182,7 @@ class ParserTest extends TestCase
     {
         $schema = $this->getEmptySchema();
         $parser = new Parser($schema);
-        $parser->parse($this->getFile('sample_empty'));
+        $parser->parse($this->getFile('sample_empty'), ['validate' => true]);
         $this->assertContains('Skipping validation of empty data', $parser->getWarnings()[0]);
     }
 
@@ -195,7 +195,7 @@ class ParserTest extends TestCase
     {
         $schema = $this->getEmptySchema();
         $parser = new Parser($schema);
-        $parser->parse($this->getFile('sample'));
+        $parser->parse($this->getFile('sample'), ['validate' => true]);
         $this->assertContains('Skipping validation with empty schema', $parser->getWarnings()[0]);
     }
 
@@ -214,7 +214,7 @@ class ParserTest extends TestCase
             'allowEmptySchema' => false,
         ]);
 
-        $parser->parse($this->getFile('sample_empty'));
+        $parser->parse($this->getFile('sample_empty'), ['validate' => true]);
     }
 
     /**
@@ -232,7 +232,7 @@ class ParserTest extends TestCase
             'allowEmptySchema' => false,
         ]);
 
-        $parser->parse($this->getFile('sample'));
+        $parser->parse($this->getFile('sample'), ['validate' => true]);
     }
 
     /**
