@@ -83,10 +83,15 @@
                     "title": "Other options",
                     "description": "Additional options for the chats",
                     "type": "object"
+                },
+                "finder": {
+                    "title": "Cakephp ORM finder",
+                    "description": "Custom Finder Methods",
+                    "type": "object"
                 }
             },
             "additionalProperties": false,
-            "required": ["id", "model", "widget_type", "name", "query", "columns"]
+            "required": ["id", "model", "widget_type", "name", "columns"]
         }
     },
     "title": "Reports configuration",
