@@ -84,7 +84,7 @@
                     "description": "Additional options for the chats",
                     "type": "object"
                 },
-                "finders": {
+                "finder": {
                     "title": "Cakephp ORM finder",
                     "description": "Custom Finder Methods",
                     "type": "object"
