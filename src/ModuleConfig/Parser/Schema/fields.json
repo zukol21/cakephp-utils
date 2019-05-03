@@ -106,7 +106,8 @@
                 "fileUploadAdapter": {
                     "title": "Upload Adapter",
                     "description": "Define Upload Adapter for FileStorage plugin",
-                    "type": "string"
+                    "type": "string",
+                    "enum": ["Local", "AwsS3", "Dropbox", "AzureBlobStorage", "GoogleCloudStorage"]
                 }
             },
             "additionalProperties": false
