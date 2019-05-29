@@ -36,7 +36,7 @@
         "alt3/cakephp-swagger": "^2.0",
         "arvenil/ninja-mutex": "^0.6",
         "burzum/cakephp-file-storage": "~2.0",
-        "burzum/cakephp-imagine-plugin": "dev-master#d21baf7378271d536982c8c0867fab3dcfa24cc8",
+        "burzum/cakephp-imagine-plugin": "dev-master",
         "cakedc/users": "^8.0",
         "cakephp/cakephp": "^3.5 <3.7",
         "cakephp/migrations": "^1.7",
